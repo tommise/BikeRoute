@@ -1,6 +1,6 @@
 # BikeRoute
 
-BikeRoute etsii lyhyimmän pyöräilyreitin paikasta A paikkaan B [Openstreetmap](https://www.openstreetmap.org/) karttadatan perusteella Dijkstran algoritmiä hyödyntäen.
+BikeRoute etsii lyhyimmän pyöräilyreitin paikasta A paikkaan B [Openstreetmap](https://www.openstreetmap.org/) karttadatan perusteella Dijkstran sekä A* algoritmiä hyödyntäen.
 
 ## Dokumentaatio
 
