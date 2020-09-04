@@ -2,7 +2,7 @@
 
 ## Mitä olen tehnyt tällä viikolla?
 
-Tämän viikon aikaa vei eniten aiheen valinta ja tämän toteutuksen suunnitteleminen. Päädyin valitsemaan aiheekseni ohjelman, joka etsii lyhimmän pyöräilyreitin paikasta A paikkaan B Openstreetmapin karttadatan perusteella hyödyntäen Dijkstraa.
+Tämän viikon aikaa vei eniten aiheen valinta ja tämän toteutuksen suunnitteleminen. Päädyin valitsemaan aiheekseni ohjelman, joka etsii lyhimmän pyöräilyreitin paikasta A paikkaan B Openstreetmapin karttadatan perusteella hyödyntäen Dijkstraa sekä A* algoritmejä.
 
 ## Miten ohjelma on edistynyt?
 
@@ -10,11 +10,11 @@ Projekti on mielestäni lähtenyt kohtuullisesti käyntiin, aihe on selvillä se
 
 ## Mitä opin tällä viikolla / tänään?
 
-Itsellä ei ole ollenkaan kokemusta karttadatan käytöstä, joten opiskelin pitkälti Openstreetmapin wikiä sekä millaisia algoritmejä normaalisti käytetään karttadatan yhteydessä.
+Itsellä ei ole ollenkaan kokemusta karttadatan käytöstä, joten opiskelin pitkälti Openstreetmapin wikiä sekä millaisia algoritmejä normaalisti käytetään karttadatan yhteydessä. Koitin myös silmäillä, miten saisin karttadataa luettavaan muotoon.
 
 ## Mikä jäi epäselväksi tai tuottanut vaikeuksia? / Kysymyksiä kurssin ohjaajalle?
 
-Vaikeinta oli ehkä jäsentää ohjelman saamia syötteitä ja aikavaativuuksia algoritmeille. Mietin myös, onko ohjelma liian yksinkertainen jos hyödynnän pelkkää Dijkstraa ohjelmassa?
+Suurimmaksi haasteeksi nousee karttadatan käsitteleminen.
 
 ## Mitä teen seuraavaksi?
 
@@ -37,7 +37,9 @@ to 03.09.
 
 pe 04.09.
 
-- Määrittelydokumentin (2h)
+- Kurssimateriaalin lukeminen (0,5h)
+- Määrittelydokumentti (2h)
+- Viikkoraportin viilausta (0,5h)
 
 
-**Yhteensä:** 7h
+**Yhteensä:** 8h
