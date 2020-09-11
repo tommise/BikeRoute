@@ -18,7 +18,7 @@ public class Dijkstra {
     public List<Solmu> etsiLyhyinReitti(Solmu lahtoSolmu, Solmu tavoiteSolmu) {
         
         lahtoSolmu.setMinimiEtaisyys(0);
-        pq = new PriorityQueue<>();
+        pq = new PriorityQueue<Solmu>();
         pq.add(lahtoSolmu);
 
         while (!pq.isEmpty()) {
@@ -37,7 +37,7 @@ public class Dijkstra {
             }
         }
         
-        List<Solmu> reitti = new ArrayList<>();
+        List<Solmu> reitti = new ArrayList<Solmu>();
 
         for (Solmu solmu = tavoiteSolmu; solmu != null; solmu = solmu.getEdellinenSolmu()) {
             reitti.add(solmu);
@@ -48,8 +48,15 @@ public class Dijkstra {
         return reitti;        
     }
     
+    /**
+     * Kääntää listarakenteen toisinpäin samaan tapaan kuin Collections.reverse()
+     * 
+     * @param reitti
+     * @return käännetty reitti Listarakenteessa
+     */
+    
     public List<Solmu> kaannaReitti(List<Solmu> reitti) { 
-        List<Solmu> kaannettyReitti = new ArrayList<>(); 
+        List<Solmu> kaannettyReitti = new ArrayList<Solmu>(); 
         
         for (int i = reitti.size()-1; i >= 0; i--) { 
             kaannettyReitti.add(reitti.get(i)); 
@@ -57,6 +64,12 @@ public class Dijkstra {
         
         return kaannettyReitti; 
     } 
+    
+    /**
+     * Tulostaa reitin käyttöliittymälle
+     * 
+     * @param reitti tulostettava reitti
+     */
     
     public void tulostaReitti(List<Solmu> reitti) {
         
