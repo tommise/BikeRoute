@@ -12,7 +12,7 @@ public class Verkko {
     ArrayList<Solmu> kaaret;
     
     public Verkko() {
-        this.kaaret = new ArrayList<>();
+        this.kaaret = new ArrayList<Solmu>();
     }
     
     /**

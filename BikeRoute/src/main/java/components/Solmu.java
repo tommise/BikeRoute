@@ -17,7 +17,7 @@ public class Solmu implements Comparable<Solmu> {
 
     public Solmu(String nimi) {
         this.nimi = nimi;
-        this.kaaret = new ArrayList<>();
+        this.kaaret = new ArrayList<Kaari>();
     }
 
     public void addNaapuri(Kaari kaari) {
