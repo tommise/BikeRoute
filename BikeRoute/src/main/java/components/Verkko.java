@@ -1,7 +1,7 @@
 
 package components;
 
-import java.util.*;
+import datastructures.ArrayList;
 
 /**
  * Verkko luokka - luokalla verkkoon kuuluvat kaaret
@@ -11,13 +11,16 @@ public class Verkko {
     
     ArrayList<Solmu> solmut;
     
+    /**
+     * Verkon konstruktori, jossa alustetaan uusi ArrayList lista solmuille
+     */
+    
     public Verkko() {
         this.solmut = new ArrayList<Solmu>();
     }
     
     /**
      * Lisää verkolle solmun
-     * 
      * @param solmu - lisättävä solmu 
      */
     
@@ -25,23 +28,31 @@ public class Verkko {
         this.solmut.add(solmu);
     }    
     
+    /**
+     * Palauttaa kaikki verkolle lisätyt solmut listana
+     * @return palautettava ArrayList muotoinen lista
+     */
+    
     public ArrayList<Solmu> getSolmut() {
         return solmut;
     }
     
     /**
      * Palauttaa solmun nimen perusteella
-     * 
      * @param name - solmun (tien) nimi
      * @return löydettäessä palauttaa solmun, muuten null
      */
     
     public Solmu getByName(String name) {
-        for (Solmu solmu : solmut) {
+        
+        for (int i = 0; i < solmut.size(); i++) {
+            Solmu solmu = solmut.get(i);
+            
             if (solmu.getNimi().equals(name)) {
                 return solmu;
             }
         }
+
         return null;
     }
 }

@@ -2,7 +2,7 @@ package algorithms;
 
 import components.Kaari;
 import components.Solmu;
-import data_structures.ArrayList;
+import datastructures.ArrayList;
 
 import java.util.PriorityQueue;
 
@@ -12,16 +12,24 @@ import java.util.PriorityQueue;
 
 public class Dijkstra {
     
-    public void etsi(Solmu lahtoSolmu, Solmu tavoiteSolmu) {
+    /**
+     * Etsii lyhyimmän reitin halutusta alkusolmusta loppuun Dijkstran algoritmin mukaisesti
+     * @param alku alkusolmu mistä lähdetään liikkeelle
+     * @param loppu tavoitesolmu mihin halutaan päätyä
+     */
+    
+    public void etsi(Solmu alku, Solmu loppu) {
         
-        lahtoSolmu.setMinimiEtaisyys(0);
+        alku.setMinimiEtaisyys(0);
         PriorityQueue<Solmu> pq = new PriorityQueue<Solmu>();
-        pq.add(lahtoSolmu);
+        pq.add(alku);
 
         while (!pq.isEmpty()) {
             Solmu solmu = pq.poll();
-
-            for (Kaari kaari : solmu.getKaaret()) {
+            ArrayList<Kaari> kaaret = solmu.getKaaret();
+            
+            for (int i = 0; i < kaaret.size(); i++) {
+                Kaari kaari = kaaret.get(i);
                 Solmu s = kaari.getLoppu();
                 double uusiMinimiEtaisyys = solmu.getMinimiEtaisyys() + kaari.getEtaisyys();
 
@@ -34,7 +42,7 @@ public class Dijkstra {
             }
         }
         
-        luoReitti(tavoiteSolmu);
+        luoReitti(loppu);
     }
 
     /**
@@ -52,7 +60,7 @@ public class Dijkstra {
         
         ArrayList<Solmu> kaannettyReitti = new ArrayList<Solmu>(); 
         
-        for (int i = reitti.size()-1; i >= 0; i--) { 
+        for (int i = reitti.size() - 1; i >= 0; i--) { 
             kaannettyReitti.add(reitti.get(i)); 
         } 
         

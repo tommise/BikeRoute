@@ -4,7 +4,7 @@ package algorithms;
 import components.Heuristic;
 import components.Kaari;
 import components.Solmu;
-import data_structures.ArrayList;
+import datastructures.ArrayList;
 
 import java.util.Comparator;
 import java.util.HashSet;
@@ -15,8 +15,14 @@ import java.util.PriorityQueue;
  */
 
 public class AStar {
+    
+    /**
+     * Etsii lyhyimmän reitin halutusta alkusolmusta loppuun A* algoritmin mukaisesti
+     * @param alku alkusolmu mistä lähdetään liikkeelle
+     * @param loppu tavoitesolmu mihin halutaan päätyä
+     */
 
-    public void etsi(Solmu alku, Solmu loppu){
+    public void etsi(Solmu alku, Solmu loppu) {
 
         Heuristic heuristic = new Heuristic();
         HashSet<Solmu> kasitelty = new HashSet<Solmu>();
@@ -31,12 +37,15 @@ public class AStar {
             Solmu nykyinenSolmu = queue.poll();
             kasitelty.add(nykyinenSolmu);
 
-            if (nykyinenSolmu.getNimi().equals(loppu.getNimi())){
+            if (nykyinenSolmu.getNimi().equals(loppu.getNimi())) {
                 luoReitti(loppu);                
                 loytyi = true;
             }
+            
+            ArrayList<Kaari> kaaret = nykyinenSolmu.getKaaret();
 
-            for (Kaari kaari : nykyinenSolmu.getKaaret()) {
+            for (int i = 0; i < kaaret.size(); i++) {
+                Kaari kaari = kaaret.get(i);
                 Solmu solmu = kaari.getLoppu();
                 double paino = kaari.getEtaisyys();
                                 
@@ -53,7 +62,7 @@ public class AStar {
                     solmu.setG(g);
                     solmu.setF(f);
 
-                    if (queue.contains(solmu)){
+                    if (queue.contains(solmu)) {
                         queue.remove(solmu);
                     }
 
@@ -78,7 +87,7 @@ public class AStar {
         
         ArrayList<Solmu> kaannettyReitti = new ArrayList<Solmu>(); 
         
-        for (int i = reitti.size()-1; i >= 0; i--) { 
+        for (int i = reitti.size() - 1; i >= 0; i--) { 
             kaannettyReitti.add(reitti.get(i)); 
         } 
         
