@@ -42,5 +42,6 @@ to 17.09.
 pe 18.09.
 - Viikkoraportin 3 kirjoittelua (0,5h)
 - Checkstylen lisääminen projektiin (0,5h)
+- Checkstylen mukaisia korjauksia (0,5h)
 
-**Yhteensä:** 14,5h
+**Yhteensä:** 15h
