@@ -5,23 +5,24 @@ import components.Solmu;
 import components.Verkko;
 import data_structures.ArrayList;
 import domain.GraphBuilder;
+import static domain.GraphBuilder.luoPolkupyoraVerkosto;
+
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import static domain.GraphBuilder.luoPolkupyoraVerkosto;
 import util.PathHelper;
 
-public class DijkstraTest {
-    
+public class AStarTest {
+
+    AStar aStar;    
     Verkko verkko;
-    Dijkstra dijkstra;
     GraphBuilder graphBuilder;
     PathHelper pathHelper;
     double epsilon = 0.001;
     
     @Before
     public void setUp() {
-        this.dijkstra = new Dijkstra();
+        this.aStar = new AStar();
         this.verkko = luoPolkupyoraVerkosto();
     } 
     
@@ -30,10 +31,10 @@ public class DijkstraTest {
         Solmu lahto = verkko.getByName("Rantatie");
         Solmu tavoite = verkko.getByName("Keskustie");
         
-        dijkstra.etsi(lahto, tavoite);
-        ArrayList<Solmu> reitti = dijkstra.luoReitti(tavoite);
+        aStar.etsi(lahto, tavoite);
+        ArrayList<Solmu> reitti = aStar.luoReitti(tavoite);
         
-        double reitinKokonaisPituus = reitti.get(reitti.size()-1).getMinimiEtaisyys();
+        double reitinKokonaisPituus = reitti.get(reitti.size()-1).getG();
         double reitinTavoitePituus = 325.0;
         
         assertEquals(reitinKokonaisPituus, reitinTavoitePituus, epsilon);
