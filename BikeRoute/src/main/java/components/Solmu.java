@@ -12,11 +12,19 @@ public class Solmu implements Comparable<Solmu> {
     
     private String nimi;
     private double minimiEtaisyys = Double.MAX_VALUE;    
-    private Solmu edellinenSolmu;
-    private List<Kaari> kaaret;    
-
-    public Solmu(String nimi) {
+    private List<Kaari> kaaret;   
+    private Solmu edellinenSolmu;    
+    
+    private double g;
+    private double f = 0;   
+    
+    public int latitude;
+    public int longitude;
+    
+    public Solmu(String nimi, int latitude, int longitude) {
         this.nimi = nimi;
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.kaaret = new ArrayList<Kaari>();
     }
 
@@ -46,6 +54,38 @@ public class Solmu implements Comparable<Solmu> {
 
     public void setEdellinenSolmu(Solmu edellinenSolmu) {
         this.edellinenSolmu = edellinenSolmu;
+    } 
+    
+    public double getG() {
+        return this.g;
+    }
+
+    public void setG(double g) {
+        this.g = g;
+    }
+
+    public double getF() {
+        return this.f;
+    }
+
+    public void setF(double f) {
+        this.f = f;
+    }    
+    
+    public int getLatitude() {
+        return this.latitude;
+    }
+    
+    public int getLongitude() {
+        return this.longitude;
+    }
+    
+    public void setLatitude(int latitude) {
+        this.latitude = latitude;
+    }
+    
+    public void setLongitude(int longitude) {
+        this.longitude = longitude;
     }
     
     @Override

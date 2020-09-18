@@ -9,24 +9,24 @@ import java.util.*;
 
 public class Verkko {
     
-    ArrayList<Solmu> kaaret;
+    ArrayList<Solmu> solmut;
     
     public Verkko() {
-        this.kaaret = new ArrayList<Solmu>();
+        this.solmut = new ArrayList<Solmu>();
     }
     
     /**
      * Lisää verkolle solmun
      * 
-     * @param node - lisättävä solmu 
+     * @param solmu - lisättävä solmu 
      */
     
     public void addSolmu(Solmu solmu) {
-        this.kaaret.add(solmu);
+        this.solmut.add(solmu);
     }    
     
-    public ArrayList<Solmu> getKaaret() {
-        return kaaret;
+    public ArrayList<Solmu> getSolmut() {
+        return solmut;
     }
     
     /**
@@ -37,9 +37,9 @@ public class Verkko {
      */
     
     public Solmu getByName(String name) {
-        for (Solmu kaari : kaaret) {
-            if (kaari.getNimi().equals(name)) {
-                return kaari;
+        for (Solmu solmu : solmut) {
+            if (solmu.getNimi().equals(name)) {
+                return solmu;
             }
         }
         return null;

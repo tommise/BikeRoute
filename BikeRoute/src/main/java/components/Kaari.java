@@ -9,7 +9,7 @@ public class Kaari {
     
     private Solmu alku;
     private Solmu loppu;
-    private double etaisyys;    
+    private double etaisyys;
 
     public Kaari(Solmu alku, Solmu loppu,  double etaisyys) {
         this.alku = alku;
