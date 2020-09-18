@@ -1,20 +1,21 @@
 
 package algorithms;
 
+import static domain.GraphBuilder.luoPolkupyoraVerkosto;
+import static org.junit.Assert.*;
+
 import components.Solmu;
 import components.Verkko;
 import datastructures.ArrayList;
 import domain.GraphBuilder;
-import static domain.GraphBuilder.luoPolkupyoraVerkosto;
 
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
 import util.PathHelper;
 
 public class AStarTest {
 
-    AStar aStar;    
+    AStar astar;    
     Verkko verkko;
     GraphBuilder graphBuilder;
     PathHelper pathHelper;
@@ -22,19 +23,19 @@ public class AStarTest {
     
     @Before
     public void setUp() {
-        this.aStar = new AStar();
+        this.astar = new AStar();
         this.verkko = luoPolkupyoraVerkosto();
     } 
     
     @Test
-    public void palauttaaOikeinLyhyimmänPolun() {
+    public void palauttaaOikeinLyhyimmanPolun() {
         Solmu lahto = verkko.getByName("Rantatie");
         Solmu tavoite = verkko.getByName("Keskustie");
         
-        aStar.etsi(lahto, tavoite);
-        ArrayList<Solmu> reitti = aStar.luoReitti(tavoite);
+        astar.etsi(lahto, tavoite);
+        ArrayList<Solmu> reitti = astar.luoReitti(tavoite);
         
-        double reitinKokonaisPituus = reitti.get(reitti.size()-1).getG();
+        double reitinKokonaisPituus = reitti.get(reitti.size() - 1).getG();
         double reitinTavoitePituus = 325.0;
         
         assertEquals(reitinKokonaisPituus, reitinTavoitePituus, epsilon);

@@ -14,6 +14,10 @@ public class ArrayList<E> {
     private Object[] arrayList;
     private int size;
     
+    /**
+     * ArrayListin konstruktori jossa alustetaan listarakenne sekä listan koko
+     */
+    
     public ArrayList() {
         arrayList = new Object[10];
         this.size = 0;

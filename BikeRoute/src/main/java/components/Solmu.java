@@ -14,8 +14,8 @@ public class Solmu implements Comparable<Solmu> {
     private final ArrayList<Kaari> kaaret;   
     private Solmu edellinenSolmu;    
     
-    private double g;
-    private double f = 0;   
+    private double gluku;
+    private double fluku = 0;   
     
     public int latitude;
     public int longitude;
@@ -98,39 +98,39 @@ public class Solmu implements Comparable<Solmu> {
     } 
     
     /**
-     * Palauttaa A* algoritmissä käytetyn g scoren
-     * @return palautettava g score double muodossa
+     * Palauttaa A* algoritmissä käytetyn gluku scoren
+     * @return palautettava gluku score double muodossa
      */
     
     public double getG() {
-        return this.g;
+        return this.gluku;
     }
     
     /**
-     * Asettaa A* algoritmissä käytetyn g scoren uuden arvon
-     * @param g asetettava g score
+     * Asettaa A* algoritmissä käytetyn gluku scoren uuden arvon
+     * @param g asetettava gluku score
      */  
 
     public void setG(double g) {
-        this.g = g;
+        this.gluku = g;
     }
     
     /**
-     * Palauttaa A* algoritmissä käytetyn f scoren
-     * @return palautettava f score double muodossa
+     * Palauttaa A* algoritmissä käytetyn fluku scoren
+     * @return palautettava fluku score double muodossa
      */    
 
     public double getF() {
-        return this.f;
+        return this.fluku;
     }
     
     /**
-     * Asettaa A* algoritmissä käytetyn f scoren uuden arvon
-     * @param f asetettava uusi f score
+     * Asettaa A* algoritmissä käytetyn fluku scoren uuden arvon
+     * @param f asetettava uusi fluku score
      */
     
     public void setF(double f) {
-        this.f = f;
+        this.fluku = f;
     }    
     
     /**
