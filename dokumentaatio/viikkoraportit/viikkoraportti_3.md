@@ -14,7 +14,7 @@ Opin rajaamaan openstreetmap karttadataa sekä sen, miten tätä voisi mahdollis
 
 ## Mikä jäi epäselväksi tai tuottanut vaikeuksia? / Kysymyksiä kurssin ohjaajalle?
 
-En saa checkstyleä konffattua projektiini vaikka minkälaista kiekuraa olen kokeillut ja asiaan ratkaisua etsinyt. (_Execution failed for task ':checkstyleMain'.)_ Tiedostossa gradle.build on nyt kommentoitu checkstyle osat pois, koska projekti ei muuten buildaa. Voiko johtua siitä, että käytössä JDK 11? Muuten projektin eteneminen alkaa hyvin hahmottua.
+Projektin eteneminen alkaa hyvin hahmottua, joten tällä hetkellä ei erityistä. Checkstylen kanssa oli painimista tällä viikolla.
 
 ## Mitä teen seuraavaksi?
 
@@ -41,5 +41,6 @@ to 17.09.
 
 pe 18.09.
 - Viikkoraportin 3 kirjoittelua (0,5h)
+- Checkstylen lisääminen projektiin (0,5h)
 
-**Yhteensä:** 14h
+**Yhteensä:** 14,5h
