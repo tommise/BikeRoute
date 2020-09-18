@@ -24,15 +24,15 @@ public class GraphBuilder {
     public static Verkko luoPolkupyoraVerkosto() {
         Verkko verkko = new Verkko();
         
-        Solmu rantatie = new Solmu("Rantatie");
-        Solmu koulutie = new Solmu("Koulutie");
-        Solmu rinnetie = new Solmu("Rinnetie");
-        Solmu kirkkotie = new Solmu("Kirkkotie");
-        Solmu teollisuustie = new Solmu("Teollisuustie");
-        Solmu myllytie = new Solmu("Myllytie");
-        Solmu kuusitie = new Solmu("Kuusitie");
-        Solmu mäntytie = new Solmu("Mäntytie");
-        Solmu keskustie = new Solmu("Keskustie");      
+        Solmu rantatie = new Solmu("Rantatie", 10, 20);
+        Solmu koulutie = new Solmu("Koulutie", 20, 10);
+        Solmu rinnetie = new Solmu("Rinnetie", 10, 10);
+        Solmu kirkkotie = new Solmu("Kirkkotie", 20, 40);
+        Solmu teollisuustie = new Solmu("Teollisuustie", 30, 40);
+        Solmu myllytie = new Solmu("Myllytie", 20, 70);
+        Solmu kuusitie = new Solmu("Kuusitie", 40, 40);
+        Solmu mäntytie = new Solmu("Mäntytie", 50, 20);
+        Solmu keskustie = new Solmu("Keskustie", 40, 10);      
 
         rantatie.addNaapuri(new Kaari(rantatie, koulutie, 210));
         rantatie.addNaapuri(new Kaari(rantatie, kirkkotie, 150));
