@@ -1,12 +1,19 @@
 apply plugin: 'java'
 apply plugin: 'jacoco'
 apply plugin: 'application'
-//apply plugin: 'checkstyle'
+apply plugin: 'checkstyle'
 
-//checkstyle {
-    //toolVersion '7.6.1'
-    //configFile file("config/checkstyle/checkstyle.xml")    
-//}
+checkstyle {
+    toolVersion '8.17'
+    configFile file("config/checkstyle/checkstyle.xml")
+}
+
+checkstyleMain {
+    source ='src/main/java'
+}
+checkstyleTest {
+    source ='src/test/java'
+}
 
 repositories {
     jcenter()
@@ -20,7 +27,7 @@ dependencies {
 }
 
 jacoco {
-  toolVersion = "0.8.2"
+    toolVersion = "0.8.2"
 }
 
 jacocoTestReport {
