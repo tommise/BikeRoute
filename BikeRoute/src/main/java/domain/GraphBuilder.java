@@ -4,9 +4,6 @@ package domain;
 import components.Kaari;
 import components.Verkko;
 import components.Solmu;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 /**
  * Luokka graphBuilder
