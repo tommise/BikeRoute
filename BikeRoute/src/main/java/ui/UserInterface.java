@@ -1,11 +1,15 @@
 
 package ui;
 
+import algorithms.AStar;
 import components.Verkko;
 import components.Solmu;
 import domain.GraphBuilder;
 import algorithms.Dijkstra;
-import java.util.*;
+import data_structures.ArrayList;
+import java.util.Scanner;
+
+import util.PathHelper;
 
 public class UserInterface {
 
@@ -36,17 +40,24 @@ public class UserInterface {
         String tavoiteSolmu = sc.nextLine();
         System.out.println("");
         
+        PathHelper pathHelper = new PathHelper();
+        
         Verkko verkko = GraphBuilder.luoPolkupyoraVerkosto();
         
         Solmu lahto = verkko.getByName(lahtoSolmu);
         Solmu tavoite = verkko.getByName(tavoiteSolmu);
-
-        Dijkstra dijkstra = new Dijkstra();
-        List<Solmu> reitti = dijkstra.etsiLyhyinReitti(lahto, tavoite);
-
-        System.out.println("Lyhyin reitti Dijkstralla kohteesta " + lahto.getNimi() + " kohteeseen " + tavoite.getNimi() + ":");
-        System.out.println("");
         
-        dijkstra.tulostaReitti(reitti);
+        Dijkstra dijkstra = new Dijkstra();
+        AStar astar = new AStar();  
+
+        astar.etsi(lahto, tavoite);
+        
+        ArrayList<Solmu> aStarReitti = astar.luoReitti(tavoite);
+        pathHelper.tulostaAstarReitti(aStarReitti);        
+
+        dijkstra.etsi(lahto, tavoite);
+        
+        ArrayList<Solmu> dijkstranReitti = dijkstra.luoReitti(tavoite);
+        pathHelper.tulostaDijkstraReitti(dijkstranReitti);
     }
 }
