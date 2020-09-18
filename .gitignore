@@ -15,6 +15,7 @@ gradle-app.setting
 # gradle/wrapper/gradle-wrapper.properties
 /.nb-gradle/
 nbproject
+/radle-version/
 
 # Random
 .classpath
