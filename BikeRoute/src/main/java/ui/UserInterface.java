@@ -2,11 +2,11 @@
 package ui;
 
 import algorithms.AStar;
-import components.Verkko;
-import components.Solmu;
-import domain.GraphBuilder;
 import algorithms.Dijkstra;
-import data_structures.ArrayList;
+import components.Solmu;
+import components.Verkko;
+import datastructures.ArrayList;
+import domain.GraphBuilder;
 import java.util.Scanner;
 
 import util.PathHelper;

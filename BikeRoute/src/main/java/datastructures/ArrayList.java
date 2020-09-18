@@ -1,5 +1,5 @@
 
-package data_structures;
+package datastructures;
 
 /**
  * ArrayList listaa kuvaava luokka

@@ -2,14 +2,13 @@
 package util;
 
 import components.Solmu;
-import data_structures.ArrayList;
+import datastructures.ArrayList;
 
 public class PathHelper {
     
     /**
-     * Tulostaa reitin käyttöliittymälle
-     * 
-     * @param reitti tulostettava reitti
+     * Tulostaa Dijkstran reitin käyttöliittymälle
+     * @param reitti tulostettava reitti ArrayList muodossa
      */
     
     public void tulostaDijkstraReitti(ArrayList<Solmu> reitti) {
@@ -26,6 +25,11 @@ public class PathHelper {
         System.out.println("Kokonaisreitti yhteensä: " + reitti.get(reitti.size() - 1).getMinimiEtaisyys() + "m");
         System.out.println(""); 
     }
+    
+    /**
+     * Tulostaa A* algoritmin reitin käyttöliittymälle
+     * @param reitti tulostettava reitti ArrayList muodossa
+     */    
     
     public void tulostaAstarReitti(ArrayList<Solmu> reitti) {
         

@@ -3,7 +3,7 @@ package algorithms;
 
 import components.Solmu;
 import components.Verkko;
-import data_structures.ArrayList;
+import datastructures.ArrayList;
 import domain.GraphBuilder;
 import org.junit.Before;
 import org.junit.Test;
