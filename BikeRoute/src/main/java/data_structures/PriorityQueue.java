@@ -1,6 +1,9 @@
 
 package data_structures;
 
-public class PriorityQueue {
+public class PriorityQueue<E> {
     
+    public PriorityQueue() {
+        
+    }
 }
