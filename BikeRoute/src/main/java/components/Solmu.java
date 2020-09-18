@@ -3,8 +3,6 @@ package components;
 
 import datastructures.ArrayList;
 
-
-
 /**
  * Solmu luokka - solmulla on mm. nimi, kaaret, vierailtu, edellinenkaari ja minimipituus
  */
