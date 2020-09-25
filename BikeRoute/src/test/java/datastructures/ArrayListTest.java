@@ -16,6 +16,13 @@ public class ArrayListTest {
     } 
     
     @Test
+    public void lisaaElementinListalle() {
+        lista.add(100);
+        
+        assertEquals(1, lista.size());
+    }
+    
+    @Test
     public void palauttaaElementinListalta() {
         lista.add(100);
         lista.add(110);
