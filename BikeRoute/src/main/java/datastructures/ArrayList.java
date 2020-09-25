@@ -31,8 +31,8 @@ public class ArrayList<E> {
     
     public void add(E obj) {
         
-        if (arrayIsFull()) {
-            growArraySize();
+        if (listaTaysi()) {
+            kasvataKokoa();
         }
         
         this.arrayList[this.size] = obj;
@@ -74,7 +74,7 @@ public class ArrayList<E> {
      * @return true jos listarakenteen pituus vastaa kokoa
      */
     
-    public boolean arrayIsFull() {
+    public boolean listaTaysi() {
         return this.arrayList.length == this.size;
     }
     
@@ -82,7 +82,7 @@ public class ArrayList<E> {
      * Kaksinkertaistaa listan kokoa
      */
     
-    public void growArraySize() {
+    public void kasvataKokoa() {
         Object[] kasvatettuLista = new Object[arrayList.length * 2];
         
         for (int i = 0; i < this.arrayList.length; i++) {

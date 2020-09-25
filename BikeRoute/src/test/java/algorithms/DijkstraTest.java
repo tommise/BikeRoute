@@ -1,29 +1,29 @@
 
 package algorithms;
 
-import static domain.GraphBuilder.luoPolkupyoraVerkosto;
+import static io.VerkonRakentaja.luoTestiVerkko;
 import static org.junit.Assert.*;
 
 import components.Solmu;
 import components.Verkko;
 import datastructures.ArrayList;
-import domain.GraphBuilder;
+import io.VerkonRakentaja;
 import org.junit.Before;
 import org.junit.Test;
-import util.PathHelper;
+import util.ReitinTulostaja;
 
 public class DijkstraTest {
     
     Verkko verkko;
     Dijkstra dijkstra;
-    GraphBuilder graphBuilder;
-    PathHelper pathHelper;
+    VerkonRakentaja graphBuilder;
+    ReitinTulostaja pathHelper;
     double epsilon = 0.001;
     
     @Before
     public void setUp() {
         this.dijkstra = new Dijkstra();
-        this.verkko = luoPolkupyoraVerkosto();
+        this.verkko = luoTestiVerkko();
     } 
     
     @Test

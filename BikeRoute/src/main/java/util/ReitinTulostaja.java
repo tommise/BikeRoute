@@ -4,7 +4,7 @@ package util;
 import components.Solmu;
 import datastructures.ArrayList;
 
-public class PathHelper {
+public class ReitinTulostaja {
     
     /**
      * Tulostaa Dijkstran reitin käyttöliittymälle

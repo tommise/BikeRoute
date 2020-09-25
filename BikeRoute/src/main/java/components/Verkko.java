@@ -39,16 +39,16 @@ public class Verkko {
     
     /**
      * Palauttaa solmun nimen perusteella
-     * @param name - solmun (tien) nimi
+     * @param nimi - solmun (tien) nimi
      * @return löydettäessä palauttaa solmun, muuten null
      */
     
-    public Solmu getByName(String name) {
+    public Solmu getByName(String nimi) {
         
         for (int i = 0; i < solmut.size(); i++) {
             Solmu solmu = solmut.get(i);
             
-            if (solmu.getNimi().equals(name)) {
+            if (solmu.getNimi().equals(nimi)) {
                 return solmu;
             }
         }

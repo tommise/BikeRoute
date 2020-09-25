@@ -6,12 +6,17 @@ import algorithms.Dijkstra;
 import components.Solmu;
 import components.Verkko;
 import datastructures.ArrayList;
-import domain.GraphBuilder;
+import io.VerkonRakentaja;
 import java.util.Scanner;
 
-import util.PathHelper;
+import util.ReitinTulostaja;
 
-public class UserInterface {
+public class Kayttoliittyma {
+    
+    /**
+     * Luokka käyttöliittymälle
+     * @param args 
+     */
 
     public static void main(String[] args) {
 
@@ -40,9 +45,9 @@ public class UserInterface {
         String tavoiteSolmu = sc.nextLine();
         System.out.println("");
         
-        PathHelper pathHelper = new PathHelper();
+        ReitinTulostaja pathHelper = new ReitinTulostaja();
         
-        Verkko verkko = GraphBuilder.luoPolkupyoraVerkosto();
+        Verkko verkko = VerkonRakentaja.luoTestiVerkko();
         
         Solmu lahto = verkko.getByName(lahtoSolmu);
         Solmu tavoite = verkko.getByName(tavoiteSolmu);
@@ -59,5 +64,6 @@ public class UserInterface {
         
         ArrayList<Solmu> dijkstranReitti = dijkstra.luoReitti(tavoite);
         pathHelper.tulostaDijkstraReitti(dijkstranReitti);
+        
     }
 }
