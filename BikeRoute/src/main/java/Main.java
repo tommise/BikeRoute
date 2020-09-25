@@ -1,14 +1,14 @@
 
-import ui.UserInterface;
+import ui.Kayttoliittyma;
 
 public class Main {
     
     /**
-     * Main luokka joka hyödyntää UserInterface luokkaa
+     * Main luokka joka hyödyntää Kayttoliittyma luokkaa
      * @param args 
      */
 
     public static void main(String[] args) {
-        UserInterface.main(args);
+        Kayttoliittyma.main(args);
     }
 }
