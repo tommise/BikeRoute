@@ -24,14 +24,14 @@ Dijkstran, A* ja JPS aikavaativuudet ovat O((|E|+|V|) log |V|) missä |E| on kaa
 
 **PriorityQueuen** lisäyksen _(add)_, poiston _(remove)_ ja pollin _(poll)_ aikavaativuudet ovat O(log(n)).
 
-# Puutteet ja parannusehdotukset
+## Puutteet ja parannusehdotukset
 
 _kesken_
 
-# Lähteet
+#### Lähteet
 
-[A* algorithm](https://en.wikipedia.org/wiki/A*_search_algorithm), Wikipedia
-[Introduction to the A* Algorithm](https://www.redblobgames.com/pathfinding/a-star/introduction.html), Red Blob Games
-[Dijkstra's algorithm](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm), Wikipedia
-[Jump point search](https://en.wikipedia.org/wiki/Jump_point_search), Wikipedia
-Cormen, T., Leiserson, C., Rivest, R. & and Stein, C. Introduction to Algorithms. Third Edition.
+- [A* algorithm](https://en.wikipedia.org/wiki/A*_search_algorithm), Wikipedia
+- [Introduction to the A* Algorithm](https://www.redblobgames.com/pathfinding/a-star/introduction.html), Red Blob Games
+- [Dijkstra's algorithm](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm), Wikipedia
+- [Jump point search](https://en.wikipedia.org/wiki/Jump_point_search), Wikipedia
+- Cormen, T., Leiserson, C., Rivest, R. & and Stein, C. Introduction to Algorithms. Third Edition.

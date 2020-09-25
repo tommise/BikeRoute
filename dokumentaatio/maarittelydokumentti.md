@@ -18,10 +18,10 @@ Jokaisen algoritmin (Dijkstran, A* sekä JPS) aikavaativuus on O((|E| + |V|) log
 
 #### Lähteet:
 
-[A* algorithm](https://en.wikipedia.org/wiki/A*_search_algorithm), Wikipedia
-[Dijkstra's algorithm](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm), Wikipedia
-[Jump point search, JPS](https://en.wikipedia.org/wiki/Jump_point_search), Wikipedia
-[Routing on Openstreetmap](https://wiki.openstreetmap.org/wiki/Routing), Openstreetmap
-Cormen, T., Leiserson, C., Rivest, R. & and Stein, C. Introduction to Algorithms. Third Edition. 
+- [A* algorithm](https://en.wikipedia.org/wiki/A*_search_algorithm), Wikipedia
+- [Dijkstra's algorithm](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm), Wikipedia
+- [Jump point search, JPS](https://en.wikipedia.org/wiki/Jump_point_search), Wikipedia
+- [Routing on Openstreetmap](https://wiki.openstreetmap.org/wiki/Routing), Openstreetmap
+- Cormen, T., Leiserson, C., Rivest, R. & and Stein, C. Introduction to Algorithms. Third Edition. 
 
 *Tietojenkäsittelytieteen kandidaatti (TKT)*
