@@ -4,7 +4,7 @@ package components;
 import datastructures.ArrayList;
 
 /**
- * Solmu luokka - solmulla on mm. nimi, kaaret, vierailtu, edellinenkaari ja minimipituus
+ * Solmua kuvaava luokka
  */
 
 public class Solmu implements Comparable<Solmu> {
@@ -15,10 +15,10 @@ public class Solmu implements Comparable<Solmu> {
     private Solmu edellinenSolmu;    
     
     private double gluku;
-    private double fluku = 0;   
+    private double fluku = 0;
     
-    public int latitude;
-    public int longitude;
+    private double latitude;
+    private double longitude;
     
     /**
      * Solmu luokan konstruktori
@@ -27,12 +27,22 @@ public class Solmu implements Comparable<Solmu> {
      * @param longitude solmun korkeus koordinaatti
      */
     
-    public Solmu(String nimi, int latitude, int longitude) {
+    public Solmu(String nimi, double latitude, double longitude) {
         this.nimi = nimi;
         this.latitude = latitude;
         this.longitude = longitude;
         this.kaaret = new ArrayList<Kaari>();
     }
+    
+    /**
+     * Solmun konstruktori ilman leveys/korkeus koordinaatteja
+     * @param nimi 
+     */
+    
+    public Solmu(String nimi) {
+        this.nimi = nimi;
+        this.kaaret = new ArrayList<Kaari>();        
+    }    
     
     /**
      * Lisää solmun kaarilistaan haluttavan kaaren eli naapurin
@@ -138,7 +148,7 @@ public class Solmu implements Comparable<Solmu> {
      * @return leveys koordinaatti int muodossa
      */
     
-    public int getLatitude() {
+    public double getLatitude() {
         return this.latitude;
     }
     
@@ -147,7 +157,7 @@ public class Solmu implements Comparable<Solmu> {
      * @return korkeus koordinaatti int muodossa
      */
     
-    public int getLongitude() {
+    public double getLongitude() {
         return this.longitude;
     }
     
