@@ -11,6 +11,7 @@ checkstyle {
 checkstyleMain {
     source ='src/main/java'
 }
+
 checkstyleTest {
     source ='src/test/java'
 }
@@ -39,8 +40,10 @@ jacocoTestReport {
     afterEvaluate {
         classDirectories = files(classDirectories.files.collect{
             fileTree(dir: it, exclude: [
-                '/ui**',
-                '/util**'
+                'Main**',            
+                '/ui**',                
+                '/util**',
+                '/io**'                        
             ])
             
         })
@@ -51,6 +54,6 @@ run {
     standardInput = System.in
 }
 
-mainClassName = 'ui.UserInterface'
+mainClassName = 'ui.Kayttoliittyma'
 
 check.dependsOn jacocoTestReport
