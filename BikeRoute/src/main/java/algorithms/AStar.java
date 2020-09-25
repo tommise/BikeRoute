@@ -1,7 +1,7 @@
 
 package algorithms;
 
-import components.Heuristic;
+import components.Heuristiikka;
 import components.Kaari;
 import components.Solmu;
 import datastructures.ArrayList;
@@ -24,7 +24,7 @@ public class AStar {
 
     public void etsi(Solmu alku, Solmu loppu) {
 
-        Heuristic heuristic = new Heuristic();
+        Heuristiikka heuristic = new Heuristiikka();
         HashSet<Solmu> kasitelty = new HashSet<Solmu>();
         PriorityQueue<Solmu> queue = new PriorityQueue<Solmu>(luoPrioriteetti());
 
@@ -95,7 +95,7 @@ public class AStar {
     }
     
     /**
-     * Luodaan Comparator joka asketaan prioriteetti F scoren mukaan
+     * Luodaan Comparator joka lasketaan prioriteetti F scoren mukaan
      * @return comparator olio
      */
     

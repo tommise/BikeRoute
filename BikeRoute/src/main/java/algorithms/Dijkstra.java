@@ -3,8 +3,9 @@ package algorithms;
 import components.Kaari;
 import components.Solmu;
 import datastructures.ArrayList;
+import datastructures.PriorityQueue;
+import java.util.Comparator;
 
-import java.util.PriorityQueue;
 
 /**
  * Dijkstran algoritmi hyödyntäen PriorityQueta sekä lyhyimmän reitin tallettaminen listaan
@@ -21,7 +22,7 @@ public class Dijkstra {
     public void etsi(Solmu alku, Solmu loppu) {
         
         alku.setMinimiEtaisyys(0);
-        PriorityQueue<Solmu> pq = new PriorityQueue<Solmu>();
+        PriorityQueue<Solmu> pq = new PriorityQueue<Solmu>(luoPrioriteetti());
         pq.add(alku);
 
         while (!pq.isEmpty()) {
@@ -65,5 +66,24 @@ public class Dijkstra {
         } 
         
         return kaannettyReitti; 
+    }
+    
+    /**
+     * Luodaan Comparator joka lasketaan minimi etäisyyden mukaan
+     * @return comparator olio
+     */
+    
+    public Comparator luoPrioriteetti() {
+        
+        Comparator comp = new Comparator<Solmu>() {
+            
+            @Override
+            public int compare(Solmu s1, Solmu s2) {
+                
+                return Double.compare(s1.getMinimiEtaisyys(), s2.getMinimiEtaisyys());
+            }
+        };
+        
+        return comp;
     }
 }
