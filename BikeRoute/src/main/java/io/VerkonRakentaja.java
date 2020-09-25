@@ -1,24 +1,74 @@
 
-package domain;
+package io;
 
 import components.Kaari;
 import components.Solmu;
 import components.Verkko;
 
-/**
- * Luokka graphBuilder
- * 
- * Luo verkon annetun karttadatan perusteella
- */
+import crosby.binary.osmosis.OsmosisReader;
 
-public class GraphBuilder {
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Map;
+
+public class VerkonRakentaja {
+    
+    String polku;
+    VerkonKasittelija verkko;
+    
+    /**
+     * Konstruktori verkon rakentajalle joka asettaa kartalle polun
+     */
+    
+    public VerkonRakentaja() {
+        this.polku = "./maps/helsinki.osm.pbf";
+    }
+    
+    /**
+     * Alustaa verkon käyttöön ohjelmalle
+     */
+    
+    public void luoVerkko() {
+        
+        InputStream inputStream = null;
+        
+        try {
+            inputStream = new FileInputStream(polku);
+        } catch (FileNotFoundException e) {
+            System.out.println(e);
+        }
+        
+        KartanKasittelija lukija = new KartanKasittelija();
+        
+        OsmosisReader osmosisLukija = new OsmosisReader(inputStream);
+        osmosisLukija.setSink(lukija);
+        osmosisLukija.run();
+        
+        this.verkko = new VerkonKasittelija();
+        
+        ArrayList<KarttaTie> tiet = lukija.getTiet();
+        Map<Long, KarttaObjekti> objektit = lukija.getObjektit();
+        
+        this.verkko.kasitteleTiet(tiet, objektit);
+    }
+    
+    /**
+     * Palauttaa luodun verkon
+     * @return palauttaa verkon
+     */
+    
+    public VerkonKasittelija getVerkko() {
+        return this.verkko;
+    }
     
     /**
      * Luo valmiin verkoston testikäyttöön
      * @return palauttaa testikäyttöön tehdyn verkon
      */
     
-    public static Verkko luoPolkupyoraVerkosto() {   
+    public static Verkko luoTestiVerkko() {   
 
         Solmu rantatie = new Solmu("Rantatie", 10, 20);
         Solmu koulutie = new Solmu("Koulutie", 20, 10);
