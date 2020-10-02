@@ -7,7 +7,7 @@ BikeRoute sovelluksen tarkoitus on etsiä lyhyin pyöräilyreitti paikasta A pai
 - [Määrittelydokumentti](https://github.com/tommise/BikeRoute/blob/master/dokumentaatio/maarittelydokumentti.md)
 - [Toteutusdokumentti](https://github.com/tommise/BikeRoute/blob/master/dokumentaatio/toteutusdokumentti.md)
 - [Testausdokumentti](https://github.com/tommise/BikeRoute/blob/master/dokumentaatio/testausdokumentti.md)
-- Käyttöohje
+- [Käyttöohje]((https://github.com/tommise/BikeRoute/blob/master/dokumentaatio/käyttöohje.md)
 
 ## Viikkoraportit
 
@@ -15,5 +15,5 @@ BikeRoute sovelluksen tarkoitus on etsiä lyhyin pyöräilyreitti paikasta A pai
 - [Viikkoraportti 2](https://github.com/tommise/BikeRoute/blob/master/dokumentaatio/viikkoraportit/viikkoraportti_2.md)
 - [Viikkoraportti 3](https://github.com/tommise/BikeRoute/blob/master/dokumentaatio/viikkoraportit/viikkoraportti_3.md)
 - [Viikkoraportti 4](https://github.com/tommise/BikeRoute/blob/master/dokumentaatio/viikkoraportit/viikkoraportti_4.md)
-- Viikkoraportti 5
+- [Viikkoraportti 5](https://github.com/tommise/BikeRoute/blob/master/dokumentaatio/viikkoraportit/viikkoraportti_5.md)
 - Viikkoraportti 6
