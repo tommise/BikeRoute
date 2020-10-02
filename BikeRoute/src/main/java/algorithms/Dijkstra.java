@@ -2,8 +2,8 @@ package algorithms;
 
 import components.Kaari;
 import components.Solmu;
-import datastructures.ArrayList;
 import datastructures.PriorityQueue;
+import java.util.ArrayList;
 import java.util.Comparator;
 
 

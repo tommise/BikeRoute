@@ -4,7 +4,7 @@ package algorithms;
 import components.Heuristiikka;
 import components.Kaari;
 import components.Solmu;
-import datastructures.ArrayList;
+import java.util.ArrayList;
 
 import java.util.Comparator;
 import java.util.HashSet;
