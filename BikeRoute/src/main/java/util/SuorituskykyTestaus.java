@@ -1,29 +1,21 @@
 
 package util;
 
-import datastructures.ArrayList;
+import algorithms.AStar;
+import algorithms.Dijkstra;
+import algorithms.JPS;
+import components.Solmu;
+import components.Verkko;
+import io.VerkonRakentaja;
 
 public class SuorituskykyTestaus {
     
-    ArrayList<Long> astarAjat;    
-    ArrayList<Long> dijkstranAjat;
-    ArrayList<Long> jpsAjat;
-    
-    long alkuAika = 0;
-    long loppuAika = 0;
+    private long alkuAika = 0;
+    private long loppuAika = 0;
+    private double kokonaisaika = 0;
     
     /**
-     * Suorituskykytestauksen konstruktori, konstruktori alustaa kaikkien algoritmien listat
-     */
-    
-    public SuorituskykyTestaus() {
-        this.astarAjat = new ArrayList<Long>();
-        this.dijkstranAjat = new ArrayList<Long>();
-        this.jpsAjat = new ArrayList<Long>();
-    }
-    
-    /**
-     * Aloittaa ajanlaskun
+     * Aloittaa ajanoton
      */
     
     public void aloita() {
@@ -31,32 +23,118 @@ public class SuorituskykyTestaus {
     }
     
     /**
-     * Lopettaa ajanlaskun ja tallettaa ajan listarakenteeseen
-     * @param algoritmi algoritmi joka käytössä
+     * Lopettaa ajanoton
      */
     
-    public void lopeta(String algoritmi) {
+    public void lopeta() {
         this.loppuAika = System.nanoTime();
         
-        long kokonaisaika = loppuAika - alkuAika;
+        double tulos = ((loppuAika - alkuAika) / 1e9);
         
-        if (algoritmi.equals("aStar")) {
-            astarAjat.add(kokonaisaika);
-        } else if (algoritmi.equals("Dijkstra")) {
-            dijkstranAjat.add(kokonaisaika);
-        } else if (algoritmi.equals("JPS")) {
-            jpsAjat.add(kokonaisaika);
-        }
+        this.kokonaisaika += tulos;
         
         reset();
     }
     
     /**
-     * Muuttaa ajat takaisin nolliksi
+     * Nollaa alkuajan sekä loppuajan
      */
     
     public void reset() {
         this.alkuAika = 0;
         this.loppuAika = 0;
+    }
+    
+    /**
+     * Dijkstran algoritmin testailun metodi
+     * @param kierroksia kierrosten lukumäärä
+     * @return kokonaisaika double muodossa
+     */
+    
+    public double dijkstra(int kierroksia) {
+        
+        this.kokonaisaika = 0;
+        
+        int i = 0;
+        
+        while (i <= kierroksia) {
+            Verkko verkko = VerkonRakentaja.luoTestiVerkko();
+
+            Solmu alku = verkko.getSolmut().get(0);
+            Solmu loppu = verkko.getSolmut().get(verkko.getSolmut().size() - 1);    
+            
+            Dijkstra dijkstra = new Dijkstra();
+            
+            aloita();
+            dijkstra.etsi(alku, loppu);
+            lopeta();
+            
+            reset();
+            i++;
+        }
+        
+        return kokonaisaika;
+    }
+    
+    /**
+     * AStar algoritmin testailun metodi
+     * @param kierroksia kierrosten lukumäärä
+     * @return kokonaisaika double muodossa
+     */
+    
+    public double astar(int kierroksia) {
+        
+        this.kokonaisaika = 0;
+        
+        int i = 0;
+        
+        while (i <= kierroksia) {
+            Verkko verkko = VerkonRakentaja.luoTestiVerkko();
+
+            Solmu alku = verkko.getSolmut().get(0);
+            Solmu loppu = verkko.getSolmut().get(verkko.getSolmut().size() - 1);    
+            
+            AStar astar = new AStar();
+            
+            aloita();
+            astar.etsi(alku, loppu);
+            lopeta();
+            
+            reset();
+            i++;
+        }
+        
+        return kokonaisaika;
+    }
+    
+    /**
+     * JPS algoritmin testailun metodi
+     * @param kierroksia kierrosten lukumäärä
+     * @return kokonaisaika double muodossa
+     */
+    
+    public double jps(int kierroksia) {
+        
+        this.kokonaisaika = 0;
+        
+        int i = 0;
+        
+        while (i <= kierroksia) {
+            Verkko verkko = VerkonRakentaja.luoTestiVerkko();
+
+            Solmu alku = verkko.getSolmut().get(0);
+            Solmu loppu = verkko.getSolmut().get(verkko.getSolmut().size() - 1);    
+            
+            JPS jps = new JPS();
+            
+            aloita();
+            jps.etsi(alku, loppu);
+            lopeta();
+            
+            reset();
+            i++;
+        }
+        
+        return kokonaisaika;
     }
 }
