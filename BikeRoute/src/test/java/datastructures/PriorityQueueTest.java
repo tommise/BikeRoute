@@ -28,9 +28,9 @@ public class PriorityQueueTest {
         };
         
         queue = new PriorityQueue<Solmu>(comp);
-        this.solmu1 = new Solmu("Jokitie");
-        this.solmu2 = new Solmu("Kallastie");
-        this.solmu3 = new Solmu("Kallastie");
+        this.solmu1 = new Solmu("Jokitie", 10, 10);
+        this.solmu2 = new Solmu("Kallastie", 20, 20);
+        this.solmu3 = new Solmu("Kallastie", 30, 30);
     } 
     
     @Test
