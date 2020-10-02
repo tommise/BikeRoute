@@ -18,7 +18,7 @@ public class Heuristiikka {
         
         return latitudes + longitudes;
     }
-    
+
     /**
      * Laskee Haversine tekniikan mukaisesti suoran pituuden kahden geopisteen välillä
      * - Käytetään kahden kaaren etaisyyden mittaamiseen

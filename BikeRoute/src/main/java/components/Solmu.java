@@ -1,7 +1,8 @@
 
 package components;
 
-import datastructures.ArrayList;
+import io.KarttaSolmu;
+import java.util.ArrayList;
 
 /**
  * Solmua kuvaava luokka
@@ -9,9 +10,9 @@ import datastructures.ArrayList;
 
 public class Solmu implements Comparable<Solmu> {
     
-    private final String nimi;
+    private String nimi = "";
     private double minimiEtaisyys = Double.MAX_VALUE;    
-    private final ArrayList<Kaari> kaaret;   
+    private final ArrayList<Kaari> kaaret;  
     private Solmu edellinenSolmu;    
     
     private double gluku;
@@ -19,6 +20,7 @@ public class Solmu implements Comparable<Solmu> {
     
     private double latitude;
     private double longitude;
+    private long id;
     
     /**
      * Solmu luokan konstruktori
@@ -35,21 +37,22 @@ public class Solmu implements Comparable<Solmu> {
     }
     
     /**
-     * Solmun konstruktori ilman leveys/korkeus koordinaatteja
-     * @param nimi 
+     * KarttaSolmu luokallinen konstruktori
+     * @param solmu luotava solmu KarttaSolmu muodossa
      */
-    
-    public Solmu(String nimi) {
-        this.nimi = nimi;
-        this.kaaret = new ArrayList<Kaari>();        
-    }    
+    public Solmu(KarttaSolmu solmu) {
+        this.id = solmu.getID();
+        this.latitude = solmu.getLatitude();
+        this.longitude = solmu.getLongitude();
+        this.kaaret = new ArrayList<Kaari>();
+    }
     
     /**
-     * Lisää solmun kaarilistaan haluttavan kaaren eli naapurin
+     * Lisää solmun kaarilistaan haluttavan kaare
      * @param kaari lisättävä kaari
      */
 
-    public void addNaapuri(Kaari kaari) {
+    public void addKaari(Kaari kaari) {
         this.kaaret.add(kaari);
     }
     
@@ -70,6 +73,21 @@ public class Solmu implements Comparable<Solmu> {
     public ArrayList<Kaari> getKaaret() {
         return kaaret;
     }
+    
+    /**
+     * Palauttaa naapurisolmut listalla
+     * @return naapurisolmut listarakenteessa
+     */
+    
+    public ArrayList<Solmu> getNaapuriSolmut() {
+        ArrayList<Solmu> lista = new ArrayList<Solmu>();
+        
+        for (Kaari kaari : kaaret) {
+            lista.add(kaari.getLoppu());
+        } 
+        
+        return lista;
+    } 
     
     /**
      * Palauttaa minimi etäisyyden
@@ -177,6 +195,15 @@ public class Solmu implements Comparable<Solmu> {
     
     public void setLongitude(int longitude) {
         this.longitude = longitude;
+    }
+    
+    /**
+     * Palauttaa solmun ID:n
+     * @return palautettava id long muodossa
+     */
+    
+    public long getID() {
+        return this.id;
     }
     
     @Override
