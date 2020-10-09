@@ -25,6 +25,9 @@ dependencies {
     
     // https://mvnrepository.com/artifact/org.openstreetmap.osmosis/osmosis-pbf
     compile group: 'org.openstreetmap.osmosis', name: 'osmosis-pbf', version: '0.43-RELEASE'
+    
+    // https://mvnrepository.com/artifact/org.jxmapviewer/jxmapviewer2
+    compile group: 'org.jxmapviewer', name: 'jxmapviewer2', version: '2.5'
 }
 
 jacoco {
@@ -42,8 +45,8 @@ jacocoTestReport {
             fileTree(dir: it, exclude: [
                 'Main**',            
                 '/ui**',                
-                '/util**',
-                '/io**'                        
+                '/io**',
+                '/suorituskyky**'                       
             ])
             
         })
