@@ -1,11 +1,11 @@
 
-package components;
+package komponentit;
 
 /**
 * Kaari luokka, jota hyödynnetään verkkojen komponentteina
 */
 
-public class Kaari {
+public final class Kaari {
     
     private final Solmu alku;
     private final Solmu loppu;
@@ -28,35 +28,9 @@ public class Kaari {
         this.nimi = nimi;
         this.tienTyyppi = tienTyyppi;
         this.heuristiikka = new Heuristiikka();
+        // asetetaan kaarelle pituus (paino) haversine tekniikan mukaisesti
+        this.etaisyys = heuristiikka.haversineMetodi(alku.getLatitude(), alku.getLongitude(), loppu.getLatitude(), loppu.getLongitude());
     }
-    
-    /**
-     * Kaari luokan konstruktori testikäyttöön
-     * @param alku Solmu josta kaari lähtee
-     * @param loppu Solmu johon kaari päättyy
-     * @param etaisyys Kaaren etäisyys (paino)
-     */
-
-    public Kaari(Solmu alku, Solmu loppu, double etaisyys) {
-        this.alku = alku;
-        this.loppu = loppu;
-        this.etaisyys = etaisyys; 
-        this.heuristiikka = new Heuristiikka();
-    }
-    
-    /**
-     * Lasketaan kaarelle etäisyys Haversine metodia hyödyntäen
-     */
-    
-    public void laskeEtaisyys() {
-        double alkulat = alku.getLatitude();
-        double alkulon = alku.getLongitude();
-        
-        double loppulat = loppu.getLatitude();
-        double loppulon = loppu.getLongitude();
-        
-        this.etaisyys = heuristiikka.haversineMethod(alkulat, alkulon, loppulat, loppulon);
-    }    
     
     /**
      * Palauttaa solmun, mistä kaari alkaa

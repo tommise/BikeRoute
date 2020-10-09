@@ -1,8 +1,7 @@
 
-package components;
+package komponentit;
 
-import io.KarttaSolmu;
-import java.util.ArrayList;
+import tietorakenteet.ArrayList;
 
 /**
  * Solmua kuvaava luokka
@@ -10,40 +9,32 @@ import java.util.ArrayList;
 
 public class Solmu implements Comparable<Solmu> {
     
-    private String nimi = "";
-    private double minimiEtaisyys = Double.MAX_VALUE;    
-    private final ArrayList<Kaari> kaaret;  
-    private Solmu edellinenSolmu;    
+    private long id;     
     
     private double gluku;
-    private double fluku = 0;
+    private double fluku;
+    private double hluku;
+    private double minimiEtaisyys;
     
     private double latitude;
     private double longitude;
-    private long id;
+    
+    private ArrayList<Kaari> kaaret;    
+    private Solmu edellinenSolmu;    
     
     /**
      * Solmu luokan konstruktori
-     * @param nimi solmun nimi
+     * @param id solmun id
      * @param latitude solmun leveys koordinaatti
      * @param longitude solmun korkeus koordinaatti
      */
     
-    public Solmu(String nimi, double latitude, double longitude) {
-        this.nimi = nimi;
+    public Solmu(long id, double latitude, double longitude) {
+        this.id = id;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.kaaret = new ArrayList<Kaari>();
-    }
-    
-    /**
-     * KarttaSolmu luokallinen konstruktori
-     * @param solmu luotava solmu KarttaSolmu muodossa
-     */
-    public Solmu(KarttaSolmu solmu) {
-        this.id = solmu.getID();
-        this.latitude = solmu.getLatitude();
-        this.longitude = solmu.getLongitude();
+        this.gluku = Double.MAX_VALUE;
+        this.minimiEtaisyys = Double.MAX_VALUE;
         this.kaaret = new ArrayList<Kaari>();
     }
     
@@ -54,15 +45,6 @@ public class Solmu implements Comparable<Solmu> {
 
     public void addKaari(Kaari kaari) {
         this.kaaret.add(kaari);
-    }
-    
-    /**
-     * Palauttaa solmun nimen
-     * @return palautettavan solmun nimi
-     */
-    
-    public String getNimi() {
-        return nimi;
     }
 
     /**
@@ -75,22 +57,16 @@ public class Solmu implements Comparable<Solmu> {
     }
     
     /**
-     * Palauttaa naapurisolmut listalla
-     * @return naapurisolmut listarakenteessa
+     * Palauttaa solmun ID:n
+     * @return palautettava id long muodossa
      */
     
-    public ArrayList<Solmu> getNaapuriSolmut() {
-        ArrayList<Solmu> lista = new ArrayList<Solmu>();
-        
-        for (Kaari kaari : kaaret) {
-            lista.add(kaari.getLoppu());
-        } 
-        
-        return lista;
-    } 
+    public long getID() {
+        return this.id;
+    }
     
     /**
-     * Palauttaa minimi etäisyyden
+     * Palauttaa lyhyimmän etäisyyden alusta solmuun asti
      * @return palautettava etäisyys double muodossa
      */
 
@@ -108,16 +84,7 @@ public class Solmu implements Comparable<Solmu> {
     }
     
     /**
-     * Palauttaa edellisen solmun
-     * @return edellinen solmu olio
-     */
-    
-    public Solmu getEdellinenSolmu() {
-        return edellinenSolmu;
-    }
-
-    /**
-     * Asettaa edellisen solmun
+     * Asettaa edellisen solmun, käytetään algoritmin reitin lukemisen helpottamiseksi
      * @param edellinenSolmu asetettava edellinen solmu
      */
     
@@ -126,7 +93,16 @@ public class Solmu implements Comparable<Solmu> {
     } 
     
     /**
-     * Palauttaa A* algoritmissä käytetyn gluku scoren
+     * Palauttaa edellisen solmun
+     * @return edellinen solmu olio
+     */
+    
+    public Solmu getEdellinenSolmu() {
+        return edellinenSolmu;
+    }
+    
+    /**
+     * Palauttaa g luvun
      * @return palautettava gluku score double muodossa
      */
     
@@ -135,7 +111,7 @@ public class Solmu implements Comparable<Solmu> {
     }
     
     /**
-     * Asettaa A* algoritmissä käytetyn gluku scoren uuden arvon
+     * Asettaa g luvulle uuden arvon
      * @param g asetettava gluku score
      */  
 
@@ -144,7 +120,7 @@ public class Solmu implements Comparable<Solmu> {
     }
     
     /**
-     * Palauttaa A* algoritmissä käytetyn fluku scoren
+     * Palauttaa f arvon
      * @return palautettava fluku score double muodossa
      */    
 
@@ -153,12 +129,30 @@ public class Solmu implements Comparable<Solmu> {
     }
     
     /**
-     * Asettaa A* algoritmissä käytetyn fluku scoren uuden arvon
+     * Asettaa f luvulle uuden arvon
      * @param f asetettava uusi fluku score
      */
     
     public void setF(double f) {
         this.fluku = f;
+    }  
+    
+    /**
+     * Palauttaa h luvun
+     * @return h luku double muodossa
+     */
+    
+    public double getH() {
+        return this.hluku;
+    }
+    
+    /**
+     * Asettaa h luvun
+     * @param luku 
+     */
+    
+    public void setH(double luku) {
+        this.hluku = luku;
     }    
     
     /**
@@ -195,20 +189,16 @@ public class Solmu implements Comparable<Solmu> {
     
     public void setLongitude(int longitude) {
         this.longitude = longitude;
-    }
+    }   
     
     /**
-     * Palauttaa solmun ID:n
-     * @return palautettava id long muodossa
+     * Asettaa edellisenSolmun, g luvun ja minimi etäisyyden oletusarvoihinsa, käytetään reitin lukemisen jälkeen
      */
     
-    public long getID() {
-        return this.id;
-    }
-    
-    @Override
-    public String toString() {
-        return this.nimi;
+    public void resetSolmu() {
+        this.edellinenSolmu = null;
+        this.gluku = Double.MAX_VALUE;
+        this.minimiEtaisyys = Double.MAX_VALUE;
     }
 
     @Override

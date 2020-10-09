@@ -1,5 +1,5 @@
 
-package components;
+package komponentit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,38 +49,18 @@ public class Verkko {
     }
     
     /**
-     * Palauttaa solmun nimen perusteella
-     * @param nimi - solmun (tien) nimi
+     * Palauttaa solmun latitudin ja longitudin perusteella
+     * @param latitude
+     * @param longitude
      * @return löydettäessä palauttaa solmun, muuten null
      */
     
-    public Solmu getSolmuByNimi(String nimi) {
+    public Solmu getSolmuByLatAndLon(double latitude, double longitude) {
         
         for (int i = 0; i < solmut.size(); i++) {
             Solmu solmu = solmut.get(i);
             
-            if (solmu.getNimi().equals(nimi)) {
-                return solmu;
-            }
-        }
-
-        return null;
-    }
-    
-    /**
-     * Palauttaa solmun ID:n perusteella
-     * @param stringID solmun ID
-     * @return palautettava solmu olio, null jos tyhjä
-     */
-    
-    public Solmu getSolmuByID(String stringID) {
-        
-        long id = Long.parseLong(stringID);
-        
-        for (int i = 0; i < solmut.size(); i++) {
-            Solmu solmu = solmut.get(i);
-            
-            if (solmu.getID() == id) {
+            if (solmu.getLatitude() == latitude && solmu.getLongitude() == longitude) {
                 return solmu;
             }
         }

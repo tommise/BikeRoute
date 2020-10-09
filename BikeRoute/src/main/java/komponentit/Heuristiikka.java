@@ -1,10 +1,14 @@
 
-package components;
+package komponentit;
+
+import tyokalut.Matikka;
 
 public class Heuristiikka {
     
+    Matikka mat = new Matikka();
+    
     /**
-     * Manhattan Distance
+     * Manhattan Etaisyys
      * 
      * @param nyky - nykyinen solmu
      * @param tavoite - tavoitesolmu
@@ -12,13 +16,14 @@ public class Heuristiikka {
      * @return Palauttaa heuristiikan manhattan etaisyys tekniikan mukaisesti
      */    
     
-    public double manhattanDistance(Solmu nyky, Solmu tavoite) {
-        double latitudes = Math.abs(nyky.getLatitude() - tavoite.getLatitude());
-        double longitudes = Math.abs(nyky.getLongitude() - tavoite.getLongitude());
+    public double manhattanEtaisyys(Solmu nyky, Solmu tavoite) {
+        
+        double latitudes = mat.itseisarvo(nyky.getLatitude() - tavoite.getLatitude());
+        double longitudes = mat.itseisarvo(nyky.getLongitude() - tavoite.getLongitude());
         
         return latitudes + longitudes;
     }
-
+    
     /**
      * Laskee Haversine tekniikan mukaisesti suoran pituuden kahden geopisteen välillä
      * - Käytetään kahden kaaren etaisyyden mittaamiseen
@@ -31,19 +36,21 @@ public class Heuristiikka {
      * @return palauttaa etaisyyden metreissä double muodossa
      */
     
-    public double haversineMethod(double alkuLat, double alkuLon, double loppuLat, double loppuLon) {
-        int maapallonSade = 6371; /// Maapallon säde 6371km
-        double latEtaisyys = Math.toRadians(loppuLat - alkuLat);
-        double lonEtaisyys = Math.toRadians(loppuLon - alkuLon);
-
-        alkuLat = Math.toRadians(alkuLat);
-        loppuLat = Math.toRadians(loppuLat);
+    public double haversineMetodi(double alkuLat, double alkuLon, double loppuLat, double loppuLon) {
+        int maapallonSade = 6371; /// Kilometreissä
         
-        double apuLat = Math.pow(Math.sin(latEtaisyys / 2), 2);
-        double apuLon = Math.pow(Math.sin(lonEtaisyys / 2), 2);
+        double latEtaisyys = mat.radiaani(loppuLat - alkuLat);
+        double lonEtaisyys = mat.radiaani(loppuLon - alkuLon);
+
+        alkuLat = mat.radiaani(alkuLat);
+        loppuLat = mat.radiaani(loppuLat);
+
+        double apuLat = mat.potenssi(mat.sini(latEtaisyys / 2), 2);
+        double apuLon = mat.potenssi(mat.sini(lonEtaisyys / 2), 2);
 
         double a = apuLat + Math.cos(alkuLat) * Math.cos(loppuLat) * apuLon;
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        
+        double c = 2 * Math.atan2(Math.sqrt(a), mat.neliojuuri(1 - a));
         
         double etaisyys = maapallonSade * c * 1000; /// Muutetaan metreiksi
 
