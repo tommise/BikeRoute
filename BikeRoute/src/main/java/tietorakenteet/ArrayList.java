@@ -1,5 +1,5 @@
 
-package datastructures;
+package tietorakenteet;
 
 /**
  * ArrayList listaa kuvaava luokka
@@ -47,7 +47,7 @@ public class ArrayList<E> {
      */
     
     public E get(int indeksi) {
-        E obj = null;
+        E obj;
         
         if (indeksi < 0 || indeksi >= size) {
             throw new IndexOutOfBoundsException();
@@ -66,6 +66,15 @@ public class ArrayList<E> {
     
     public int size() {
         return this.size;
+    }
+    
+    /**
+     * Tarkistaa onko lista tyhjä
+     * @return true jos tyhjä, false jos listalla alkioita
+     */
+    
+    public boolean isEmpty() {
+        return this.arrayList.length == 0;
     }
     
     /**
