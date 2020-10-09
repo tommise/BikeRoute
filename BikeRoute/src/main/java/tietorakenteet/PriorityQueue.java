@@ -1,5 +1,5 @@
 
-package datastructures;
+package tietorakenteet;
 
 import java.util.Comparator;
 
