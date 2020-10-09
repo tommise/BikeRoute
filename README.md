@@ -1,6 +1,6 @@
 # BikeRoute
 
-BikeRoute sovelluksen tarkoitus on etsiä lyhyin pyöräilyreitti paikasta A paikkaan B ja vertailemaan kuinka kauan käytetyillä algoritmeilla (Dijkstra, A* tai JPS) menee tähän aikaa. Sovellus hyödyntää [Openstreetmap](https://www.openstreetmap.org/) karttadataa ja se on toteutettu Javalla.
+BikeRoute sovelluksen tarkoitus on etsiä lyhyin pyöräilyreitti paikasta A paikkaan B ja vertailemaan kuinka kauan käytetyillä algoritmeilla (Dijkstra, A* tai Fringe Search) menee tähän aikaa. Sovellus hyödyntää [Openstreetmap](https://www.openstreetmap.org/) karttadataa ja se on toteutettu Javalla.
 
 ## Dokumentaatio
 
@@ -16,4 +16,4 @@ BikeRoute sovelluksen tarkoitus on etsiä lyhyin pyöräilyreitti paikasta A pai
 - [Viikkoraportti 3](https://github.com/tommise/BikeRoute/blob/master/dokumentaatio/viikkoraportit/viikkoraportti_3.md)
 - [Viikkoraportti 4](https://github.com/tommise/BikeRoute/blob/master/dokumentaatio/viikkoraportit/viikkoraportti_4.md)
 - [Viikkoraportti 5](https://github.com/tommise/BikeRoute/blob/master/dokumentaatio/viikkoraportit/viikkoraportti_5.md)
-- Viikkoraportti 6
+- [Viikkoraportti 6](https://github.com/tommise/BikeRoute/blob/master/dokumentaatio/viikkoraportit/viikkoraportti_6.md)
