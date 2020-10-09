@@ -1,11 +1,11 @@
-package algorithms;
+package algoritmit;
 
-import components.Kaari;
-import components.Solmu;
-import datastructures.PriorityQueue;
-import java.util.ArrayList;
 import java.util.Comparator;
 
+import komponentit.Kaari;
+import komponentit.Solmu;
+import tietorakenteet.ArrayList;
+import tietorakenteet.PriorityQueue;
 
 /**
  * Dijkstran algoritmi hyödyntäen PriorityQueta sekä lyhyimmän reitin tallettaminen listaan
@@ -22,23 +22,24 @@ public class Dijkstra {
     public void etsi(Solmu alku, Solmu loppu) {
         
         alku.setMinimiEtaisyys(0);
-        PriorityQueue<Solmu> pq = new PriorityQueue<Solmu>(luoPrioriteetti());
-        pq.add(alku);
+        PriorityQueue<Solmu> prioriteettijono = new PriorityQueue<Solmu>(luoPrioriteetti());
+        prioriteettijono.add(alku);
 
-        while (!pq.isEmpty()) {
-            Solmu solmu = pq.poll();
-            ArrayList<Kaari> kaaret = solmu.getKaaret();
+        while (!prioriteettijono.isEmpty()) {
+            Solmu nyky = prioriteettijono.poll();
+            ArrayList<Kaari> kaaret = nyky.getKaaret();
             
             for (int i = 0; i < kaaret.size(); i++) {
                 Kaari kaari = kaaret.get(i);
-                Solmu s = kaari.getLoppu();
-                double uusiMinimiEtaisyys = solmu.getMinimiEtaisyys() + kaari.getEtaisyys();
+                Solmu solmu = kaari.getLoppu();
+                double uusiMinimiEtaisyys = nyky.getMinimiEtaisyys() + kaari.getEtaisyys();
 
-                if (uusiMinimiEtaisyys < s.getMinimiEtaisyys()) {
-                    pq.remove(solmu);
-                    s.setEdellinenSolmu(solmu);
-                    s.setMinimiEtaisyys(uusiMinimiEtaisyys);
-                    pq.add(s);
+                if (uusiMinimiEtaisyys < solmu.getMinimiEtaisyys()) {
+                    prioriteettijono.remove(nyky);
+                    solmu.setEdellinenSolmu(nyky);
+                    solmu.setMinimiEtaisyys(uusiMinimiEtaisyys);
+                    
+                    prioriteettijono.add(solmu);
                 }
             }
         }
@@ -62,8 +63,9 @@ public class Dijkstra {
         ArrayList<Solmu> kaannettyReitti = new ArrayList<Solmu>(); 
         
         for (int i = reitti.size() - 1; i >= 0; i--) { 
-            kaannettyReitti.add(reitti.get(i)); 
-        } 
+            Solmu solmu = reitti.get(i);
+            kaannettyReitti.add(solmu); 
+        }
         
         return kaannettyReitti; 
     }
