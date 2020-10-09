@@ -1,5 +1,5 @@
 
-package datastructures;
+package tietorakenteet;
 
 import static org.junit.Assert.*;
 

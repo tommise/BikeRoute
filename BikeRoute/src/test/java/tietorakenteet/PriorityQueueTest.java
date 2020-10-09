@@ -1,9 +1,9 @@
 
-package datastructures;
+package tietorakenteet;
 
 import static org.junit.Assert.*;
 
-import components.Solmu;
+import komponentit.Solmu;
 
 import java.util.Comparator;
 import org.junit.Before;
@@ -28,9 +28,9 @@ public class PriorityQueueTest {
         };
         
         queue = new PriorityQueue<Solmu>(comp);
-        this.solmu1 = new Solmu("Jokitie", 10, 10);
-        this.solmu2 = new Solmu("Kallastie", 20, 20);
-        this.solmu3 = new Solmu("Kallastie", 30, 30);
+        this.solmu1 = new Solmu(1, 10, 10);
+        this.solmu2 = new Solmu(2, 20, 20);
+        this.solmu3 = new Solmu(3, 30, 30);
     } 
     
     @Test
@@ -86,7 +86,7 @@ public class PriorityQueueTest {
         
         queue.poll();
         
-        assertEquals(2, queue.size());
+        assertEquals(false, queue.contains(solmu1));
     }       
     
     @Test
@@ -116,5 +116,11 @@ public class PriorityQueueTest {
     public void palauttaaFalseKunJonossaElementteja() {
         queue.add(solmu3);
         assertFalse(queue.isEmpty());
-    }      
+    }  
+
+    @Test
+    public void palauttaaNullKunPollataanTyhjastaJonosta() {
+        Solmu solmu = queue.poll();
+        assertEquals(null, solmu);
+    }
 }

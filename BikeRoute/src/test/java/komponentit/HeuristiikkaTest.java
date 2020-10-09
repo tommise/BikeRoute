@@ -1,5 +1,5 @@
 
-package components;
+package komponentit;
 
 import static org.junit.Assert.*;
 
@@ -18,13 +18,13 @@ public class HeuristiikkaTest {
     }
     
     /**
-     * Kahden pisteen oikea etaisyys laskettu linnuntielaskurin avulla, esim mapdevelopers
+     * Kahden geopisteen etaisyys laskettu linnuntielaskurin avulla, esim mapdevelopers
      */
     
     @Test
     public void haversinePalauttaaOikein() {
-        Solmu gurula = new Solmu("Gurula", 60.2042304, 24.9614875);
-        Solmu klusteri = new Solmu("Klusteri", 60.1696052, 24.921479993131108);
+        Solmu gurula = new Solmu(1, 60.2042304, 24.9614875);
+        Solmu klusteri = new Solmu(2, 60.1696052, 24.921479993131108);
         
         double klulat = klusteri.getLatitude();
         double klulon = klusteri.getLongitude();
@@ -32,7 +32,7 @@ public class HeuristiikkaTest {
         double gurlat = gurula.getLatitude();
         double gurlon = gurula.getLongitude();
         
-        double etaisyys = heuristiikka.haversineMethod(klulat, klulon, gurlat, gurlon);
+        double etaisyys = heuristiikka.haversineMetodi(klulat, klulon, gurlat, gurlon);
         
         double oikeaEtaisyys = 4440;
         
