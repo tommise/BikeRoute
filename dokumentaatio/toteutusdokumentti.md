@@ -2,12 +2,12 @@
 
 ## Ohjelman yleisrakenne
 
-Projektissa toteutettiin kolme erilaista reitinhakualgoritmia. Nämä algoritmit ovat Dijkstra, A* sekä JPS (Jump Point Search). Käytännössä A* on paranneltu versio Dijkstrasta ja Jump Point Search paranneltu versio A*:sta.
+Projektissa toteutettiin kolme erilaista reitinhakualgoritmia. Nämä algoritmit ovat Dijkstra, A* sekä Fringe Search. Käytännössä A* on paranneltu versio Dijkstrasta ja Fringe Search paranneltu versio A*:sta.
 
 Projektin rakenne on seuraava:
-- Paketissa _algorithms_ on A*, Dijkstra ja JPS
-- Paketissa _components_ on Heuristiikka, Kaari, Solmu, SolmuJPS ja Verkko
-- Paketissa _datastructures_ on ArrayList, HashSet, PriorityQueue
+- Paketissa _algoritmit_ on A*, Dijkstra ja Fringe Search
+- Paketissa _komponentit_ on Heuristiikka, Kaari, Solmu ja Verkko
+- Paketissa _tietorakenteet_ on ArrayList, HashSet, PriorityQueue
 - Paketissa _io_ on Kartankäsittelijä, KarttaObjekti, KarttaTie, VerkonKasittelija ja VerkonRakentaja
 - Paketissa _ui_ on Käyttöliittymä
 - Paketissa _util_ on ReitinTulostaja ja SuorituskykyTestaus
@@ -16,13 +16,15 @@ Projektin rakenne on seuraava:
 
 ### Algoritmit
 
-Dijkstran, A* ja JPS aikavaativuudet ovat O((|E|+|V|) log |V|) missä |E| on kaarien lukumäärä (edges) ja |V| on solmujen lukumäärä (vertices) ja tilavaativuus O(|V|). Vaikka kaikilla reitinhakualgoritmeillä on sama aikavaativuus niin käytännössä algoritmeillä on verrattain suurikin nopeusero.
+Dijkstran ja A* aikavaativuudet ovat O((|E|+|V|) log |V|) missä |E| on kaarien lukumäärä (edges) ja |V| on solmujen lukumäärä (vertices) ja tilavaativuus O(|V|). Vaikka Dijkstralla ja A* on sama aikavaativuus niin käytännössä algoritmeillä on verrattain suurikin nopeusero. Fringe Searchin..
 
 ### Tietorakenteet
 
 **ArrayListin** lisäyksen _(add)_ aikavaativuus on O(1) ellei kokoa joudu kasvattamaan jolloin O(n). Noudon _(get)_ aikavaativuus on O(1).
 
 **PriorityQueuen** lisäyksen _(add)_, poiston _(remove)_ ja pollin _(poll)_ aikavaativuudet ovat O(log(n)).
+
+**HashSet** 
 
 ## Puutteet ja parannusehdotukset
 
