@@ -1,18 +1,39 @@
 
 package ui;
 
-import algorithms.AStar;
-import algorithms.Dijkstra;
-import components.Kaari;
-import components.Solmu;
-import components.Verkko;
+import algoritmit.AStar;
+import algoritmit.Dijkstra;
+import algoritmit.FringeSearch;
 import io.VerkonRakentaja;
+
+import java.io.File;
+
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 
-import util.SuorituskykyTestaus;
+import javax.swing.JFrame;
+import javax.swing.event.MouseInputListener;
+
+import komponentit.Kaari;
+import komponentit.Solmu;
+import komponentit.Verkko;
+import org.jxmapviewer.JXMapViewer;
+import org.jxmapviewer.OSMTileFactoryInfo;
+import org.jxmapviewer.cache.FileBasedLocalCache;
+import org.jxmapviewer.input.CenterMapListener;
+import org.jxmapviewer.input.PanKeyListener;
+import org.jxmapviewer.input.PanMouseInputListener;
+import org.jxmapviewer.input.ZoomMouseWheelListenerCenter;
+import org.jxmapviewer.viewer.DefaultTileFactory;
+import org.jxmapviewer.viewer.GeoPosition;
+import org.jxmapviewer.viewer.TileFactoryInfo;
+import org.jxmapviewer.viewer.Waypoint;
+import org.jxmapviewer.viewer.WaypointPainter;
+
+import suorituskyky.SuorituskykyTestaus;
 
 public class Kayttoliittyma {
     
@@ -22,29 +43,57 @@ public class Kayttoliittyma {
      */
 
     public static void main(String[] args) {
+
+        System.out.println("Luodaan verkko karttadatan pohjalta... (odota hetki)");     
         
-        Scanner lukija = new Scanner(System.in);
-        System.out.println("Luodaan polkupyöräverkosto... (odota hetki)");        
-        
-        VerkonRakentaja verkonRakentaja = new VerkonRakentaja();
-        verkonRakentaja.lueTiedosto();
-        
-        Verkko verkko = verkonRakentaja.luoVerkko();
+        VerkonRakentaja rakentaja = new VerkonRakentaja();
+        Verkko verkko = rakentaja.luoVerkko();
+        List<Solmu> solmut = verkko.getSolmut();        
         
         System.out.println("Kaikki valmista!");
+
+        Scanner lukija = new Scanner(System.in);
         
-        List<Solmu> solmut = verkko.getSolmut();
+        System.out.println("");
+        System.out.println("Tervetuloa!");
+        System.out.println("");
+        System.out.println("Valitse seuraavista:");
+        System.out.println("-------------------------");
+        System.out.println("1 Tekstipohjainen käyttöliittymä");
+        System.out.println("2 Visuaalinen käyttöliittymä (huom. ks. alla)");
+        System.out.println("");
+        System.out.println("- Visuaalinen käyttöliittymä vielä kesken, karttanäkymä avautuu");
+        System.out.println("- Seuraavaksi implementointiin reitinhaku karttanäkymällä");
+        System.out.println("");
         
+        String komento = lukija.nextLine();
+        
+        if (komento.equals("1")) {
+            tekstiKayttoliittyma(lukija, solmut);
+        } else if (komento.equals("2")) {
+            visuaalinenKayttoliittyma();
+        } else {
+            System.out.println("Väärä komento, yritä uudelleen");
+        }
+    }   
+    
+    /**
+     * Tekstikäyttöliittymä ohjelmalle
+     * @param lukija
+     * @param solmut verkon kaikki solmut
+     */
+    
+    public static void tekstiKayttoliittyma(Scanner lukija, List<Solmu> solmut) {
         while (true) {
             System.out.println("");
             System.out.println("-------------------------");
             System.out.println("");
             System.out.println("Tervetuloa!");
             System.out.println("");
-            System.out.println("1 Luo testiverkko");
+            System.out.println("1 Kasittele testiverkko");
             System.out.println("2 Suorituskykytestaus");
             System.out.println("3 Lue kartan tiet");
-            System.out.println("4 Testaa kartan verkkoa");
+            System.out.println("");
             System.out.println("x Poistu");
             System.out.println("");
             System.out.println("-------------------------");
@@ -54,13 +103,11 @@ public class Kayttoliittyma {
             System.out.println("");
             
             if (komento.equals("1")) {
-                luoTestiVerkko(lukija);
+                kasitteleTestiVerkko();
             } else if (komento.equals("2")) {
                 suoritusKykyTestaus();
-            } else if(komento.equals("3")) {
+            } else if (komento.equals("3")) {
                 lueKartanTiet(solmut);
-            } else if (komento.equals("4")) {
-                testaaKartanVerkkoa(verkko);
             } else if (komento.equals("x")) {
                 System.out.println("Kiitos ja näkemiin!");
                 break;
@@ -68,39 +115,45 @@ public class Kayttoliittyma {
                 System.out.println("Väärä komento.");
             }
         }
-        
     }
     
     /**
-     * Luodaan testiverkko tulostettavaksi
-     * @param lukija käyttäjän syöte
+     * Käsittelee testiverkon kolme eri reittiä kaikilla algoritmeillä
      */
     
-    public static void luoTestiVerkko(Scanner lukija) {
-        System.out.println("Rantatie");
-        System.out.println("Koulutie");
-        System.out.println("Rinnetie");
-        System.out.println("Kirkkotie");
-        System.out.println("Teollisuustie");
-        System.out.println("Myllytie");
-        System.out.println("Kuusitie");
-        System.out.println("Mäntytie");
-        System.out.println("Keskustie");
+    public static void kasitteleTestiVerkko() {
         
-        System.out.println("");        
-        System.out.println("Mistä lähdet:");
-        String lahtoSolmu = lukija.nextLine();
+        VerkonRakentaja verkonRakentaja = new VerkonRakentaja();
+        Verkko verkko = verkonRakentaja.luoTestiVerkko();
+        
+        List<Solmu> solmut = verkko.getSolmut();
+        
+        System.out.println("Reitti 1:");
+        System.out.println("-------");
+        
+        Solmu alku1 = solmut.get(0);
+        Solmu loppu1 = solmut.get(solmut.size() - 1);
+        
+        tulostaKaikkiReitit(alku1, loppu1);
+        
         System.out.println("");
-        System.out.println("Minne haluat:");
-        String tavoiteSolmu = lukija.nextLine();
-        System.out.println("");
+        System.out.println("Reitti 2:");
+        System.out.println("-------");
 
-        Verkko verkko = VerkonRakentaja.luoTestiVerkko();
+        Solmu alku2 = solmut.get(3);
+        Solmu loppu2 = solmut.get(12);
         
-        Solmu alku = verkko.getSolmuByNimi(lahtoSolmu);
-        Solmu loppu = verkko.getSolmuByNimi(tavoiteSolmu);
+        tulostaKaikkiReitit(alku2, loppu2);
+
+        System.out.println("");
+        System.out.println("Reitti 3:");
+        System.out.println("-------");   
         
-        tulostaKaikkiReitit(alku, loppu);
+        Solmu alku3 = solmut.get(10);
+        Solmu loppu3 = solmut.get(18);
+        
+        tulostaKaikkiReitit(alku3, loppu3);
+        
     }
     
     /**
@@ -110,22 +163,33 @@ public class Kayttoliittyma {
     public static void suoritusKykyTestaus() {
         SuorituskykyTestaus suoritus = new SuorituskykyTestaus();
         
-        int kierroksia = 50000;
+        int kierroksia = 5000000;
         
         System.out.println("");
         System.out.println("Suorituskykytestaus:");
         System.out.println("Kierroksia: " + kierroksia);
         System.out.println("");
+        System.out.println("(odota hetki)");
+        System.out.println("");
+        
         System.out.println("Dijkstra");
         double dijkstraAika = suoritus.dijkstra(kierroksia);
         System.out.println("Kokonaisaika " + dijkstraAika + " s");
         System.out.println("Keskiarvo " + dijkstraAika / kierroksia);
         System.out.println("");
+        
         System.out.println("A*");
         double astarAika = suoritus.astar(kierroksia);
         System.out.println("Kokonaisaika " + astarAika + " s");
         System.out.println("Keskiarvo " + astarAika / kierroksia);
         System.out.println("");
+        
+        System.out.println("Fringe Search");
+        double fringeAika = suoritus.fringe(kierroksia);
+        System.out.println("Kokonaisaika " + fringeAika + " s");
+        System.out.println("Keskiarvo " + fringeAika / kierroksia);
+        System.out.println("");    
+        
     }
     
     /**
@@ -138,17 +202,38 @@ public class Kayttoliittyma {
         System.out.println("");
         
         Dijkstra dijkstra = new Dijkstra();
-        AStar astar = new AStar();  
-        
         dijkstra.etsi(alku, loppu);
         
-        ArrayList<Solmu> dijkstranReitti = dijkstra.luoReitti(loppu);
+        tietorakenteet.ArrayList<Solmu> dijkstranReitti = dijkstra.luoReitti(loppu);
         tulostaDijkstraReitti(dijkstranReitti); 
+        resetoiKaytetytSolmut(dijkstranReitti);           
         
+        AStar astar = new AStar();
         astar.etsi(alku, loppu);
         
-        ArrayList<Solmu> aStarReitti = astar.luoReitti(loppu);
-        tulostaAstarReitti(aStarReitti);        
+        tietorakenteet.ArrayList<Solmu> aStarReitti = astar.luoReitti(loppu);
+        tulostaAstarReitti(aStarReitti); 
+        resetoiKaytetytSolmut(aStarReitti);    
+        
+        FringeSearch fringe = new FringeSearch();
+        fringe.etsi(alku, loppu);
+        /*
+        tietorakenteet.ArrayList<Solmu> fringeReitti = fringe.luoReitti(loppu);        
+        tulostaFringeReitti(fringeReitti); 
+        resetoiKaytetytSolmut(fringeReitti);       
+        */
+    }
+    
+    /**
+     * Resetoi käytetyt solmut jotta gluvut ja minimietäisyydet eivät jää solmuille edellisestä kierroksesta
+     * @param solmut 
+     */
+    
+    public static void resetoiKaytetytSolmut(tietorakenteet.ArrayList<Solmu> solmut) {
+        for (int i = 0; i < solmut.size(); i++) {
+            Solmu solmu = solmut.get(i);
+            solmu.resetSolmu();
+        }  
     }
     
     /**
@@ -157,10 +242,16 @@ public class Kayttoliittyma {
      */
     
     public static void lueKartanTiet(List<Solmu> solmut) {
-        for (Solmu solmu : solmut) {
-            List<Kaari> kaaret = solmu.getKaaret();
-
-            for (Kaari kaari : kaaret) {
+        
+        for (int i = 0; i < solmut.size(); i++) {
+            Solmu solmu = solmut.get(i);
+            
+            tietorakenteet.ArrayList<Kaari> kaaret = solmu.getKaaret();
+            
+            for (int j = 0; j < kaaret.size(); j++) {
+                
+                Kaari kaari = kaaret.get(j);
+                
                 System.out.println("Käsiteltävän solmun ID: " + solmu.getID());
                 System.out.println("Tien nimi: " + kaari.getNimi());
                 System.out.println("Tien tyyppi: " + kaari.getTienTyyppi());
@@ -175,14 +266,14 @@ public class Kayttoliittyma {
      * @param reitti reitti solmulistassa
      */
     
-    public static void tulostaDijkstraReitti(ArrayList<Solmu> reitti) {
+    public static void tulostaDijkstraReitti(tietorakenteet.ArrayList<Solmu> reitti) {
         
-        System.out.println("Reitti Dijkstralla:");
+        System.out.println("Reitti Dijkstra:");
         System.out.println("");
         
         for (int i = 0; i < reitti.size(); i++) {
             Solmu solmu = reitti.get(i);
-            System.out.println(solmu.getNimi() + " " + solmu.getMinimiEtaisyys() + "m");
+            System.out.println(solmu.getMinimiEtaisyys() + "m");
         }        
         
         System.out.println("");
@@ -195,45 +286,93 @@ public class Kayttoliittyma {
      * @param reitti reitti solmulistassa
      */
     
-    public static void tulostaAstarReitti(ArrayList<Solmu> reitti) {
+    public static void tulostaAstarReitti(tietorakenteet.ArrayList<Solmu> reitti) {
         
-        System.out.println("Reitti AStarilla:");
+        System.out.println("Reitti A*:");
         System.out.println("");      
         
         for (int i = 0; i < reitti.size(); i++) {
             Solmu solmu = reitti.get(i);
-            System.out.println(solmu.getNimi() + " " + solmu.getG() + "m");
+            System.out.println(solmu.getG() + "m");
         }
         
         System.out.println("");
         System.out.println("Kokonaisreitti yhteensä: " + reitti.get(reitti.size() - 1).getG() + "m");
         System.out.println("");         
-    }    
+    } 
     
     /**
-     * Tulostetaan JPS algoritmin tuottama reitti
+     * Tulostetaan Fringe algoritmin tuottama reitti
      * @param reitti reitti solmulistassa
      */
     
-    public static void tulostaJPSReitti(ArrayList<Solmu> reitti) {
+    public static void tulostaFringeReitti(ArrayList<Solmu> reitti) { 
         
+        System.out.println("Reitti Fringe*:");
+        System.out.println("");      
+        
+        System.out.println("");
+        System.out.println("Kokonaisreitti yhteensä: 0m");
+        System.out.println("");         
     }
     
     /**
-     * Testataan verkon toimivuutta
-     * @param verkko käytössä oleva verkko
+     * Visuaalinen käyttöliittymä
      */
     
-    public static void testaaKartanVerkkoa(Verkko verkko) {
+    public static void visuaalinenKayttoliittyma() { 
         
-        Solmu alku = verkko.getSolmuByID("25584498");
-        Solmu loppu = verkko.getSolmuByID("1363676294");
+        TileFactoryInfo osmTile = new OSMTileFactoryInfo();
+        DefaultTileFactory tiles = new DefaultTileFactory(osmTile);
+
+        File cache = new File(System.getProperty("user.home") + File.separator + ".jxmapviewer2");
+        tiles.setLocalCache(new FileBasedLocalCache(cache, false));
+
+        JXMapViewer kartta = new JXMapViewer();
+        kartta.setTileFactory(tiles);     
+
+        GeoPosition lahtoSolmu = new GeoPosition(60.219099, 24.863034);
+        GeoPosition maaliSolmu = new GeoPosition(60.214286, 24.859588);
         
-        String alkuNimi = alku.getKaaret().get(0).getNimi();
-        String loppuNimi = alku.getKaaret().get(1).getNimi();        
+        GeoPosition talinSiirtolaPuutarha = new GeoPosition(60.217283, 24.860603);
         
-        System.out.println(alkuNimi + " - " + loppuNimi);
+        kartta.setZoom(3);
+        kartta.setAddressLocation(talinSiirtolaPuutarha);
+
+        MouseInputListener mouse = new PanMouseInputListener(kartta);
+        kartta.addMouseListener(mouse);
+        kartta.addMouseMotionListener(mouse);
+        kartta.addMouseListener(new CenterMapListener(kartta));
+        kartta.addMouseWheelListener(new ZoomMouseWheelListenerCenter(kartta));
+        kartta.addKeyListener(new PanKeyListener(kartta));
+
+        Waypoint alku = new Waypoint() {
+            @Override
+            public GeoPosition getPosition() {
+                return lahtoSolmu;
+            }
+        };
         
-        tulostaKaikkiReitit(alku, loppu);       
+        Waypoint loppu = new Waypoint() {
+            @Override
+            public GeoPosition getPosition() {
+                return maaliSolmu;
+            }
+        };
+        
+        Set<Waypoint> karttaMerkit = new HashSet<>();
+        karttaMerkit.add(alku);
+        karttaMerkit.add(loppu);
+
+        WaypointPainter<Waypoint> merkkienAsettaja = new WaypointPainter<Waypoint>();
+        merkkienAsettaja.setWaypoints(karttaMerkit);
+
+        kartta.setOverlayPainter(merkkienAsettaja);  
+
+        JFrame ikkuna = new JFrame("Talin siirtolapuutarha -testi");
+        ikkuna.getContentPane().add(kartta);
+        ikkuna.setSize(1000, 800);
+        ikkuna.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        ikkuna.setVisible(true); 
     }
 }
