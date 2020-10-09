@@ -138,9 +138,10 @@ public class FringeSearch {
         }
     }
     
-    public ArrayList<Solmu> luoReitti(Solmu loppu) {
-        ArrayList<Solmu> kaannettyReitti = new ArrayList<Solmu>();
+    public ArrayList<Solmu> luoReitti(Solmu solmu) {
 
+        ArrayList<Solmu> kaannettyReitti = new ArrayList<Solmu>();        
+        
         /*
         reverse_path(node)
             (g, parent) = C[node]
@@ -149,6 +150,16 @@ public class FringeSearch {
             print node
         */
         
+        Solmu parent = link_to_parent.get((int) solmu.getID());
+        
+        if (parent != null) {
+            double g = cacheG.get((int) solmu.getID());
+            solmu.setG(g);
+            kaannettyReitti.add(solmu);
+            
+            luoReitti(parent);
+        }
+
         return kaannettyReitti;
     }    
 }

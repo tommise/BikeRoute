@@ -217,11 +217,11 @@ public class Kayttoliittyma {
         
         FringeSearch fringe = new FringeSearch();
         fringe.etsi(alku, loppu);
-        /*
-        tietorakenteet.ArrayList<Solmu> fringeReitti = fringe.luoReitti(loppu);        
+        
+        ArrayList<Solmu> fringeReitti = fringe.luoReitti(loppu);        
         tulostaFringeReitti(fringeReitti); 
-        resetoiKaytetytSolmut(fringeReitti);       
-        */
+        resetoiKaytetytSolmutFringe(fringeReitti);       
+        
     }
     
     /**
@@ -235,6 +235,13 @@ public class Kayttoliittyma {
             solmu.resetSolmu();
         }  
     }
+    
+    public static void resetoiKaytetytSolmutFringe(ArrayList<Solmu> solmut) {
+        for (int i = 0; i < solmut.size(); i++) {
+            Solmu solmu = solmut.get(i);
+            solmu.resetSolmu();
+        }  
+    }    
     
     /**
      * Tulostetaan kartan tiet
@@ -308,11 +315,21 @@ public class Kayttoliittyma {
     
     public static void tulostaFringeReitti(ArrayList<Solmu> reitti) { 
         
-        System.out.println("Reitti Fringe*:");
-        System.out.println("");      
+        System.out.println("Reitti Fringe Search:");
+        System.out.println(""); 
+        
+        if (reitti.isEmpty()) {
+            System.out.println("Fringe ei nyt toiminut!");
+            return;
+        }   
+        
+        for (int i = 0; i < reitti.size(); i++) {
+            Solmu solmu = reitti.get(i);
+            System.out.println(solmu.getG() + "m");
+        }     
         
         System.out.println("");
-        System.out.println("Kokonaisreitti yhteensä: 0m");
+        System.out.println("Kokonaisreitti yhteensä: " + reitti.get(reitti.size() - 1).getG() + "m");
         System.out.println("");         
     }
     
