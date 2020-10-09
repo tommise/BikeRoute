@@ -1,20 +1,31 @@
 
-package algorithms;
-
-import components.Heuristiikka;
-import components.Kaari;
-import components.Solmu;
-import java.util.ArrayList;
+package algoritmit;
 
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.PriorityQueue;
+
+import komponentit.Heuristiikka;
+import komponentit.Kaari;
+import komponentit.Solmu;
+
+import tietorakenteet.ArrayList;
+import tietorakenteet.HashSet;
 
 /**
  * A* algoritmi sekä lyhyimmän reitin tallettaminen listaan
  */
 
 public class AStar {
+    
+    Heuristiikka heuristiikka;
+    
+    /**
+     * A* algoritmin konstruktori
+     */
+    
+    public AStar() {
+        this.heuristiikka = new Heuristiikka();
+    }
     
     /**
      * Etsii lyhyimmän reitin halutusta alkusolmusta loppuun A* algoritmin mukaisesti
@@ -23,23 +34,19 @@ public class AStar {
      */
 
     public void etsi(Solmu alku, Solmu loppu) {
-
-        Heuristiikka heuristic = new Heuristiikka();
+    
         HashSet<Solmu> kasitelty = new HashSet<Solmu>();
         PriorityQueue<Solmu> queue = new PriorityQueue<Solmu>(luoPrioriteetti());
-
-        boolean loytyi = false;
         
         queue.add(alku);
         alku.setG(0);
 
-        while ((!loytyi) && (!queue.isEmpty())) {
+        while (!queue.isEmpty()) {
             Solmu nykyinenSolmu = queue.poll();
             kasitelty.add(nykyinenSolmu);
 
-            if (nykyinenSolmu.getNimi().equals(loppu.getNimi())) {
-                luoReitti(loppu);                
-                loytyi = true;
+            if (alku.getID() == loppu.getID()) {
+                luoReitti(loppu);
             }
             
             ArrayList<Kaari> kaaret = nykyinenSolmu.getKaaret();
@@ -47,29 +54,28 @@ public class AStar {
             for (int i = 0; i < kaaret.size(); i++) {
                 Kaari kaari = kaaret.get(i);
                 Solmu solmu = kaari.getLoppu();
-                double paino = kaari.getEtaisyys();
-                                
-                double g = nykyinenSolmu.getG() + paino;
-                double f = g + heuristic.manhattanDistance(solmu, loppu);
-                                
-                if ((f >= solmu.getF() && (kasitelty.contains(solmu)))) {
-                    continue;
-                } 
                 
-                if ((f < solmu.getF() || (!queue.contains(solmu)))) {
+                if (kasitelty.contains(solmu)) {
+                    continue;
+                }
+                
+                double tentativeG = nykyinenSolmu.getG() + kaari.getEtaisyys();
+                
+                if (tentativeG < solmu.getG()) {
+                    double f = tentativeG + heuristiikka.manhattanEtaisyys(solmu, loppu);
+                    solmu.setF(f);
+                    solmu.setG(tentativeG);
                     
                     solmu.setEdellinenSolmu(nykyinenSolmu);
-                    solmu.setG(g);
-                    solmu.setF(f);
 
-                    if (queue.contains(solmu)) {
-                        queue.remove(solmu);
+                    if (!queue.contains(solmu)) {
+                        queue.add(solmu);
                     }
-
-                    queue.add(solmu);
                 }
             }
         }
+    
+        
     }
     
     /**
@@ -87,9 +93,10 @@ public class AStar {
         
         ArrayList<Solmu> kaannettyReitti = new ArrayList<Solmu>(); 
         
-        for (int i = reitti.size() - 1; i >= 0; i--) { 
-            kaannettyReitti.add(reitti.get(i)); 
-        } 
+        for (int i = reitti.size() - 1; i >= 0; i--) {
+            Solmu solmu = reitti.get(i);
+            kaannettyReitti.add(solmu);
+        }
         
         return kaannettyReitti; 
     }
