@@ -1,12 +1,13 @@
 
-package util;
+package suorituskyky;
 
-import algorithms.AStar;
-import algorithms.Dijkstra;
-import algorithms.JPS;
-import components.Solmu;
-import components.Verkko;
+import algoritmit.AStar;
+import algoritmit.Dijkstra;
+import algoritmit.FringeSearch;
+
 import io.VerkonRakentaja;
+import komponentit.Solmu;
+import komponentit.Verkko;
 
 public class SuorituskykyTestaus {
     
@@ -55,13 +56,15 @@ public class SuorituskykyTestaus {
         
         this.kokonaisaika = 0;
         
+        VerkonRakentaja rakentaja = new VerkonRakentaja();
+        Verkko verkko1 = rakentaja.luoTestiVerkko();
+        
         int i = 0;
         
         while (i <= kierroksia) {
-            Verkko verkko = VerkonRakentaja.luoTestiVerkko();
-
-            Solmu alku = verkko.getSolmut().get(0);
-            Solmu loppu = verkko.getSolmut().get(verkko.getSolmut().size() - 1);    
+            
+            Solmu alku = verkko1.getSolmut().get(0);
+            Solmu loppu = verkko1.getSolmut().get(verkko1.getSolmut().size() - 1);    
             
             Dijkstra dijkstra = new Dijkstra();
             
@@ -72,6 +75,44 @@ public class SuorituskykyTestaus {
             reset();
             i++;
         }
+        
+        Verkko verkko2 = rakentaja.luoTestiVerkko();
+        
+        int j = 0;
+        
+        while (j <= kierroksia) {
+            
+            Solmu alku = verkko2.getSolmut().get(10);
+            Solmu loppu = verkko2.getSolmut().get(18);   
+            
+            Dijkstra dijkstra = new Dijkstra();
+            
+            aloita();
+            dijkstra.etsi(alku, loppu);
+            lopeta();
+            
+            reset();
+            j++;
+        }
+        
+        Verkko verkko3 = rakentaja.luoTestiVerkko();
+        
+        int k = 0;
+        
+        while (k <= kierroksia) {
+
+            Solmu alku = verkko3.getSolmut().get(3);
+            Solmu loppu = verkko3.getSolmut().get(12);    
+            
+            Dijkstra dijkstra = new Dijkstra();
+            
+            aloita();
+            dijkstra.etsi(alku, loppu);
+            lopeta();
+            
+            reset();
+            k++;
+        }             
         
         return kokonaisaika;
     }
@@ -86,13 +127,15 @@ public class SuorituskykyTestaus {
         
         this.kokonaisaika = 0;
         
+        VerkonRakentaja rakentaja = new VerkonRakentaja();
+        Verkko verkko1 = rakentaja.luoTestiVerkko();
+        
         int i = 0;
         
         while (i <= kierroksia) {
-            Verkko verkko = VerkonRakentaja.luoTestiVerkko();
 
-            Solmu alku = verkko.getSolmut().get(0);
-            Solmu loppu = verkko.getSolmut().get(verkko.getSolmut().size() - 1);    
+            Solmu alku = verkko1.getSolmut().get(0);
+            Solmu loppu = verkko1.getSolmut().get(verkko1.getSolmut().size() - 1);    
             
             AStar astar = new AStar();
             
@@ -104,36 +147,114 @@ public class SuorituskykyTestaus {
             i++;
         }
         
+        Verkko verkko2 = rakentaja.luoTestiVerkko();
+        
+        int j = 0;
+        
+        while (j <= kierroksia) {
+
+            Solmu alku = verkko2.getSolmut().get(10);
+            Solmu loppu = verkko2.getSolmut().get(18);    
+            
+            AStar astar = new AStar();
+            
+            aloita();
+            astar.etsi(alku, loppu);
+            lopeta();
+            
+            reset();
+            j++;
+        }   
+        
+        Verkko verkko3 = rakentaja.luoTestiVerkko();
+        
+        int k = 0;
+        
+        while (k <= kierroksia) {
+
+            Solmu alku = verkko3.getSolmut().get(3);
+            Solmu loppu = verkko3.getSolmut().get(12);    
+            
+            AStar astar = new AStar();
+            
+            aloita();
+            astar.etsi(alku, loppu);
+            lopeta();
+            
+            reset();
+            k++;
+        }          
+        
         return kokonaisaika;
     }
     
     /**
-     * JPS algoritmin testailun metodi
+     * Fringe search algoritmin testailun metodi
      * @param kierroksia kierrosten lukumäärä
      * @return kokonaisaika double muodossa
      */
     
-    public double jps(int kierroksia) {
+    public double fringe(int kierroksia) {
         
         this.kokonaisaika = 0;
+        
+        VerkonRakentaja rakentaja = new VerkonRakentaja();
+        Verkko verkko1 = rakentaja.luoTestiVerkko();
         
         int i = 0;
         
         while (i <= kierroksia) {
-            Verkko verkko = VerkonRakentaja.luoTestiVerkko();
-
-            Solmu alku = verkko.getSolmut().get(0);
-            Solmu loppu = verkko.getSolmut().get(verkko.getSolmut().size() - 1);    
             
-            JPS jps = new JPS();
+            Solmu alku = verkko1.getSolmut().get(0);
+            Solmu loppu = verkko1.getSolmut().get(verkko1.getSolmut().size() - 1);    
+            
+            FringeSearch fringe = new FringeSearch();
             
             aloita();
-            jps.etsi(alku, loppu);
+            fringe.etsi(alku, loppu);
             lopeta();
             
             reset();
             i++;
         }
+        
+        Verkko verkko2 = rakentaja.luoTestiVerkko();
+        
+        int j = 0;
+        
+        while (j <= kierroksia) {
+            
+            Solmu alku = verkko2.getSolmut().get(10);
+            Solmu loppu = verkko2.getSolmut().get(18);   
+            
+            FringeSearch fringe = new FringeSearch();
+            
+            aloita();
+            fringe.etsi(alku, loppu);
+            lopeta();
+            
+            reset();
+            j++;
+        }
+        
+        Verkko verkko3 = rakentaja.luoTestiVerkko();
+        
+        int k = 0;
+        
+        while (k <= kierroksia) {
+
+            Solmu alku = verkko3.getSolmut().get(3);
+            Solmu loppu = verkko3.getSolmut().get(12);    
+            
+            FringeSearch fringe = new FringeSearch();
+            
+            aloita();
+            fringe.etsi(alku, loppu);
+            lopeta();
+            
+            reset();
+            k++;
+        }             
         
         return kokonaisaika;
     }
