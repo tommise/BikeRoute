@@ -29,9 +29,13 @@ public class VerkonRakentaja {
      * @return luotu verkko olio
      */
 
-    public Verkko luoTestiVerkko() {  
+    public Verkko luoTestiVerkko() {
 
         Verkko verkko = new Verkko();
+        
+        /**
+         * Alustaan solmut korkeus ja leveyskoordinaateilla
+         */
         
         Solmu solmu1 = new Solmu(1, 60.219675, 24.861553);
         Solmu solmu2 = new Solmu(2, 60.219099, 24.863034);
@@ -55,130 +59,206 @@ public class VerkonRakentaja {
         Solmu solmu20 = new Solmu(20, 60.215342, 24.860339);
         Solmu solmu21 = new Solmu(21, 60.215203, 24.860811);
         Solmu solmu22 = new Solmu(22, 60.214654, 24.858944);
-        Solmu solmu23 = new Solmu(23, 60.214286, 24.859588);
+        Solmu solmu23 = new Solmu(23, 60.215029, 24.861039);
+        Solmu solmu24 = new Solmu(24, 60.214286, 24.859588);
+        
+        /**
+         * Alustetaan kaaret missä rev tarkoittaa kaarta toisinpäin, koska kyseessä ei-suunnattu verkko
+         */
 
         Kaari kaari1 = new Kaari(solmu1, solmu2, "Metsäpolku", "hiekka");
+        Kaari kaari1rev = new Kaari(solmu2, solmu1, "Metsäpolku", "hiekka");
+        
         Kaari kaari2 = new Kaari(solmu2, solmu3, "Peltotie", "hiekka");
+        Kaari kaari2rev = new Kaari(solmu3, solmu2, "Peltotie", "hiekka");
+        
         Kaari kaari3 = new Kaari(solmu1, solmu4, "Metsäpolku", "hiekka");
+        Kaari kaari3rev = new Kaari(solmu4, solmu1, "Metsäpolku", "hiekka");  
+        
         Kaari kaari4 = new Kaari(solmu2, solmu6, "Valtatie", "hiekka");
+        Kaari kaari4rev = new Kaari(solmu6, solmu2, "Valtatie", "hiekka");
+        
         Kaari kaari5 = new Kaari(solmu3, solmu8, "Peltotie", "hiekka");
+        Kaari kaari5rev = new Kaari(solmu8, solmu3, "Peltotie", "hiekka");
+        
         Kaari kaari6 = new Kaari(solmu4, solmu5, "Lähdetie", "hiekka");
+        Kaari kaari6rev = new Kaari(solmu5, solmu4, "Lähdetie", "hiekka");
+        
         Kaari kaari7 = new Kaari(solmu5, solmu6, "Lähdetie", "hiekka");
+        Kaari kaari7rev = new Kaari(solmu6, solmu5, "Lähdetie", "hiekka");
+        
         Kaari kaari8 = new Kaari(solmu6, solmu7, "Lähdetie", "hiekka");
+        Kaari kaari8rev = new Kaari(solmu7, solmu6, "Lähdetie", "hiekka");
+        
         Kaari kaari9 = new Kaari(solmu7, solmu8, "Lähdetie", "hiekka");
+        Kaari kaari9rev = new Kaari(solmu8, solmu7, "Lähdetie", "hiekka");
+        
         Kaari kaari10 = new Kaari(solmu4, solmu9, "Metsäpolku", "hiekka");
+        Kaari kaari10rev = new Kaari(solmu9, solmu4, "Metsäpolku", "hiekka");
+        
         Kaari kaari11 = new Kaari(solmu5, solmu10, "Kotipolku", "hiekka");
+        Kaari kaari11rev = new Kaari(solmu10, solmu5, "Kotipolku", "hiekka");
+        
         Kaari kaari12 = new Kaari(solmu6, solmu11, "Valtatie", "hiekka");
+        Kaari kaari12rev = new Kaari(solmu11, solmu6, "Valtatie", "hiekka");
+        
         Kaari kaari13 = new Kaari(solmu7, solmu12, "Niittypolku", "hiekka");
+        Kaari kaari13rev = new Kaari(solmu12, solmu7, "Niittypolku", "hiekka");
+        
         Kaari kaari14 = new Kaari(solmu8, solmu13, "Peltotie", "hiekka");
+        Kaari kaari14rev = new Kaari(solmu13, solmu8, "Peltotie", "hiekka");
+        
         Kaari kaari15 = new Kaari(solmu9, solmu10, "Rantatie", "hiekka");
+        Kaari kaari15rev = new Kaari(solmu10, solmu9, "Rantatie", "hiekka");
+        
         Kaari kaari16 = new Kaari(solmu10, solmu11, "Rantatie", "hiekka");
+        Kaari kaari16rev = new Kaari(solmu11, solmu10, "Rantatie", "hiekka");
+        
         Kaari kaari17 = new Kaari(solmu11, solmu12, "Rantatie", "hiekka");
+        Kaari kaari17rev = new Kaari(solmu12, solmu11, "Rantatie", "hiekka");
+        
         Kaari kaari18 = new Kaari(solmu12, solmu13, "Rantatie", "hiekka");
+        Kaari kaari18rev = new Kaari(solmu13, solmu12, "Rantatie", "hiekka");
+        
         Kaari kaari19 = new Kaari(solmu13, solmu14, "Rantatie", "hiekka");
+        Kaari kaari19rev = new Kaari(solmu14, solmu13, "Rantatie", "hiekka");
+        
         Kaari kaari20 = new Kaari(solmu9, solmu15, "Metsäpolku", "hiekka");
+        Kaari kaari20rev = new Kaari(solmu15, solmu4, "Metsäpolku", "hiekka");
+        
         Kaari kaari21 = new Kaari(solmu10, solmu16, "Kotipolku", "hiekka");
+        Kaari kaari21rev = new Kaari(solmu16, solmu10, "Kotipolku", "hiekka");
+        
         Kaari kaari22 = new Kaari(solmu11, solmu17, "Valtatie", "hiekka");
+        Kaari kaari22rev = new Kaari(solmu17, solmu11, "Valtatie", "hiekka");
+        
         Kaari kaari23 = new Kaari(solmu12, solmu18, "Niittypolku", "hiekka");
+        Kaari kaari23rev = new Kaari(solmu18, solmu12, "Niittypolku", "hiekka");
+        
         Kaari kaari24 = new Kaari(solmu13, solmu19, "Peltotie", "hiekka");
+        Kaari kaari24rev = new Kaari(solmu19, solmu13, "Peltotie", "hiekka");
+        
         Kaari kaari25 = new Kaari(solmu14, solmu21, "Rantatie", "hiekka");
+        Kaari kaari25rev = new Kaari(solmu21, solmu14, "Rantatie", "hiekka");
+        
         Kaari kaari26 = new Kaari(solmu15, solmu16, "Kaivotie", "hiekka");
+        Kaari kaari26rev = new Kaari(solmu16, solmu15, "Kaivotie", "hiekka");
+        
         Kaari kaari27 = new Kaari(solmu16, solmu17, "Kaivotie", "hiekka");
+        Kaari kaari27rev = new Kaari(solmu17, solmu16, "Kaivotie", "hiekka");
+        
         Kaari kaari28 = new Kaari(solmu17, solmu18, "Kaivotie", "hiekka");
+        Kaari kaari28rev = new Kaari(solmu18, solmu17, "Kaivotie", "hiekka");
+        
         Kaari kaari29 = new Kaari(solmu18, solmu19, "Kaivotie", "hiekka");
+        Kaari kaari29rev = new Kaari(solmu19, solmu18, "Kaivotie", "hiekka");
+        
         Kaari kaari30 = new Kaari(solmu19, solmu20, "Kaivotie", "hiekka");
+        Kaari kaari30rev = new Kaari(solmu20, solmu19, "Kaivotie", "hiekka");
+        
         Kaari kaari31 = new Kaari(solmu20, solmu21, "Kaivotie", "hiekka");
+        Kaari kaari31rev = new Kaari(solmu21, solmu20, "Kaivotie", "hiekka");
+        
         Kaari kaari32 = new Kaari(solmu20, solmu22, "Onnentie", "hiekka");
+        Kaari kaari32rev = new Kaari(solmu22, solmu20, "Onnentie", "hiekka");
+        
         Kaari kaari33 = new Kaari(solmu21, solmu23, "Kaivotie", "hiekka");
-
+        Kaari kaari33rev = new Kaari(solmu23, solmu21, "Kaivotie", "hiekka");
+        
+        Kaari kaari34 = new Kaari(solmu23, solmu24, "Kaivotie", "hiekka");
+        Kaari kaari34rev = new Kaari(solmu24, solmu23, "Kaivotie", "hiekka");
+        
         solmu1.addKaari(kaari1);
         solmu1.addKaari(kaari3);
         
-        solmu2.addKaari(kaari1);
+        solmu2.addKaari(kaari1rev);
         solmu2.addKaari(kaari2);
         solmu2.addKaari(kaari4);
         
-        solmu3.addKaari(kaari2);
+        solmu3.addKaari(kaari2rev);
         solmu3.addKaari(kaari5);
         
-        solmu4.addKaari(kaari3);
+        solmu4.addKaari(kaari3rev);
         solmu4.addKaari(kaari6);
         solmu4.addKaari(kaari10);
 
-        solmu5.addKaari(kaari6);
+        solmu5.addKaari(kaari6rev);
         solmu5.addKaari(kaari7);
         solmu5.addKaari(kaari11);
 
-        solmu6.addKaari(kaari4);
-        solmu6.addKaari(kaari7);
+        solmu6.addKaari(kaari4rev);
+        solmu6.addKaari(kaari7rev);
         solmu6.addKaari(kaari8);
         solmu6.addKaari(kaari12);
 
-        solmu7.addKaari(kaari8);
+        solmu7.addKaari(kaari8rev);
         solmu7.addKaari(kaari9);
         solmu7.addKaari(kaari13);
 
-        solmu8.addKaari(kaari5);
-        solmu8.addKaari(kaari9);
+        solmu8.addKaari(kaari5rev);
+        solmu8.addKaari(kaari9rev);
         solmu8.addKaari(kaari14);
 
-        solmu9.addKaari(kaari10);
+        solmu9.addKaari(kaari10rev);
         solmu9.addKaari(kaari15);
         solmu9.addKaari(kaari20);
 
-        solmu10.addKaari(kaari11);
-        solmu10.addKaari(kaari15);
+        solmu10.addKaari(kaari11rev);
+        solmu10.addKaari(kaari15rev);
         solmu10.addKaari(kaari16);
         solmu10.addKaari(kaari21);
 
-        solmu11.addKaari(kaari12);
-        solmu11.addKaari(kaari16);
+        solmu11.addKaari(kaari12rev);
+        solmu11.addKaari(kaari16rev);
         solmu11.addKaari(kaari17);
         solmu11.addKaari(kaari22);
 
-        solmu12.addKaari(kaari13);
-        solmu12.addKaari(kaari17);
+        solmu12.addKaari(kaari13rev);
+        solmu12.addKaari(kaari17rev);
         solmu12.addKaari(kaari18);
         solmu12.addKaari(kaari23);
 
-        solmu13.addKaari(kaari14);
-        solmu13.addKaari(kaari18);
+        solmu13.addKaari(kaari14rev);
+        solmu13.addKaari(kaari18rev);
         solmu13.addKaari(kaari19);
         solmu13.addKaari(kaari24);
 
-        solmu14.addKaari(kaari19);
+        solmu14.addKaari(kaari19rev);
         solmu14.addKaari(kaari25);
 
-        solmu15.addKaari(kaari20);
+        solmu15.addKaari(kaari20rev);
         solmu15.addKaari(kaari26);
 
-        solmu16.addKaari(kaari21);
-        solmu16.addKaari(kaari26);
+        solmu16.addKaari(kaari21rev);
+        solmu16.addKaari(kaari26rev);
         solmu16.addKaari(kaari27);
 
-        solmu17.addKaari(kaari22);
-        solmu17.addKaari(kaari27);
+        solmu17.addKaari(kaari22rev);
+        solmu17.addKaari(kaari27rev);
         solmu17.addKaari(kaari28);
 
-        solmu18.addKaari(kaari23);
-        solmu18.addKaari(kaari28);
+        solmu18.addKaari(kaari23rev);
+        solmu18.addKaari(kaari28rev);
         solmu18.addKaari(kaari29);
 
-        solmu19.addKaari(kaari24);
-        solmu19.addKaari(kaari29);
+        solmu19.addKaari(kaari24rev);
+        solmu19.addKaari(kaari29rev);
         solmu19.addKaari(kaari30);
 
-        solmu20.addKaari(kaari30);
+        solmu20.addKaari(kaari30rev);
         solmu20.addKaari(kaari31);
         solmu20.addKaari(kaari32);
 
-        solmu21.addKaari(kaari25);
-        solmu21.addKaari(kaari31);
+        solmu21.addKaari(kaari25rev);
+        solmu21.addKaari(kaari31rev);
         solmu21.addKaari(kaari33);
 
-        solmu22.addKaari(kaari32);
+        solmu22.addKaari(kaari32rev);
 
-        solmu23.addKaari(kaari33);
+        solmu23.addKaari(kaari33rev);
+        solmu23.addKaari(kaari34);
+        
+        solmu24.addKaari(kaari34rev);
 
         verkko.addSolmu(solmu1);
         verkko.addSolmu(solmu2);
@@ -203,6 +283,7 @@ public class VerkonRakentaja {
         verkko.addSolmu(solmu21); 
         verkko.addSolmu(solmu22);
         verkko.addSolmu(solmu23);
+        verkko.addSolmu(solmu24);
 
         return verkko;
     }  
