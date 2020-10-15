@@ -9,7 +9,7 @@ import komponentit.Kaari;
 import komponentit.Solmu;
 
 public class FringeSearch {
-    
+    ArrayList<Solmu> reitti;
     Heuristiikka heuristiikka;
     HashMap<Integer, Double> cacheG;
     HashMap<Integer, Solmu> link_to_parent;
@@ -40,7 +40,8 @@ public class FringeSearch {
         link_to_parent.put((int) alku.getID(), null);
         
         // flimit = h(start)
-        double flimit = heuristiikka.manhattanEtaisyys(alku, loppu);
+        //double flimit = heuristiikka.manhattanEtaisyys(alku, loppu);
+        double flimit = heuristiikka.haversineMetodi(alku.getLatitude(), alku.getLongitude(), loppu.getLatitude(), loppu.getLongitude());        
         
         // found = false
         boolean found = false;
@@ -48,13 +49,13 @@ public class FringeSearch {
         // while (found == false) AND (F not empty)
         while (!found && !F.isEmpty()) {
             // fmin = ∞
-            double fmin = Double.MAX_VALUE;      
+            double fmin = 999999;      
             
             // for node in F, from left to right
             for (int i = 0; i < F.size(); i++) {
                 Solmu solmu = F.get(i);
                 
-                tietorakenteet.ArrayList<Kaari> kaaret = solmu.getKaaret();
+                ArrayList<Kaari> kaaret = solmu.getKaaret();
                 
                 for (int j = 0; j < kaaret.size(); j++) {
                     
@@ -64,7 +65,11 @@ public class FringeSearch {
                     double g = cacheG.get((int) solmu.getID());
                     
                     // f = g + h(node)
-                    double f = g + heuristiikka.manhattanEtaisyys(solmu, loppu);
+                    
+                    //double hnode = heuristiikka.manhattanEtaisyys(solmu, loppu);
+                    double hnode = heuristiikka.haversineMetodi(solmu.getLatitude(), solmu.getLongitude(), loppu.getLatitude(), loppu.getLongitude());
+                    
+                    double f = g + hnode;
                     
                     // if f > flimit 
                     //    fmin = min(f, fmin)
@@ -86,7 +91,7 @@ public class FringeSearch {
                     
                     // for child in children(node), from right to left
                     Solmu lapsi = kaari.getLoppu();
-                    tietorakenteet.ArrayList<Kaari> lapsenKaaret = lapsi.getKaaret();
+                    ArrayList<Kaari> lapsenKaaret = lapsi.getKaaret();
                     
                     for (int k = 0; k < lapsenKaaret.size(); k++) {
                         Kaari lapsenKaari = lapsenKaaret.get(k);
@@ -107,13 +112,18 @@ public class FringeSearch {
                             }
                         }
                         
-                        // if child in F -> remove child from F
+                        // if child in F
+                            // remove child from F
                         if (F.contains(lapsi)) {
                             F.remove(lapsi);
                         }
                         
                         // insert child in F past node
-                        F.add(lapsi);
+                        if (F.size() > 2) {
+                            F.add(i + 1, lapsi);
+                        } else {
+                            F.add(lapsi);
+                        }
                         
                         // C[child] = (g_child, node)
                         cacheG.put((int) lapsi.getID(), g_child);
@@ -122,7 +132,7 @@ public class FringeSearch {
                     // remove node from F
                     F.remove(solmu);
                 }
-                // Jotta päästään pois uloimmasta loopista
+                // Jotta päästään pois uloimmasta loopista solmun löydyttyä
                 if (solmu == loppu) {
                     break;
                 }
@@ -131,16 +141,18 @@ public class FringeSearch {
             flimit = fmin;
         }
         
+        // Lista reitin rakentamiselle
+        this.reitti = new ArrayList<>();
+        
         // if reachedgoal == true 
             //reverse_path(goal)
         if (found) {
-            luoReitti(loppu);
+            System.out.println("Reitti löytyi!");
+            rakennaReitti(loppu);
         }
     }
     
-    public ArrayList<Solmu> luoReitti(Solmu solmu) {
-
-        ArrayList<Solmu> kaannettyReitti = new ArrayList<Solmu>();        
+    public void rakennaReitti(Solmu solmu) {     
         
         /*
         reverse_path(node)
@@ -150,16 +162,19 @@ public class FringeSearch {
             print node
         */
         
+        this.reitti.add(solmu);
+        
         Solmu parent = link_to_parent.get((int) solmu.getID());
         
         if (parent != null) {
             double g = cacheG.get((int) solmu.getID());
             solmu.setG(g);
-            kaannettyReitti.add(solmu);
             
-            luoReitti(parent);
+            rakennaReitti(parent);
         }
-
-        return kaannettyReitti;
-    }    
+    }  
+    
+    public ArrayList<Solmu> luoReitti() {
+        return this.reitti;
+    }
 }
