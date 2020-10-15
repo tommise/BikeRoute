@@ -3,6 +3,7 @@ package algoritmit;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 import komponentit.Heuristiikka;
 import komponentit.Kaari;
@@ -28,8 +29,11 @@ public class FringeSearch {
     // init(start, goal)
     public void etsi(Solmu alku, Solmu loppu) {
         
+        System.out.println("alku: " + alku.getID());
+        System.out.println("loppu: " + loppu.getID());
+        
         // fringe F = s
-        ArrayList<Solmu> F = new ArrayList<>();
+        LinkedList<Solmu> F = new LinkedList<>();
         F.add(alku);
 
         // cache C[start] = (0, null)
@@ -40,8 +44,8 @@ public class FringeSearch {
         link_to_parent.put((int) alku.getID(), null);
         
         // flimit = h(start)
-        //double flimit = heuristiikka.manhattanEtaisyys(alku, loppu);
-        double flimit = heuristiikka.haversineMetodi(alku.getLatitude(), alku.getLongitude(), loppu.getLatitude(), loppu.getLongitude());        
+        double flimit = heuristiikka.manhattanEtaisyys(alku, loppu);
+        //double flimit = heuristiikka.haversineMetodi(alku.getLatitude(), alku.getLongitude(), loppu.getLatitude(), loppu.getLongitude());        
         
         // found = false
         boolean found = false;
@@ -49,13 +53,17 @@ public class FringeSearch {
         // while (found == false) AND (F not empty)
         while (!found && !F.isEmpty()) {
             // fmin = ∞
-            double fmin = 999999;      
+            double fmin = Double.MAX_VALUE;      
             
-            // for node in F, from left to right
+            // for node in F, !! from left to right !!
             for (int i = 0; i < F.size(); i++) {
                 Solmu solmu = F.get(i);
                 
-                ArrayList<Kaari> kaaret = solmu.getKaaret();
+                System.out.println("Solmu: " + solmu.getID());
+                
+                ArrayList<Solmu> solmunLapset = new ArrayList<>();
+                
+                ArrayList<Kaari> kaaret = solmu.getKaaret();                
                 
                 for (int j = 0; j < kaaret.size(); j++) {
                     
@@ -63,11 +71,12 @@ public class FringeSearch {
                     
                     // (g, parent) = C[node]
                     double g = cacheG.get((int) solmu.getID());
+                    System.out.println("g_main: " + g);
                     
                     // f = g + h(node)
                     
-                    //double hnode = heuristiikka.manhattanEtaisyys(solmu, loppu);
-                    double hnode = heuristiikka.haversineMetodi(solmu.getLatitude(), solmu.getLongitude(), loppu.getLatitude(), loppu.getLongitude());
+                    double hnode = heuristiikka.manhattanEtaisyys(solmu, loppu);
+                    //double hnode = heuristiikka.haversineMetodi(solmu.getLatitude(), solmu.getLongitude(), loppu.getLatitude(), loppu.getLongitude());
                     
                     double f = g + hnode;
                     
@@ -80,23 +89,31 @@ public class FringeSearch {
                         continue;
                     }
                     
-                    // if node == goal 
-                    //  found = true
-                    //  break;
-                    
-                    if (solmu == loppu) {
-                        found = true;
-                        break;
-                    }
-                    
-                    // for child in children(node), from right to left
                     Solmu lapsi = kaari.getLoppu();
+                    solmunLapset.add(lapsi);
+                }
+                
+                // if node == goal 
+                //      found = true
+                //      break;
+                    
+                if (solmu == loppu) {
+                    found = true;
+                    break;
+                }
+                    
+                // for child in children(node), !! from right to left !!
+                
+                for (int j = solmunLapset.size() - 1; j >= 0; j--) {
+                    Solmu lapsi = solmunLapset.get(i);
+                    
                     ArrayList<Kaari> lapsenKaaret = lapsi.getKaaret();
                     
-                    for (int k = 0; k < lapsenKaaret.size(); k++) {
+                    for (int k = lapsenKaaret.size() - 1; k >= 0; k--) {
                         Kaari lapsenKaari = lapsenKaaret.get(k);
                         
                         // g_child = g + cost(node, child)
+                        double g = cacheG.get((int) solmu.getID());
                         double g_child = g + lapsenKaari.getEtaisyys();
 
                         // if C[child] != null
@@ -111,7 +128,7 @@ public class FringeSearch {
                                 continue;
                             }
                         }
-                        
+                    
                         // if child in F
                             // remove child from F
                         if (F.contains(lapsi)) {
@@ -119,23 +136,15 @@ public class FringeSearch {
                         }
                         
                         // insert child in F past node
-                        if (F.size() > 2) {
-                            F.add(i + 1, lapsi);
-                        } else {
-                            F.add(lapsi);
-                        }
+                        F.add(i + 1, lapsi);
                         
                         // C[child] = (g_child, node)
                         cacheG.put((int) lapsi.getID(), g_child);
                         link_to_parent.put((int) lapsi.getID(), solmu);
                     }
-                    // remove node from F
-                    F.remove(solmu);
                 }
-                // Jotta päästään pois uloimmasta loopista solmun löydyttyä
-                if (solmu == loppu) {
-                    break;
-                }
+                // remove node from F
+                F.remove(solmu);
             }
             // flimit = fmin
             flimit = fmin;
@@ -175,6 +184,13 @@ public class FringeSearch {
     }  
     
     public ArrayList<Solmu> luoReitti() {
-        return this.reitti;
+        ArrayList<Solmu> kaannettyReitti = new ArrayList<Solmu>(); 
+        
+        for (int i = reitti.size() - 1; i >= 0; i--) {
+            Solmu solmu = reitti.get(i);
+            kaannettyReitti.add(solmu);
+        }
+        
+        return kaannettyReitti; 
     }
 }
