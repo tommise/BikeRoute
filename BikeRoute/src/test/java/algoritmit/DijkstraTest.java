@@ -2,6 +2,7 @@
 package algoritmit;
 
 import io.VerkonRakentaja;
+import java.util.ArrayList;
 import java.util.List;
 import static org.junit.Assert.*;
 
@@ -11,7 +12,6 @@ import komponentit.Verkko;
 import org.junit.Before;
 import org.junit.Test;
 
-import tietorakenteet.ArrayList;
 
 public class DijkstraTest {
     
@@ -41,7 +41,7 @@ public class DijkstraTest {
         ArrayList<Solmu> reitti = dijkstra.luoReitti(loppu);
         
         double lyhyinPolkuDijkstra = reitti.get(reitti.size() - 1).getMinimiEtaisyys();
-        double reitinOikeaPituus = 786.9615717880192;
+        double reitinOikeaPituus = 802.8398626554501;
         
         assertEquals(lyhyinPolkuDijkstra, reitinOikeaPituus, epsilon);
     }    

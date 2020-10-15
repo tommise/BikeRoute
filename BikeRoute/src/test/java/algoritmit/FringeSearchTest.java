@@ -41,7 +41,7 @@ public class FringeSearchTest {
         ArrayList<Solmu> reitti = fringe.luoReitti(loppu);
         
         double fringeReitti = reitti.get(reitti.size() - 1).getG();
-        double reitinOikeaPituus = 786.9615717880192;
+        double reitinOikeaPituus = 802.8398626554501;
         
         assertEquals(fringeReitti, reitinOikeaPituus, epsilon);
     }    

@@ -16,7 +16,7 @@ public final class Kaari {
     
     /**
      * Kaari luokan pääkonstruktori jota hyödynnetään karttadatan kanssa
-     * @param alku Solmu josta kaari lähtee
+     * @param alku Solmu josta kaari lähtee, solmu tarvitsee tämän laskeakseen etäisyytensä
      * @param loppu Solmu johon kaari päättyy
      * @param nimi Tien nimi
      * @param tienTyyppi Tien tyyppi

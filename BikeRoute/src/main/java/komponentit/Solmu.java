@@ -1,7 +1,8 @@
 
 package komponentit;
 
-import tietorakenteet.ArrayList;
+import java.util.ArrayList;
+
 
 /**
  * Solmua kuvaava luokka

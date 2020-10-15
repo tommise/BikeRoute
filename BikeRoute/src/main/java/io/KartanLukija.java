@@ -48,7 +48,8 @@ public class KartanLukija implements Sink {
         this.kaaret = new ArrayList<Kaari>();
         this.solmut = new HashMap<Long, Solmu>();
         
-        this.polku = "./maps/helsinki.osm.pbf";          
+        this.polku = "./maps/davis.osm.pbf"; 
+        //this.polku = "./maps/talinsiirtolapuutarha.osm.pbf";
     }
     
     /**

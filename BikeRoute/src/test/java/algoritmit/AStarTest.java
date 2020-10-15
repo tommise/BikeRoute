@@ -2,6 +2,7 @@
 package algoritmit;
 
 import io.VerkonRakentaja;
+import java.util.ArrayList;
 import java.util.List;
 import static org.junit.Assert.*;
 
@@ -10,8 +11,6 @@ import komponentit.Verkko;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import tietorakenteet.ArrayList;
 
 
 public class AStarTest {
@@ -41,7 +40,7 @@ public class AStarTest {
         ArrayList<Solmu> reitti = astar.luoReitti(loppu);
         
         double lyhyinPolkuAStar = reitti.get(reitti.size() - 1).getG();
-        double reitinOikeaPituus = 786.9615717880192;
+        double reitinOikeaPituus = 802.8398626554501;
         
         assertEquals(lyhyinPolkuAStar, reitinOikeaPituus, epsilon);
     }

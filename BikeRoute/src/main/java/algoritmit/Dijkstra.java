@@ -1,11 +1,11 @@
 package algoritmit;
 
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.PriorityQueue;
 
 import komponentit.Kaari;
 import komponentit.Solmu;
-import tietorakenteet.ArrayList;
-import tietorakenteet.PriorityQueue;
 
 /**
  * Dijkstran algoritmi hyödyntäen PriorityQueta sekä lyhyimmän reitin tallettaminen listaan

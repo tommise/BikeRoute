@@ -1,15 +1,14 @@
 
 package algoritmit;
 
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.PriorityQueue;
 
 import komponentit.Heuristiikka;
 import komponentit.Kaari;
 import komponentit.Solmu;
-
-import tietorakenteet.ArrayList;
-import tietorakenteet.HashSet;
 
 /**
  * A* algoritmi sekä lyhyimmän reitin tallettaminen listaan

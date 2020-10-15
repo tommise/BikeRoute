@@ -4,11 +4,11 @@ package komponentit;
 import algoritmit.AStar;
 import algoritmit.Dijkstra;
 import io.VerkonRakentaja;
+import java.util.ArrayList;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import tietorakenteet.ArrayList;
 
 public class SolmuTest {
     
