@@ -201,7 +201,7 @@ public class Solmu implements Comparable<Solmu> {
         this.gluku = Double.MAX_VALUE;
         this.minimiEtaisyys = Double.MAX_VALUE;
     }
-
+    
     @Override
     public int compareTo(Solmu verrattava) {
         return Double.compare(this.minimiEtaisyys, verrattava.minimiEtaisyys);

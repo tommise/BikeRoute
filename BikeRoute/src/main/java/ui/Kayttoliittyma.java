@@ -373,25 +373,31 @@ public class Kayttoliittyma {
                 Dijkstra dj = new Dijkstra();
                 dj.etsi(alku, loppu);
 
-                ArrayList<Solmu> reitti = dj.luoReitti(loppu);
+                ArrayList<Solmu> dijkstraReitti = dj.luoReitti(loppu);
 
-                paivitaReitti(reitti);
+                paivitaReitti(dijkstraReitti);
                 
-                this.tulos.setText("Kokonaisreitti: " + reitti.get(reitti.size() - 1).getMinimiEtaisyys() + " m");
+                this.tulos.setText("Kokonaisreitti: " + dijkstraReitti.get(dijkstraReitti.size() - 1).getMinimiEtaisyys() + " m");
                 
             } else if (astarKaytossa) {
                 AStar asta = new AStar();
                 asta.etsi(alku, loppu);
                 
-                ArrayList<Solmu> reitti = asta.luoReitti(loppu);
+                ArrayList<Solmu> aStarReitti = asta.luoReitti(loppu);
                 
-                paivitaReitti(reitti);
+                paivitaReitti(aStarReitti);
                 
-                this.tulos.setText("Kokonaisreitti: " + reitti.get(reitti.size() - 1).getG() + " m");
+                this.tulos.setText("Kokonaisreitti: " + aStarReitti.get(aStarReitti.size() - 1).getG() + " m");
                 
             } else if (fringeKaytossa) {
                 FringeSearch fringeSearch = new FringeSearch();
                 fringeSearch.etsi(alku, loppu);
+                
+                ArrayList<Solmu> fringeReitti = fringeSearch.luoReitti();
+                
+                paivitaReitti(fringeReitti);
+                
+                this.tulos.setText("Kokonaisreitti: " + fringeReitti.get(fringeReitti.size() - 1).getG() + " m");                
             }
         }
         
@@ -656,8 +662,8 @@ public class Kayttoliittyma {
         System.out.println("Reitti 1:");
         System.out.println("-------");
         
-        Solmu alku1 = solmut.get(0);
-        Solmu loppu1 = solmut.get(solmut.size() -1);
+        Solmu alku1 = solmut.get(solmut.size() -1);
+        Solmu loppu1 = solmut.get(0);
         
         Solmu alku2 = solmut.get(3);
         Solmu loppu2 = solmut.get(12);
@@ -674,8 +680,8 @@ public class Kayttoliittyma {
         System.out.println("Reitti 3:");
         System.out.println("-------");   
         
-        Solmu alku3 = solmut.get(10);
-        Solmu loppu3 = solmut.get(18);
+        Solmu alku3 = solmut.get(5);
+        Solmu loppu3 = solmut.get(10);
         
         tulostaKaikkiReitit(alku3, loppu3);        
     }
@@ -724,7 +730,7 @@ public class Kayttoliittyma {
     
     public static void tulostaKaikkiReitit(Solmu alku, Solmu loppu) {
         System.out.println("");
-
+        /*
         Dijkstra dijkstra = new Dijkstra();
         dijkstra.etsi(alku, loppu);
         
@@ -739,13 +745,13 @@ public class Kayttoliittyma {
         ArrayList<Solmu> aStarReitti = astar.luoReitti(loppu);
         tulostaAstarReitti(aStarReitti); 
         resetoiKaytetytSolmut(aStarReitti);    
-        
+        */
         FringeSearch fringe = new FringeSearch();
         fringe.etsi(alku, loppu);
         
         ArrayList<Solmu> fringeReitti = fringe.luoReitti();        
         tulostaFringeReitti(fringeReitti); 
-        resetoiKaytetytSolmutFringe(fringeReitti);
+        resetoiKaytetytSolmut(fringeReitti);
     }
     
     /**
@@ -758,14 +764,7 @@ public class Kayttoliittyma {
             Solmu solmu = solmut.get(i);
             solmu.resetSolmu();
         }  
-    }
-    
-    public static void resetoiKaytetytSolmutFringe(ArrayList<Solmu> solmut) {
-        for (int i = 0; i < solmut.size(); i++) {
-            Solmu solmu = solmut.get(i);
-            solmu.resetSolmu();
-        }  
-    }    
+    }  
     
     /**
      * Tulostetaan kartan tiet
