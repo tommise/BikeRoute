@@ -26,9 +26,9 @@ x Poistu
 x Poistu
 ```
 
-**1 Kasittele testiverkko** tulostaa kolme eri reittiä kaikilla algoritmeilla (A*, Dijkstra ja Fringe Search)
-**2 Suorituskykytestaus** suorittaa jokaista algoritmia 10 000 kierrosta kolmella eri reitillä ja laskee näiden yhteisajan ja keskiarvon
-**3 Lue kartan tiet** lukee karttadatan tiet
+- **1 Kasittele testiverkko** tulostaa kolme eri reittiä kaikilla algoritmeilla (A*, Dijkstra ja Fringe Search)
+- **2 Suorituskykytestaus** suorittaa jokaista algoritmia 10 000 kierrosta kolmella eri reitillä ja laskee näiden yhteisajan ja keskiarvon
+- **3 Lue kartan tiet** lukee karttadatan tiet
 
 #### Visuaalinen käyttöliittymä
 
