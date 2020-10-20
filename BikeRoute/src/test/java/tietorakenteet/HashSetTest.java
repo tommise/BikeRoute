@@ -8,7 +8,7 @@ import org.junit.Test;
 
 public class HashSetTest {
     
-    HashSet<Integer> hashSet;
+    HashSet<String> hashSet;
     
     @Before
     public void setUp() {
@@ -17,29 +17,29 @@ public class HashSetTest {
     
     @Test
     public void containsPalauttaaOikeinKunLoytyy() {
-        hashSet.add(101);
-        hashSet.add(202);
+        hashSet.add("101");
+        hashSet.add("202");
         
-        boolean sisaltaako = hashSet.contains(202);
+        boolean sisaltaako = hashSet.contains("202");
         
         assertEquals(true, sisaltaako);
     }
     
     @Test
     public void containsPalauttaaOikeinKunEiLoydy() {
-        hashSet.add(101);
-        hashSet.add(202);
+        hashSet.add("101");
+        hashSet.add("202");
         
-        boolean sisaltaako = hashSet.contains(102);
+        boolean sisaltaako = hashSet.contains("102");
         
         assertEquals(false, sisaltaako);
     }
     
     @Test
     public void lisaaOlionListalle() {
-        hashSet.add(1000);
-        hashSet.add(2000);
+        hashSet.add("1000");
+        hashSet.add("2000");
         
-        assertEquals(true, hashSet.contains(1000));
+        assertEquals(true, hashSet.contains("1000"));
     }
 }
