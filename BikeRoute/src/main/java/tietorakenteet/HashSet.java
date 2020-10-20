@@ -2,8 +2,9 @@
 package tietorakenteet;
 
 public class HashSet<E> {
-    private final int koko;
-    private final EntrySet<E>[] alkiot;
+    private int koko;
+    private int alkioita;
+    private EntrySet<E>[] alkiot;
     
     /**
      * HashSetin konstruktori
@@ -11,17 +12,27 @@ public class HashSet<E> {
     
     public HashSet() {
         this.koko = 50;
+        this.alkioita = 0;
         this.alkiot = new EntrySet[koko];
     }
     
     /**
      * Laskee hajautusarvon annetun avaimen perusteella
-     * @param avain
+     * @param data
      * @return palauttaa hajautusarvon
      */
     
-    private int hajautusarvo(E avain) {
-        return Math.abs(avain.hashCode()) % koko;
+    private int hajautusarvo(E data) {
+        return Math.abs(data.hashCode()) % koko;
+    }
+    
+    /**
+     * Palauttaa listan koon
+     * @return koko int muodossa
+     */
+    
+    public int size() {
+        return this.alkioita;
     }
     
     /**
@@ -35,9 +46,13 @@ public class HashSet<E> {
             return;
         }
         
+        if (alkioita == koko - 1) {
+            kasvataListanKokoa();
+        }
+        
         int hajautusarvo = hajautusarvo(obj);
         
-        EntrySet<E> newEntry = new EntrySet<>(obj, null);
+        EntrySet<E> uusiEntry = new EntrySet<>(obj, null);
         
         if (alkiot[hajautusarvo] != null) {
             
@@ -46,15 +61,15 @@ public class HashSet<E> {
 
             while (nyky != null) {
 
-                if (edellinen != null && nyky.getAvain().equals(obj)) {
-                    newEntry.setSeuraava(nyky.getSeuraava());
+                if (edellinen != null && nyky.getData().equals(obj)) {
+                    uusiEntry.setSeuraava(nyky.getSeuraava());
                     alkiot[hajautusarvo] = nyky.getSeuraava();
 
                     return;
 
-                } else if (edellinen == null && nyky.getAvain().equals(obj)) {
-                    newEntry.setSeuraava(nyky.getSeuraava());
-                    edellinen.setSeuraava(newEntry);
+                } else if (edellinen == null && nyky.getData().equals(obj)) {
+                    uusiEntry.setSeuraava(nyky.getSeuraava());
+                    edellinen.setSeuraava(uusiEntry);
 
                     return;
                 }
@@ -63,12 +78,13 @@ public class HashSet<E> {
                 nyky = nyky.getSeuraava();
             }
 
-            edellinen.setSeuraava(newEntry); 
+            edellinen.setSeuraava(uusiEntry); 
         }
         
         if (alkiot[hajautusarvo] == null) {
-            alkiot[hajautusarvo] = newEntry;
+            alkiot[hajautusarvo] = uusiEntry;
         }
+        alkioita++;
     }
     
     /**
@@ -87,7 +103,7 @@ public class HashSet<E> {
         EntrySet<E> apu = alkiot[hajautusarvo];
         
         while (apu != null) {
-            if (apu.getAvain().equals(obj)) {
+            if (apu.getData().equals(obj)) {
                 return true;
             }
             
@@ -95,5 +111,80 @@ public class HashSet<E> {
         }
         
         return false;
+    }
+    
+    /**
+     * Kaksinkertaistaa listan koon
+     */
+    
+    public void kasvataListanKokoa() {
+        int uusiKoko = koko * 2;
+        EntrySet<E>[] kasvatettuLista = new EntrySet[uusiKoko];
+        
+        for (int i = 0; i < alkiot.length; i++) {
+            EntrySet<E> entrySet = alkiot[i];
+            kasvatettuLista[i] = entrySet;
+        }
+        
+        alkiot = kasvatettuLista;
+        koko = uusiKoko;
+    }
+    
+    /**
+     * Hashsetin entryt, jossa avain sekä seuraava
+     * @param <E> 
+     */
+    
+    private class EntrySet<E> {
+
+        private E data;
+        private EntrySet<E> seuraava;
+
+        /**
+         * HashSet entryn konstruktori
+         * @param data
+         * @param seuraava 
+         */
+
+        public EntrySet(E data, EntrySet<E> seuraava) {
+            this.data = data;
+            this.seuraava = seuraava;
+        }
+
+        /**
+         * Palauttaa avaimen
+         * @return avain
+         */
+
+        public E getData() {
+            return this.data;
+        }
+
+        /**
+         * Asettaa avaimen
+         * @param data
+         */
+
+        public void setData(E data) {
+            this.data = data;
+        }
+
+        /**
+         * Palauttaa seuraavan
+         * @return seuraava
+         */
+
+        public EntrySet<E> getSeuraava() {
+            return this.seuraava;
+        }
+
+        /**
+         * Asettaa seuraavan
+         * @param obj seuraava
+         */
+
+        public void setSeuraava(EntrySet<E> obj) {
+            this.seuraava = obj;
+        }  
     }
 }

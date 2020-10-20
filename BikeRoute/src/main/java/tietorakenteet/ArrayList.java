@@ -3,6 +3,7 @@ package tietorakenteet;
 
 /**
  * ArrayList listaa kuvaava luokka
+ * @param <E> geneerinen listarakenne
  */
 
 public class ArrayList<E> {
