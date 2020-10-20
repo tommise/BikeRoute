@@ -4,7 +4,9 @@ package ui;
 import algoritmit.AStar;
 import algoritmit.Dijkstra;
 import algoritmit.FringeSearch;
+
 import io.VerkonRakentaja;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -15,14 +17,9 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import java.io.File;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Scanner;
-import java.util.Set;
-import javax.swing.JButton;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -37,6 +34,7 @@ import javax.swing.event.MouseInputListener;
 import komponentit.Kaari;
 import komponentit.Solmu;
 import komponentit.Verkko;
+
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
 import org.jxmapviewer.cache.FileBasedLocalCache;
@@ -53,8 +51,9 @@ import org.jxmapviewer.viewer.WaypointPainter;
 
 import suorituskyky.SuorituskykyTestaus;
 
-public class Kayttoliittyma {
+import tietorakenteet.ArrayList;
 
+public class Kayttoliittyma {
     
     /**
      * Luokka käyttöliittymälle sisältäen alkeellisen tekstikäyttöliittymän
@@ -67,7 +66,7 @@ public class Kayttoliittyma {
         
         VerkonRakentaja rakentaja = new VerkonRakentaja();
         Verkko verkko = rakentaja.luoVerkko();
-        List<Solmu> solmut = verkko.getSolmut();       
+        ArrayList<Solmu> solmut = verkko.getSolmut();       
         
         System.out.println("Kaikki valmista!");
 
@@ -107,9 +106,9 @@ public class Kayttoliittyma {
     private class VisuaalinenKayttoliittyma implements Runnable {
         
         private ArrayList<GeoPosition> reitti;
-        private List<Solmu> solmut;       
-        private List<Painter<JXMapViewer>> piirtajat;
-        private Set<Etappi> karttaMerkit;         
+        private ArrayList<Solmu> solmut;       
+        private ArrayList<Painter<JXMapViewer>> piirtajat;
+        private ArrayList<Etappi> karttaMerkit;         
         
         private JXMapViewer kartta;
         private ReitinPiirtaja kartanPiirtaja;
@@ -125,7 +124,7 @@ public class Kayttoliittyma {
         
         private Solmu alku;
         private Solmu loppu;
-        private JLabel tulos;        
+        private JLabel tulosLabel;        
         
         private Etappi alkuEtappi;
         private Etappi loppuEtappi;
@@ -140,7 +139,8 @@ public class Kayttoliittyma {
             TileFactoryInfo osmTile = new OSMTileFactoryInfo();
             DefaultTileFactory tiles = new DefaultTileFactory(osmTile);
 
-            File cache = new File(System.getProperty("user.home") + File.separator + ".jxmapviewer2");
+            String cachePath = System.getProperty("user.home") + File.separator + ".jxmapviewer2";
+            File cache = new File(cachePath);
             tiles.setLocalCache(new FileBasedLocalCache(cache, false));
 
             this.kartta = new JXMapViewer();
@@ -159,9 +159,9 @@ public class Kayttoliittyma {
             
             GeoPosition talinSiirtolaPuutarha = new GeoPosition(60.217407, 24.860599);
             kartta.setAddressLocation(talinSiirtolaPuutarha);
-            
+
             /*
-            // Karttaverkko osm.pbf tiedoston pohjalta
+            // Karttaverkko davis.osm.pbf tiedoston pohjalta
             
             VerkonRakentaja rakentaja = new VerkonRakentaja();
             Verkko verkko = rakentaja.luoVerkko();
@@ -169,7 +169,16 @@ public class Kayttoliittyma {
             
             GeoPosition davis = new GeoPosition(38.556964, -121.743357);
             kartta.setAddressLocation(davis);
-            */         
+            
+            // Karttaverkko talinsiirtolapuutarha.osm.pbf tiedoston pohjalta
+            
+            VerkonRakentaja rakentaja = new VerkonRakentaja();
+            Verkko verkko = rakentaja.luoVerkko();
+            this.solmut = verkko.getSolmut(); 
+            
+            GeoPosition talinSiirtolaPuutarhaOsm = new GeoPosition(60.217407, 24.860599);
+            kartta.setAddressLocation(talinSiirtolaPuutarhaOsm);
+            */
             
             kartta.setZoom(3);
             
@@ -180,7 +189,7 @@ public class Kayttoliittyma {
             kartta.addMouseMotionListener(hiiri);
             kartta.addKeyListener(new PanKeyListener(kartta));
 
-            this.karttaMerkit = new HashSet<>();
+            this.karttaMerkit = new ArrayList<>();
             this.reitti = new ArrayList<>();
             
             paivitaKarttaMerkit();
@@ -204,12 +213,14 @@ public class Kayttoliittyma {
             paneeli1.add(loppuBtn, BorderLayout.PAGE_END);
 
             aloitaBtn.addActionListener(new ActionListener() {
+                @Override
                 public void actionPerformed(ActionEvent e) {
                     valitseAlku();
                 }
             });
 
             loppuBtn.addActionListener(new ActionListener() {
+                @Override
                 public void actionPerformed(ActionEvent e) {
                     valitseLoppu();
                 }
@@ -225,12 +236,15 @@ public class Kayttoliittyma {
             paneeli2.add(haeReittiBtn, BorderLayout.PAGE_END);
             
             valitseAlgoBtn.addActionListener(new ActionListener() {
+                @Override
                 public void actionPerformed(ActionEvent e) {
                     
                     String[] valinnat = new String[] {"Dijkstra", "A*", "Fringe Search"};
-                    
-                    int valinta = JOptionPane.showOptionDialog(kartta, "Valitse algoritmi", 
-                            "", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, valinnat, valinnat[0]);
+                    String teksti = "Valitse algoritmi";
+
+                    int valinta = JOptionPane.showOptionDialog(kartta, teksti, "", 
+                            JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, 
+                            null, valinnat, valinnat[0]);
                     
                     if (valinta == 0) {
                         dijkstraKaytossa = true;
@@ -251,6 +265,7 @@ public class Kayttoliittyma {
             }); 
             
             haeReittiBtn.addActionListener(new ActionListener() {
+                @Override
                 public void actionPerformed(ActionEvent e) {
                     haeReitti();
                     paivitaKartta();
@@ -260,13 +275,14 @@ public class Kayttoliittyma {
             JPanel paneeli3 = new JPanel(new BorderLayout(30, 30));
             paneeli3.setBorder(new EmptyBorder(10, 10, 10, 10));
             
-            this.tulos = new JLabel("Kokonaisreitti: ");
+            this.tulosLabel = new JLabel("Kokonaisreitti: ");
             JButton pyyhiReittiBtn = new JButton("Pyyhi reitti");
             
-            paneeli3.add(tulos, BorderLayout.PAGE_START);
+            paneeli3.add(tulosLabel, BorderLayout.PAGE_START);
             paneeli3.add(pyyhiReittiBtn, BorderLayout.PAGE_END);  
 
             pyyhiReittiBtn.addActionListener(new ActionListener() {
+                @Override
                 public void actionPerformed(ActionEvent e) {
                     pyyhiReitti();
                 }
@@ -324,7 +340,7 @@ public class Kayttoliittyma {
              * Asetetaan lopuksi paneelit ikkunaan
              */
 
-            JFrame frame = new JFrame("Talin siirtolapuutarha");
+            JFrame frame = new JFrame("BikeRoute");
 
             frame.getContentPane().setLayout(new BorderLayout());
             frame.getContentPane().add(vasenSivuPaneeli, BorderLayout.WEST);
@@ -376,8 +392,9 @@ public class Kayttoliittyma {
                 ArrayList<Solmu> dijkstraReitti = dj.luoReitti(loppu);
 
                 paivitaReitti(dijkstraReitti);
+                double tulos = dijkstraReitti.get(dijkstraReitti.size() - 1).getMinimiEtaisyys();
                 
-                this.tulos.setText("Kokonaisreitti: " + dijkstraReitti.get(dijkstraReitti.size() - 1).getMinimiEtaisyys() + " m");
+                this.tulosLabel.setText("Kokonaisreitti: " + tulos + " m");
                 
             } else if (astarKaytossa) {
                 AStar asta = new AStar();
@@ -386,8 +403,9 @@ public class Kayttoliittyma {
                 ArrayList<Solmu> aStarReitti = asta.luoReitti(loppu);
                 
                 paivitaReitti(aStarReitti);
+                double tulos = aStarReitti.get(aStarReitti.size() - 1).getG();
                 
-                this.tulos.setText("Kokonaisreitti: " + aStarReitti.get(aStarReitti.size() - 1).getG() + " m");
+                this.tulosLabel.setText("Kokonaisreitti: " + tulos + " m");
                 
             } else if (fringeKaytossa) {
                 FringeSearch fringeSearch = new FringeSearch();
@@ -396,8 +414,9 @@ public class Kayttoliittyma {
                 ArrayList<Solmu> fringeReitti = fringeSearch.luoReitti();
                 
                 paivitaReitti(fringeReitti);
+                double tulos = fringeReitti.get(fringeReitti.size() - 1).getG();
                 
-                this.tulos.setText("Kokonaisreitti: " + fringeReitti.get(fringeReitti.size() - 1).getG() + " m");                
+                this.tulosLabel.setText("Kokonaisreitti: " + tulos + " m");                
             }
         }
         
@@ -430,8 +449,8 @@ public class Kayttoliittyma {
         }
         
         public void pyyhiReitti() {
-            karttaMerkit.clear();
-            reitti.clear();
+            karttaMerkit = new ArrayList();
+            reitti = new ArrayList<>();
             
             alkuEtappi = null;
             loppuEtappi = null;
@@ -443,13 +462,11 @@ public class Kayttoliittyma {
             astarKaytossa = false;
             fringeKaytossa = false;
             
-            tulos.setText("Kokonaisreitti: ");
+            tulosLabel.setText("Kokonaisreitti: ");
             
             resetoiKaytetytSolmut();
             paivitaKarttaMerkit();
             paivitaKartta();
-            
-            //JOptionPane.showMessageDialog(kartta, "Reitti pyyhitty!");
         }
         
         public void resetoiKaytetytSolmut() {
@@ -461,19 +478,41 @@ public class Kayttoliittyma {
         
         public void paivitaKartta() {
             
-            this.merkkienAsettaja = new WaypointPainter<Etappi>();
-            merkkienAsettaja.setWaypoints(karttaMerkit);
+            /**
+             * JXMapViewerin WaypointPainter tarvitsee "Waypointikseen" java.util.Set rakenteen
+             */
+            
+            this.merkkienAsettaja = new WaypointPainter<>();
+            
+            java.util.Set jxMapKarttaMerkit = new java.util.HashSet();
+            
+            for (int i = 0; i < karttaMerkit.size(); i++) {
+                Etappi etappi = karttaMerkit.get(i);
+                jxMapKarttaMerkit.add(etappi);
+            }
+            
+            merkkienAsettaja.setWaypoints(jxMapKarttaMerkit);
             merkkienAsettaja.setRenderer(new EtappienKasittelija());
 
             this.kartanPiirtaja = new ReitinPiirtaja(reitti);
 
-            this.piirtajat = new ArrayList<Painter<JXMapViewer>>();
+            this.piirtajat = new ArrayList<>();
             piirtajat.add(kartanPiirtaja);
             piirtajat.add(merkkienAsettaja);  
 
-            kartta.setOverlayPainter(merkkienAsettaja); 
-
-            CompoundPainter<JXMapViewer> painter = new CompoundPainter<JXMapViewer>(piirtajat);
+            kartta.setOverlayPainter(merkkienAsettaja);
+            
+            /**
+             * JXMapViewerin compoundPainter tarvitsee parametrikseen java.util.List rakenteen
+             */
+            
+            java.util.List jxMapPainterLista = new java.util.ArrayList();
+            jxMapPainterLista.add(piirtajat.get(0));
+            jxMapPainterLista.add(piirtajat.get(1));
+            
+            CompoundPainter<JXMapViewer> painter = new CompoundPainter<>();
+            painter.setPainters(jxMapPainterLista);
+            
             kartta.setOverlayPainter(painter);
         }
         
@@ -488,7 +527,10 @@ public class Kayttoliittyma {
                     karttaMerkit.add(loppuEtappi);
                     kartta.add(loppuEtappi.getNappi());
                 } else {
-                    Etappi uusi = new Etappi(new GeoPosition(solmu.getLatitude(), solmu.getLongitude()), "default");
+                    double latitude = solmu.getLatitude();
+                    double longitude = solmu.getLongitude();
+                    GeoPosition positio = new GeoPosition(latitude, longitude);
+                    Etappi uusi = new Etappi(positio, "default");
                     kartta.add(uusi.getNappi());
                     karttaMerkit.add(uusi);
                 }                
@@ -496,7 +538,9 @@ public class Kayttoliittyma {
         }
         
         public void naytaAlkuNapit() {
-            for (Etappi etappi : this.karttaMerkit) {
+            
+            for (int i = 0; i < karttaMerkit.size(); i++) {
+                Etappi etappi = karttaMerkit.get(i);
                 
                 etappi.resetHiirenKuuntelijat();
                 
@@ -506,7 +550,9 @@ public class Kayttoliittyma {
         }
         
         public void naytaLoppuNapit() {
-            for (Etappi etappi : this.karttaMerkit) {
+            
+            for (int i = 0; i < karttaMerkit.size(); i++) {
+                Etappi etappi = karttaMerkit.get(i);
                 
                 etappi.resetHiirenKuuntelijat();
                 etappi.getNappi().addMouseListener(new loppuPointListener(etappi));
@@ -518,7 +564,10 @@ public class Kayttoliittyma {
         }
         
         public void piilotaKarttaNapit() {
-            for (Etappi etappi : this.karttaMerkit) {
+            
+            for (int i = 0; i < karttaMerkit.size(); i++) {
+                Etappi etappi = karttaMerkit.get(i);
+                
                 etappi.setNappiPiiloon();
             }
         }
@@ -548,7 +597,6 @@ public class Kayttoliittyma {
                 etappi.setValittu(true);
                 etappi.setEtapinTyyppi("alku");
                 
-                //JOptionPane.showMessageDialog(nappi, "Alku valittu!");
                 piilotaKarttaNapit();
             }
 
@@ -584,8 +632,7 @@ public class Kayttoliittyma {
                 paivitaLoppu(etappi);
                 etappi.setValittu(true);
                 etappi.setEtapinTyyppi("loppu");
-                
-                //JOptionPane.showMessageDialog(nappi, "Loppu valittu!");
+
                 piilotaKarttaNapit();
             }
 
@@ -613,7 +660,7 @@ public class Kayttoliittyma {
      * @param solmut verkon kaikki solmut
      */
     
-    public static void tekstiKayttoliittyma(Scanner lukija, List<Solmu> solmut) {
+    public static void tekstiKayttoliittyma(Scanner lukija, ArrayList<Solmu> solmut) {
         
         while (true) {
             System.out.println("");
@@ -657,22 +704,22 @@ public class Kayttoliittyma {
         VerkonRakentaja verkonRakentaja = new VerkonRakentaja();
         Verkko verkko = verkonRakentaja.luoTestiVerkko();
         
-        List<Solmu> solmut = verkko.getSolmut();
+        ArrayList<Solmu> solmut = verkko.getSolmut();
         
         System.out.println("Reitti 1:");
         System.out.println("-------");
         
-        Solmu alku1 = solmut.get(solmut.size() -1);
+        Solmu alku1 = solmut.get(solmut.size() - 1);
         Solmu loppu1 = solmut.get(0);
-        
-        Solmu alku2 = solmut.get(3);
-        Solmu loppu2 = solmut.get(12);
         
         tulostaKaikkiReitit(alku1, loppu1);
         
         System.out.println("");
         System.out.println("Reitti 2:");
         System.out.println("-------");
+        
+        Solmu alku2 = solmut.get(3);
+        Solmu loppu2 = solmut.get(12);
         
         tulostaKaikkiReitit(alku2, loppu2);
 
@@ -714,11 +761,13 @@ public class Kayttoliittyma {
         System.out.println("Keskiarvo " + astarAika / kierroksia);
         System.out.println("");
         
+        /*
         System.out.println("Fringe Search");
         double fringeAika = suoritus.fringe(kierroksia);
         System.out.println("Kokonaisaika " + fringeAika + " s");
         System.out.println("Keskiarvo " + fringeAika / kierroksia);
-        System.out.println("");    
+        System.out.println("");   
+        */
         
     }
     
@@ -730,7 +779,7 @@ public class Kayttoliittyma {
     
     public static void tulostaKaikkiReitit(Solmu alku, Solmu loppu) {
         System.out.println("");
-        /*
+        
         Dijkstra dijkstra = new Dijkstra();
         dijkstra.etsi(alku, loppu);
         
@@ -738,24 +787,25 @@ public class Kayttoliittyma {
         tulostaDijkstraReitti(dijkstranReitti); 
         resetoiKaytetytSolmut(dijkstranReitti);           
         
-        
         AStar astar = new AStar();
         astar.etsi(alku, loppu);
         
         ArrayList<Solmu> aStarReitti = astar.luoReitti(loppu);
         tulostaAstarReitti(aStarReitti); 
         resetoiKaytetytSolmut(aStarReitti);    
-        */
+        
+        /*
         FringeSearch fringe = new FringeSearch();
         fringe.etsi(alku, loppu);
         
         ArrayList<Solmu> fringeReitti = fringe.luoReitti();        
         tulostaFringeReitti(fringeReitti); 
         resetoiKaytetytSolmut(fringeReitti);
+        */
     }
     
     /**
-     * Resetoi käytetyt solmut jotta gluvut ja minimietäisyydet eivät jää solmuille edellisestä kierroksesta
+     * Resetoi käytetyt solmut gluvultaan ja minimietäisyydeltään
      * @param solmut 
      */
     
@@ -771,7 +821,7 @@ public class Kayttoliittyma {
      * @param solmut annettu solmulista
      */
     
-    public static void lueKartanTiet(List<Solmu> solmut) {
+    public static void lueKartanTiet(ArrayList<Solmu> solmut) {
         
         for (int i = 0; i < solmut.size(); i++) {
             Solmu solmu = solmut.get(i);
@@ -806,8 +856,10 @@ public class Kayttoliittyma {
             System.out.println(solmu.getMinimiEtaisyys() + "m");
         }        
         
+        double tulos = reitti.get(reitti.size() - 1).getMinimiEtaisyys();
+        
         System.out.println("");
-        System.out.println("Kokonaisreitti yhteensä: " + reitti.get(reitti.size() - 1).getMinimiEtaisyys() + "m");
+        System.out.println("Kokonaisreitti yhteensä: " + tulos + "m");
         System.out.println(""); 
     }
     
@@ -826,8 +878,10 @@ public class Kayttoliittyma {
             System.out.println(solmu.getG() + "m");
         }
         
+        double tulos = reitti.get(reitti.size() - 1).getG();
+        
         System.out.println("");
-        System.out.println("Kokonaisreitti yhteensä: " + reitti.get(reitti.size() - 1).getG() + "m");
+        System.out.println("Kokonaisreitti yhteensä: " + tulos + "m");
         System.out.println("");         
     } 
     
@@ -851,8 +905,10 @@ public class Kayttoliittyma {
             System.out.println(solmu.getG() + "m");
         }     
         
+        double tulos = reitti.get(reitti.size() - 1).getG();
+                
         System.out.println("");
-        System.out.println("Kokonaisreitti yhteensä: " + reitti.get(reitti.size() - 1).getG() + "m");
+        System.out.println("Kokonaisreitti yhteensä: " + tulos + "m");
         System.out.println("");         
     }
 }

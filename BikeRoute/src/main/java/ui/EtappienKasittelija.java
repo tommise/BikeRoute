@@ -6,13 +6,18 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
+
 import java.io.File;
 import java.io.IOException;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
+
 import org.jxmapviewer.JXMapViewer;
+import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.WaypointRenderer;
 
 public final class EtappienKasittelija implements WaypointRenderer<Etappi> {
@@ -21,6 +26,10 @@ public final class EtappienKasittelija implements WaypointRenderer<Etappi> {
     private BufferedImage loppu;
     private BufferedImage piste;
     
+    /**
+     * Etappienkäsittelijän konstruktori
+     * Konstuktorissa luetaan alku, loppu ja piste kuvat
+     */
     public EtappienKasittelija() {
 
         try {
@@ -37,13 +46,23 @@ public final class EtappienKasittelija implements WaypointRenderer<Etappi> {
         }
     }
     
+    /**
+     * Muuntaa Image muodossa olevan tiedoston BufferedImageksi
+     * @param kuva
+     * @return palauttaa bufferedimage olion
+     */
+    
     public BufferedImage muunnaBufferoiduksiKuvaksi(Image kuva) {
         
         if (kuva instanceof BufferedImage) {
             return (BufferedImage) kuva;
         }
-
-        BufferedImage bufferedKuva = new BufferedImage(kuva.getWidth(null), kuva.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+        
+        int leveys = kuva.getWidth(null);
+        int korkeus = kuva.getHeight(null);
+        int argb = BufferedImage.TYPE_INT_ARGB;
+        
+        BufferedImage bufferedKuva = new BufferedImage(leveys, korkeus, argb);
         Graphics2D grafiikka = bufferedKuva.createGraphics();
         grafiikka.drawImage(kuva, 0, 0, null);
         grafiikka.dispose();
@@ -58,30 +77,35 @@ public final class EtappienKasittelija implements WaypointRenderer<Etappi> {
             return;
         }
         
-        grafiikka = (Graphics2D)grafiikka.create();        
+        grafiikka = (Graphics2D)grafiikka.create();
         
-        Point2D kohta = kartta.getTileFactory().geoToPixel(etappi.getPosition(), kartta.getZoom());
-
-        int kohtaX = (int)kohta.getX();
-        int kohtaY = (int)kohta.getY();
+        GeoPosition positio = etappi.getPosition();
+        int zoomi = kartta.getZoom();
         
+        Point2D kohta = kartta.getTileFactory().geoToPixel(positio, zoomi);
         Rectangle ruutu = kartta.getViewportBounds();
         
-        int ruutuX = (int) ruutu.getX();
-        int ruutuY = (int) ruutu.getY();
+        int nappiX = (int)kohta.getX() - (int)ruutu.getX();
+        int nappiY = (int)kohta.getY() - (int)ruutu.getY();   
         
-        int nappiX = kohtaX - ruutuX;
-        int nappiY = kohtaY - ruutuY;   
+        int kohtaXMiinusAlkuLeveys = (int)kohta.getX() - alku.getWidth() / 2;
+        int kohtaYMiinusAlkuKorkeus = (int)kohta.getY() - alku.getHeight();
+        int kohtaXMiinusLoppuLeveys = (int)kohta.getX() - loppu.getWidth() / 2;
+        int kohtaYMiinusLoppuKorkeus = (int)kohta.getY() - loppu.getHeight();
+        int kohtaXMiinusPisteLeveys = (int)kohta.getX() - piste.getWidth() / 2;
+        int kohtaYMiinusPisteKorkeus = (int)kohta.getY() - piste.getHeight() / 2;
+        
+        JButton nappi = etappi.getNappi();
+        int nappiXMiinusNappiLeveys = nappiX - nappi.getWidth() / 2;
+        int nappiYMiinusNappiKorkeus = nappiY - nappi.getHeight() / 2;
 
         if (etappi.getEtapinTyyppi().equals("alku")) {
-            grafiikka.drawImage(alku, kohtaX -alku.getWidth() / 2, kohtaY -alku.getHeight(), null);
+            grafiikka.drawImage(alku, kohtaXMiinusAlkuLeveys, kohtaYMiinusAlkuKorkeus, null);
         } else if (etappi.getEtapinTyyppi().equals("loppu")) {
-            grafiikka.drawImage(loppu, kohtaX -loppu.getWidth() / 2, kohtaY -loppu.getHeight(), null);
+            grafiikka.drawImage(loppu, kohtaXMiinusLoppuLeveys, kohtaYMiinusLoppuKorkeus, null);
         } else {           
-            grafiikka.drawImage(piste, kohtaX -piste.getWidth() / 2, kohtaY -piste.getHeight() / 2, null);
-            
-            JButton nappi = etappi.getNappi();
-            nappi.setLocation(nappiX - nappi.getWidth() / 2, nappiY - nappi.getHeight() / 2);
+            grafiikka.drawImage(piste, kohtaXMiinusPisteLeveys, kohtaYMiinusPisteKorkeus, null);
+            nappi.setLocation(nappiXMiinusNappiLeveys, nappiYMiinusNappiKorkeus);
         }
         
         grafiikka.dispose();
