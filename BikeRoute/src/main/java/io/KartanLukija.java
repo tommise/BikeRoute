@@ -4,13 +4,9 @@ import crosby.binary.osmosis.OsmosisReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
+
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+
 import komponentit.Kaari;
 import komponentit.Solmu;
 import komponentit.Verkko;
@@ -24,32 +20,37 @@ import org.openstreetmap.osmosis.core.domain.v0_6.Way;
 import org.openstreetmap.osmosis.core.domain.v0_6.WayNode;
 import org.openstreetmap.osmosis.core.task.v0_6.Sink;
 
+import tietorakenteet.ArrayList;
+import tietorakenteet.HashSet;
+
 public class KartanLukija implements Sink {
     
     private Verkko verkko;
     
     private final String polku;
-    private final ArrayList<Kaari> kaaret;
+    private final HashMap<Long, Kaari> kaaret;
     private final HashMap<Long, Solmu> solmut;    
 
-    private final List<String> kielletytTunnisteet;      
+    private final HashSet<String> kielletytTunnisteet;      
     private final ArrayList<KarttaKaari> karttaKaaret;
     private final HashMap<Long, KarttaSolmu> karttaSolmut;
         
     /**
-     * Kartanlukijan konstruktori, jossa alustetaan kaaret ja solmut sekä määritetään pyöräilylle kielletyt 
+     * Kartanlukijan konstruktori
+     * Alustetaan kaaret, solmut sekä määritetään pyöräilylle kielletyt tiet
      */
         
     public KartanLukija() {
-        this.karttaKaaret = new ArrayList<KarttaKaari>();
-        this.karttaSolmut = new HashMap<Long, KarttaSolmu>();
-        this.kielletytTunnisteet = Arrays.asList("null", "unclassified", "trunk", "construction", "motorway");
+        this.karttaKaaret = new ArrayList<>();
+        this.karttaSolmut = new HashMap<>();
+        this.kielletytTunnisteet = new HashSet<>();
+        alustaKielletytTunnisteet();
         
-        this.kaaret = new ArrayList<Kaari>();
-        this.solmut = new HashMap<Long, Solmu>();
+        this.kaaret = new HashMap<>();
+        this.solmut = new HashMap<>();
         
-        this.polku = "./maps/davis.osm.pbf"; 
-        //this.polku = "./maps/talinsiirtolapuutarha.osm.pbf";
+        //this.polku = "./maps/davis.osm.pbf"; 
+        this.polku = "./maps/talinsiirtolapuutarha.osm.pbf";
     }
     
     /**
@@ -76,8 +77,11 @@ public class KartanLukija implements Sink {
 
     public void kasitteleVerkko() {
         kasitteleKaariLista(karttaKaaret);
+        ArrayList<Solmu> solmutVerkolle = new ArrayList<>();        
         
-        List<Solmu> solmutVerkolle = new LinkedList<Solmu>(this.solmut.values());
+        for (Solmu value : solmut.values()) {
+            solmutVerkolle.add(value);
+        }
         
         this.verkko = new Verkko(solmutVerkolle);
     }  
@@ -98,20 +102,34 @@ public class KartanLukija implements Sink {
     
     public void kasitteleKaariLista(ArrayList<KarttaKaari> karttaKaaret) {
         
-        for (KarttaKaari karttaKaari: karttaKaaret) {
+        for (int i = 0; i < karttaKaaret.size(); i++) {
+            KarttaKaari karttaKaari = karttaKaaret.get(i);
             
-            if (karttaKaari.getSolmut().size() > 1) {
+            HashMap<Long, KarttaSolmu> solmutTienVarrella = karttaKaari.getKarttaSolmut();
+            
+            if (!solmutTienVarrella.isEmpty() && karttaKaari.getSolmuLista().size() > 1) {
+                
                 Solmu alku = valitseSolmu(karttaKaari.noudaEnsimmainen());
                 Solmu loppu = valitseSolmu(karttaKaari.noudaViimeinen());
                 String nimi = karttaKaari.getTunniste("name");
                 String tienTyyppi = karttaKaari.getTunniste("highway");
                 
                 Kaari kaari = new Kaari(alku, loppu, nimi, tienTyyppi);
-                this.kaaret.add(kaari);
+                
+                this.kaaret.put(laskeKaarenId(kaari), kaari);
+                
+                ArrayList<KarttaSolmu> karttaSolmuLista = karttaKaari.getSolmuLista();
+                
+                for (int j = 0; j < karttaSolmuLista.size(); j++) {
+                    KarttaSolmu solmu = karttaSolmuLista.get(j);
+                    if (solmu.kaariLaskuri > 1) {
+                        kaari = puolitaKaari(solmu, kaari, nimi, tienTyyppi);
+                    }
+                }
             }
         }
-        
-        for (Kaari kaari: kaaret) {
+            
+        for (Kaari kaari : this.kaaret.values()) {
             Solmu alku = kaari.getAlku();
             Solmu loppu = kaari.getLoppu();
             
@@ -120,6 +138,18 @@ public class KartanLukija implements Sink {
         }
     }
     
+    /**
+     * Alustaa kielletyt tunnisteet listalle
+     */
+    
+    private void alustaKielletytTunnisteet() {
+        String[] tunnisteet = {"null", "unclassified", "trunk", "construction", "motorway"};
+        
+        for (int i = 0; i < tunnisteet.length; i++) {
+            String tunniste = tunnisteet[i];
+            kielletytTunnisteet.add(tunniste);
+        }
+    }
     
     /**
      * Valitsee tietyn solmun ID:n perusteella solmuista
@@ -142,13 +172,14 @@ public class KartanLukija implements Sink {
         }
         
         return solmu;
-    }    
+    }
     
     /**
      * Käsittelee kartan Osmosis kirjastoa hyödyntäen
      * @param entityContainer karttaan liittyvät oliot konteissaan
      */
     
+    @Override
     public void process(EntityContainer entityContainer) {
         
         if (entityContainer instanceof NodeContainer) { 
@@ -159,25 +190,44 @@ public class KartanLukija implements Sink {
             double latitude = solmu.getLatitude();
             double longitude = solmu.getLongitude();
             
-            KarttaSolmu karttaSolmu = new KarttaSolmu(id, latitude, longitude);
-            karttaSolmut.put(id, karttaSolmu);
+            KarttaSolmu karttaSolmu = karttaSolmut.get(id);
+            
+            if (karttaSolmu != null) {
+                karttaSolmu.setLatitude(latitude);
+                karttaSolmu.setLongitude(longitude);
+            } else {
+                karttaSolmu = new KarttaSolmu(id, latitude, longitude);
+                karttaSolmut.put(id, karttaSolmu);
+            }
         
         } else if (entityContainer instanceof WayContainer) {
             
             Way tie = ((WayContainer) entityContainer).getEntity();
-            Collection<Tag> tunnisteet = tie.getTags();
+            
+            ArrayList<Tag> tunnisteet = new ArrayList<>();
+            
+            for (Tag tunniste : tie.getTags()) {
+                tunnisteet.add(tunniste);
+            }
             
             if (voikoPyorailla(tunnisteet)) {
                 
-                KarttaKaari kaari = new KarttaKaari();
+                KarttaKaari kaari = new KarttaKaari(tie.getId());
                 kaari.addTunnisteet(tunnisteet);
                 
                 for (WayNode solmuKaarenVarrella: tie.getWayNodes()) {
                     
-                    KarttaSolmu solmu = karttaSolmut.get(solmuKaarenVarrella.getNodeId());
+                    long id = solmuKaarenVarrella.getNodeId();
+                    KarttaSolmu karttaSolmu = this.karttaSolmut.get(id);
                     
-                    kaari.lisaaSolmu(solmu);
-                    solmu.addKaari(kaari);
+                    if (karttaSolmu == null) {
+                        karttaSolmu  = new KarttaSolmu(id);
+                        karttaSolmut.put(karttaSolmu.getID(), karttaSolmu);
+                    }
+                    
+                    kaari.lisaaSolmu(karttaSolmu);
+                    karttaSolmu.addKaari(kaari);
+                    karttaSolmu.kaariLaskuri++;
                 }
                 
                 this.karttaKaaret.add(kaari);
@@ -191,20 +241,22 @@ public class KartanLukija implements Sink {
      * @return palauttaa true, jos tiellä voi pyöräillä, muuten false
      */
     
-    private boolean voikoPyorailla(Collection<Tag> tunnisteet) {
+    private boolean voikoPyorailla(ArrayList<Tag> tunnisteet) {
         boolean nimettyTie = false;
         boolean pyoraSallittu = false;
         
-        for (Tag tag : tunnisteet) {
+        for (int i = 0; i < tunnisteet.size(); i++) {
             
-            String tunniste = tag.getKey();
+            Tag tagi = tunnisteet.get(i);
+            
+            String tunniste = tagi.getKey();
             
             if (tunniste.equals("name")) {
                 nimettyTie = true;
             }
             
             if (tunniste.equals("highway")) {
-                pyoraSallittu = !this.kielletytTunnisteet.contains(tag.getValue());
+                pyoraSallittu = !this.kielletytTunnisteet.contains(tagi.getValue());
             }
             
             if (nimettyTie && pyoraSallittu) {
@@ -215,7 +267,32 @@ public class KartanLukija implements Sink {
         
         return nimettyTie && pyoraSallittu;
     }
+    
+    /**
+     * Puolittaa halutun kaaren sillä solmu on löytynyt matkalla
+     * @param kartSolmu
+     * @param kaari
+     * @param nimi
+     * @param tienTyyppi
+     * @return oikeanpuoleinen kaari
+     */
+    
+    private Kaari puolitaKaari(KarttaSolmu kartSolmu, Kaari kaari, String nimi, String tienTyyppi) {
+        this.kaaret.remove(laskeKaarenId(kaari));
         
+        Solmu solmu = valitseSolmu(kartSolmu);
+        
+        Solmu alku = kaari.getAlku();
+        Solmu loppu = kaari.getLoppu();
+                
+        Kaari vasen = new Kaari(alku, solmu, nimi, tienTyyppi);
+        Kaari oikea = new Kaari(solmu, loppu, nimi, tienTyyppi);
+        
+        this.kaaret.put(laskeKaarenId(vasen), vasen);
+        this.kaaret.put(laskeKaarenId(oikea), oikea);
+        
+        return oikea;
+    } 
     /**
      * Palauttaa kaaret listalla
      * @return kaaret listarakenteella
@@ -224,19 +301,38 @@ public class KartanLukija implements Sink {
     public ArrayList<KarttaKaari> getKaaret() {
         return this.karttaKaaret;
     }
+    
+    /**
+     * Laskee kaarelle id:n
+     * @param kaari annettu kaari
+     * @return id long muodossa
+     */
+    
+    public long laskeKaarenId(Kaari kaari) {
+        long solmujenIdSumma = kaari.getAlku().getID() + kaari.getLoppu().getID();
+        
+        String id = String.valueOf(solmujenIdSumma);
+        
+        long uusiId = Math.abs(id.hashCode());
+        
+        return uusiId;
+    }    
         
     /**
      * Välttämätön komponentti Osmosiksen rajapinnan toteuttamiseksi
+     * Tarvitsee java.util.Map olion
      * @param data 
      */
     
-    public void initialize(Map<String, Object> data) {
+    @Override
+    public void initialize(java.util.Map<String, Object> data) {
     }
         
     /**
      * Välttämätön komponentti Osmosiksen rajapinnan toteuttamiseksi
      */
 
+    @Override
     public void complete() {
     }
         
@@ -244,6 +340,7 @@ public class KartanLukija implements Sink {
      * Välttämätön komponentti Osmosiksen rajapinnan toteuttamiseksi
      */
     
+    @Override
     public void release() {
     }  
     
@@ -253,6 +350,7 @@ public class KartanLukija implements Sink {
     
     class KarttaKaari {
       
+        private long id;
         private final HashMap<Long, KarttaSolmu> solmut;
         private final HashMap<String, String> tunnisteet;
 
@@ -260,9 +358,14 @@ public class KartanLukija implements Sink {
          * Konstruktori kartan teille
          */
 
-        public KarttaKaari() {
-            this.solmut = new HashMap<Long, KarttaSolmu>();
-            this.tunnisteet = new HashMap<String, String>();
+        public KarttaKaari(long id) {
+            this.id = id;
+            this.solmut = new HashMap<>();
+            this.tunnisteet = new HashMap<>();
+        }
+        
+        public long getId() {
+            return this.id;
         }
 
         /**
@@ -270,10 +373,15 @@ public class KartanLukija implements Sink {
          * @param tunnisteet lisättävät tunnisteet listana
          */
 
-        public void addTunnisteet(Collection<Tag> tunnisteet) {
+        public void addTunnisteet(ArrayList<Tag> tunnisteet) {
             if (!tunnisteet.isEmpty()) {
-                for (Tag tunniste : tunnisteet) {
-                    this.tunnisteet.put(tunniste.getKey(), tunniste.getValue());
+                
+                for (int i = 0; i < tunnisteet.size(); i++) {
+                    Tag tunniste = tunnisteet.get(i);
+                    String avain = tunniste.getKey();
+                    String arvo = tunniste.getValue();
+
+                    this.tunnisteet.put(avain, arvo);
                 }
             }
         }
@@ -296,16 +404,30 @@ public class KartanLukija implements Sink {
         public void lisaaSolmu(KarttaSolmu karttaSolmu) {
             this.solmut.put(karttaSolmu.getID(), karttaSolmu);
         }
-
+        
+        /**
+         * Palauttaa karttaSolmut
+         * @return palautettavat solmut
+         */
+        
+        public HashMap<Long, KarttaSolmu> getKarttaSolmut() {
+            return this.solmut;
+        }
+        
         /**
          * Palauttaa solmut listassa
          * @return palautettavat solmut
          */
 
-        public LinkedList<KarttaSolmu> getSolmut() {
-            LinkedList<KarttaSolmu> lista = new LinkedList<KarttaSolmu>(this.solmut.values());
+        public ArrayList<KarttaSolmu> getSolmuLista() {
+            
+            ArrayList<KarttaSolmu> karttaSolmut = new ArrayList<>();
+            
+            for (KarttaSolmu karttaSolmu : this.solmut.values()) {
+                karttaSolmut.add(karttaSolmu);
+            }
 
-            return lista;
+            return karttaSolmut;
         }
 
         /**
@@ -314,8 +436,8 @@ public class KartanLukija implements Sink {
          */
 
         public KarttaSolmu noudaEnsimmainen() {
-            long id = this.getSolmut().getFirst().getID();
-            KarttaSolmu karttaSolmu = this.solmut.remove(id);
+            long karttaSolmuId = this.getSolmuLista().get(0).getID();
+            KarttaSolmu karttaSolmu = this.solmut.remove(karttaSolmuId);
 
             return karttaSolmu;
         }
@@ -326,8 +448,10 @@ public class KartanLukija implements Sink {
          */
 
         public KarttaSolmu noudaViimeinen() {
-            long id = this.getSolmut().getLast().getID();
-            KarttaSolmu karttaSolmu = this.solmut.remove(id);
+            int viimeisenIndeksi = this.getSolmuLista().size() - 1;
+            
+            long karttaSolmuId = this.getSolmuLista().get(viimeisenIndeksi).getID();
+            KarttaSolmu karttaSolmu = this.solmut.remove(karttaSolmuId);
 
             return karttaSolmu;
         }
@@ -342,7 +466,8 @@ public class KartanLukija implements Sink {
         private long id;
         private double latitude;
         private double longitude;
-        private ArrayList<KarttaKaari> kaaret;
+        public int kaariLaskuri;
+        private HashMap<Long, KarttaKaari> kaaret;        
 
         /**
          * Karttasolmun konstruktori
@@ -355,7 +480,14 @@ public class KartanLukija implements Sink {
             this.id = id;
             this.latitude = lat;
             this.longitude = lon;
-            this.kaaret = new ArrayList<KarttaKaari>();   
+            this.kaariLaskuri = 0;
+            this.kaaret = new HashMap<>();
+        }
+        
+        public KarttaSolmu(long id) {
+            this.id = id;
+            this.kaariLaskuri = 0;
+            this.kaaret = new HashMap<>();
         }
 
         /**
@@ -364,8 +496,8 @@ public class KartanLukija implements Sink {
          */
 
         public void addKaari(KarttaKaari kaari) {
-            this.kaaret.add(kaari);
-        }    
+            this.kaaret.put(kaari.getId(), kaari);
+        }   
 
         /**
          * Palauttaa latituden
