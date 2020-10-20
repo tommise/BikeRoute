@@ -1,11 +1,12 @@
 package algoritmit;
 
-import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.PriorityQueue;
 
 import komponentit.Kaari;
 import komponentit.Solmu;
+
+import tietorakenteet.ArrayList;
+import tietorakenteet.PriorityQueue;
 
 /**
  * Dijkstran algoritmi hyödyntäen PriorityQueta sekä lyhyimmän reitin tallettaminen listaan
@@ -22,7 +23,7 @@ public class Dijkstra {
     public void etsi(Solmu alku, Solmu loppu) {
         
         alku.setMinimiEtaisyys(0);
-        PriorityQueue<Solmu> prioriteettijono = new PriorityQueue<Solmu>(luoPrioriteetti());
+        PriorityQueue<Solmu> prioriteettijono = new PriorityQueue<>(luoPrioriteetti());
         prioriteettijono.add(alku);
 
         while (!prioriteettijono.isEmpty()) {
@@ -35,7 +36,6 @@ public class Dijkstra {
                 double uusiMinimiEtaisyys = nyky.getMinimiEtaisyys() + kaari.getEtaisyys();
 
                 if (uusiMinimiEtaisyys < solmu.getMinimiEtaisyys()) {
-                    prioriteettijono.remove(nyky);
                     solmu.setEdellinenSolmu(nyky);
                     solmu.setMinimiEtaisyys(uusiMinimiEtaisyys);
                     
@@ -54,13 +54,13 @@ public class Dijkstra {
      */    
     
     public ArrayList<Solmu> luoReitti(Solmu tavoiteSolmu) {
-        ArrayList<Solmu> reitti = new ArrayList<Solmu>();
+        ArrayList<Solmu> reitti = new ArrayList<>();
 
         for (Solmu solmu = tavoiteSolmu; solmu != null; solmu = solmu.getEdellinenSolmu()) {
             reitti.add(solmu);
         }
         
-        ArrayList<Solmu> kaannettyReitti = new ArrayList<Solmu>(); 
+        ArrayList<Solmu> kaannettyReitti = new ArrayList<>(); 
         
         for (int i = reitti.size() - 1; i >= 0; i--) { 
             Solmu solmu = reitti.get(i);

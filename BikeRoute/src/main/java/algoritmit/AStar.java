@@ -1,14 +1,15 @@
 
 package algoritmit;
 
-import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashSet;
-import java.util.PriorityQueue;
 
 import komponentit.Heuristiikka;
 import komponentit.Kaari;
 import komponentit.Solmu;
+
+import tietorakenteet.ArrayList;
+import tietorakenteet.HashSet;
+import tietorakenteet.PriorityQueue;
 
 /**
  * A* algoritmi sekä lyhyimmän reitin tallettaminen listaan
@@ -34,8 +35,8 @@ public class AStar {
 
     public void etsi(Solmu alku, Solmu loppu) {
     
-        HashSet<Solmu> kasitelty = new HashSet<Solmu>();
-        PriorityQueue<Solmu> queue = new PriorityQueue<Solmu>(luoPrioriteetti());
+        HashSet<Solmu> kasitelty = new HashSet<>();
+        PriorityQueue<Solmu> queue = new PriorityQueue<>(luoPrioriteetti());
         
         queue.add(alku);
         alku.setG(0);
@@ -84,20 +85,20 @@ public class AStar {
      */
     
     public ArrayList<Solmu> luoReitti(Solmu tavoiteSolmu) {
-        ArrayList<Solmu> reitti = new ArrayList<Solmu>();
+        ArrayList<Solmu> reitti = new ArrayList<>();
 
         for (Solmu solmu = tavoiteSolmu; solmu != null; solmu = solmu.getEdellinenSolmu()) {
             reitti.add(solmu);
         }
         
-        ArrayList<Solmu> kaannettyReitti = new ArrayList<Solmu>(); 
+        ArrayList<Solmu> kaannettyReitti = new ArrayList<>(); 
         
         for (int i = reitti.size() - 1; i >= 0; i--) {
             Solmu solmu = reitti.get(i);
             kaannettyReitti.add(solmu);
         }
         
-        return kaannettyReitti; 
+        return kaannettyReitti;
     }
     
     /**

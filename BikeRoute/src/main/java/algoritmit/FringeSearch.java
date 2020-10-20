@@ -1,13 +1,14 @@
 
 package algoritmit;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 
 import komponentit.Heuristiikka;
 import komponentit.Kaari;
 import komponentit.Solmu;
+
+import tietorakenteet.ArrayList;
 
 public class FringeSearch {
     ArrayList<Solmu> reitti;
@@ -184,7 +185,7 @@ public class FringeSearch {
     }  
     
     public ArrayList<Solmu> luoReitti() {
-        ArrayList<Solmu> kaannettyReitti = new ArrayList<Solmu>(); 
+        ArrayList<Solmu> kaannettyReitti = new ArrayList<>(); 
         
         for (int i = reitti.size() - 1; i >= 0; i--) {
             Solmu solmu = reitti.get(i);
