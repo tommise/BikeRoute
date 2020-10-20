@@ -1,15 +1,15 @@
 
 package algoritmit;
 
+import static org.junit.Assert.*;
+
 import io.VerkonRakentaja;
-import java.util.ArrayList;
-import java.util.List;
 import komponentit.Solmu;
 import komponentit.Verkko;
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Before;
 import org.junit.Test;
+
+import tietorakenteet.ArrayList;
 
 public class FringeSearchTest {
        
@@ -17,7 +17,6 @@ public class FringeSearchTest {
     FringeSearch fringe;     
     double epsilon = 0.001;
     VerkonRakentaja rakentaja; 
-    
     
     @Before
     public void setUp() {
@@ -32,13 +31,13 @@ public class FringeSearchTest {
     @Test
     public void palauttaaOikeinLyhyimmanPolunReitti1() {
         
-        List<Solmu> solmut = verkko.getSolmut();
+        ArrayList<Solmu> solmut = verkko.getSolmut();
         
         Solmu alku = solmut.get(0);
         Solmu loppu = solmut.get(solmut.size() - 1);
         
         fringe.etsi(alku, loppu);
-        ArrayList<Solmu> reitti = fringe.luoReitti(loppu);
+        ArrayList<Solmu> reitti = fringe.luoReitti();
         
         double fringeReitti = reitti.get(reitti.size() - 1).getG();
         double reitinOikeaPituus = 802.8398626554501;
@@ -49,13 +48,13 @@ public class FringeSearchTest {
     @Test
     public void palauttaaOikeinLyhyimmanPolunReitti2() {
         
-        List<Solmu> solmut = verkko.getSolmut();
+        ArrayList<Solmu> solmut = verkko.getSolmut();
         
         Solmu alku = solmut.get(3);
         Solmu loppu = solmut.get(12);
         
         fringe.etsi(alku, loppu);
-        ArrayList<Solmu> reitti = fringe.luoReitti(loppu);
+        ArrayList<Solmu> reitti = fringe.luoReitti();
         
         double fringeReitti = reitti.get(reitti.size() - 1).getG();
         double reitinOikeaPituus = 375.823394569141;
@@ -66,13 +65,13 @@ public class FringeSearchTest {
     @Test
     public void palauttaaOikeinLyhyimmanPolunReitti3() {
         
-        List<Solmu> solmut = verkko.getSolmut();
+        ArrayList<Solmu> solmut = verkko.getSolmut();
         
         Solmu alku = solmut.get(10);
         Solmu loppu = solmut.get(18);
         
         fringe.etsi(alku, loppu);
-        ArrayList<Solmu> reitti = fringe.luoReitti(loppu);
+        ArrayList<Solmu> reitti = fringe.luoReitti();
         
         double fringeReitti = reitti.get(reitti.size() - 1).getG();
         double reitinOikeaPituus = 293.860036810901;

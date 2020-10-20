@@ -1,23 +1,21 @@
 
 package algoritmit;
 
-import io.VerkonRakentaja;
-import java.util.ArrayList;
-import java.util.List;
 import static org.junit.Assert.*;
 
+import io.VerkonRakentaja;
 import komponentit.Solmu;
 import komponentit.Verkko;
-
 import org.junit.Before;
 import org.junit.Test;
 
+import tietorakenteet.ArrayList;
 
 public class AStarTest {
 
     AStar astar;    
     Verkko verkko;
-    double epsilon = 0.001;
+    double epsilon = 0.01;
     VerkonRakentaja rakentaja; 
     
     @Before
@@ -31,7 +29,7 @@ public class AStarTest {
     @Test
     public void palauttaaOikeinLyhyimmanPolunReitti1() {
         
-        List<Solmu> solmut = verkko.getSolmut();
+        ArrayList<Solmu> solmut = verkko.getSolmut();
         
         Solmu alku = solmut.get(0);
         Solmu loppu = solmut.get(solmut.size() - 1);
@@ -48,7 +46,7 @@ public class AStarTest {
     @Test
     public void palauttaaOikeinLyhyimmanPolunReitti2() {
         
-        List<Solmu> solmut = verkko.getSolmut();
+        ArrayList<Solmu> solmut = verkko.getSolmut();
         
         Solmu alku = solmut.get(3);
         Solmu loppu = solmut.get(12);
@@ -65,7 +63,7 @@ public class AStarTest {
     @Test
     public void palauttaaOikeinLyhyimmanPolunReitti3() {
         
-        List<Solmu> solmut = verkko.getSolmut();
+        ArrayList<Solmu> solmut = verkko.getSolmut();
         
         Solmu alku = solmut.get(10);
         Solmu loppu = solmut.get(18);
@@ -78,4 +76,55 @@ public class AStarTest {
         
         assertEquals(lyhyinPolkuAStar, reitinOikeaPituus, epsilon);
     }    
+    
+    @Test
+    public void palauttaaOikeinLyhyimmanPolunReitti1Vaarinpain() {
+        
+        ArrayList<Solmu> solmut = verkko.getSolmut();
+        
+        Solmu alku = solmut.get(solmut.size() - 1);
+        Solmu loppu = solmut.get(0);
+        
+        astar.etsi(alku, loppu);
+        ArrayList<Solmu> reitti = astar.luoReitti(loppu);
+        
+        double lyhyinPolkuAStar = reitti.get(reitti.size() - 1).getG();
+        double reitinOikeaPituus = 802.8398626554501;
+        
+        assertEquals(lyhyinPolkuAStar, reitinOikeaPituus, epsilon);
+    }
+    
+    @Test
+    public void palauttaaOikeinLyhyimmanPolunReitti2Vaarinpain() {
+        
+        ArrayList<Solmu> solmut = verkko.getSolmut();
+        
+        Solmu alku = solmut.get(12);
+        Solmu loppu = solmut.get(3);
+        
+        astar.etsi(alku, loppu);
+        ArrayList<Solmu> reitti = astar.luoReitti(loppu);
+        
+        double lyhyinPolkuAStar = reitti.get(reitti.size() - 1).getG();
+        double reitinOikeaPituus = 375.823394569141;
+        
+        assertEquals(lyhyinPolkuAStar, reitinOikeaPituus, epsilon);
+    }
+    
+    @Test
+    public void palauttaaOikeinLyhyimmanPolunReitti3Vaarinpain() {
+        
+        ArrayList<Solmu> solmut = verkko.getSolmut();
+        
+        Solmu alku = solmut.get(18);
+        Solmu loppu = solmut.get(10);
+        
+        astar.etsi(alku, loppu);
+        ArrayList<Solmu> reitti = astar.luoReitti(loppu);
+        
+        double lyhyinPolkuAStar = reitti.get(reitti.size() - 1).getG();
+        double reitinOikeaPituus = 293.860036810901;
+        
+        assertEquals(lyhyinPolkuAStar, reitinOikeaPituus, epsilon);
+    }      
 }
