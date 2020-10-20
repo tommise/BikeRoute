@@ -3,9 +3,8 @@ package tietorakenteet;
 
 import static org.junit.Assert.*;
 
-import komponentit.Solmu;
-
 import java.util.Comparator;
+import komponentit.Solmu;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -40,16 +39,6 @@ public class PriorityQueueTest {
         
         assertEquals(1, queue.size());
     }
-    
-    @Test
-    public void poistaaElementinListalta() {
-        queue.add(solmu1);
-        queue.add(solmu2);
-        
-        queue.remove(solmu2);
-        
-        assertEquals(1, queue.size());
-    }  
     
     @Test
     public void elementtiLoytyyListalta() {

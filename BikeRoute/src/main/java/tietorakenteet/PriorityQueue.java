@@ -5,6 +5,7 @@ import java.util.Comparator;
 
 /**
  * PriorityQueueta kuvaava luokka
+ * @param <E> geneerinen rakenne
  */
 
 public class PriorityQueue<E> {
@@ -29,28 +30,36 @@ public class PriorityQueue<E> {
      * @param obj lisättävä elementti
      */
     
-    public void add(E obj) {
-        koko++;
-
-        if (prjono.length <= koko) {
-            kasvataKokoa();
+    public void add(Object obj) {
+        
+        if (isFull()) {
+            kasvataListanKokoa();
         }
         
-        int indeksi = koko - 1;
-
-        while (indeksi > 0) {
-            int verrattava = comparator.compare(obj, (E) prjono[getVanhempi(indeksi)]);
+        prjono[koko] = obj;
+        
+        if (!isEmpty()) {
+            int tail = koko - 1;
             
-            if (verrattava > 0) {
-                prjono[indeksi] = prjono[getVanhempi(indeksi)];
-                indeksi = getVanhempi(indeksi);
-            } else {
-                break;
+            if (comparator.compare((E) obj, (E) prjono[tail]) < 0) {
+                
+                Object apu1 = prjono[tail];
+                Object apu2;
+                
+                prjono[tail] = obj;
+                
+                while (tail <= koko) {
+                    tail++;
+                    
+                    apu2 = prjono[tail];
+                    prjono[tail] = apu1;
+                    apu1 = apu2;
+                }
             }
         }
 
-        prjono[indeksi] = obj;
-    }   
+        kasvataKokoLaskuria(); 
+    } 
     
     /**
      * Tarkistaa löytyykö haluttu elementti jonosta
@@ -67,44 +76,30 @@ public class PriorityQueue<E> {
         }
         
         return false;
-    }       
-
-    /**
-     * Poistaa halutun elementin jonosta
-     * @param obj haluttu poistettava elementti
-     */
-    
-    public void remove(E obj) {
-        
-        if (!contains(obj)) {
-            return;
-        }
-        
-        int indeksi = getIndeksi(obj);
-        
-        prjono[indeksi] = prjono[koko - 1];
-        koko--;
-        maxHeapify(indeksi);
     }
     
     /**
-     * Palauttaa ensimmäisen elementin
+     * Palauttaa ensimmäisen elementin ja korjaa listan
      * @return ensimmäisen elementti jonossa, jos prjono on tyhjä palauttaa null
      */    
     
     public E poll() {
         
-        if (isEmpty()) {
-            return null;
+        Object[] uusiLista = new Object[prjono.length];
+        final Object palautettavaObj = prjono[0];
+        
+        int j = 0;
+        
+        for (int i = 1; i < prjono.length; i++) {
+            uusiLista[j] = prjono[i];
+            j++;
         }
         
-        E polled = (E) prjono[0];
-
-        prjono[0] = prjono[koko - 1];
-        koko--;
-        maxHeapify(0);
-
-        return polled;
+        prjono = uusiLista;
+        
+        vahennaKokoLaskuria();        
+        
+        return (E) palautettavaObj;
     }
     
     /**
@@ -118,7 +113,7 @@ public class PriorityQueue<E> {
     
     /**
      * Tarkistaa onko prjono tyhjä
-     * @return palauttaa jonon koon
+     * @return palauttaa true jos tyhjä, false jos ei
      */
     
     public boolean isEmpty() {
@@ -126,10 +121,36 @@ public class PriorityQueue<E> {
     }    
     
     /**
-     * Kasvattaa jonon kokoa
+     * Tarkistaa onko prjono täysi
+     * @return palauttaa true jos täysi, false jos ei
      */
     
-    private void kasvataKokoa() {
+    public boolean isFull() {
+        return koko == prjono.length - 1;
+    }
+    
+    /**
+     * Vähentää listan koko laskuria
+     */
+    public void vahennaKokoLaskuria() {
+        if (!isEmpty()) {
+            koko--;
+        }
+    }
+    
+    /**
+     * Kasvattaa listan koko laskuria
+     */
+    
+    public void kasvataKokoLaskuria() {
+        koko++;
+    }
+    
+    /**
+     * Kasvattaa listan kokoa
+     */
+    
+    private void kasvataListanKokoa() {
         Object[] apu = new Object[prjono.length * 2];
         
         for (int i = 0; i < this.prjono.length; i++) {
@@ -137,102 +158,5 @@ public class PriorityQueue<E> {
         }
         
         this.prjono = apu;
-    }  
-    
-    /**
-     * Palauttaa elementin indeksin
-     * @param obj etsitty elementti
-     * @return palautettava indeksi int muodossa
-     */
-    
-    private int getIndeksi(E obj) {
-        
-        int index = 0;
-        
-        for (int i = 0; i < this.koko; i++) {
-            if (prjono[i] == obj) {
-                index = i;
-                break;
-            }
-        }
-        
-        return index;
-    }    
-    
-    /**
-     * Vaihtaa vanhemman oikean lapsen kanssa.
-     * @param indeksi haluttu indeksi
-     */
-
-    private void maxHeapify(int indeksi) {
-        
-        if (onkoLehti(indeksi)) {
-            return; 
-        }
-        
-        int vasen = getVasen(indeksi);
-        int oikea = getOikea(indeksi);        
-  
-        if (vasen < indeksi && comparator.compare((E) prjono[vasen], (E) prjono[indeksi]) > 0) {
-            vaihdaKeskenaan(indeksi, vasen);
-            maxHeapify(vasen);
-        }
-        
-        if (oikea < indeksi && comparator.compare((E) prjono[oikea], (E) prjono[indeksi]) > 0) {
-            vaihdaKeskenaan(indeksi, oikea);
-            maxHeapify(oikea);
-        }
     }
-    
-    /**
-     * Tarkastaa onko solmu ns. lehti eli solmu jolla ei ole lapsia
-     * @param indeksi
-     * @return palauttaa true jos annetulla indeksillä oleva solmu on lehti
-     */
-    
-    private boolean onkoLehti(int indeksi) { 
-        return indeksi >= (koko / 2) && indeksi <= koko;
-    }     
-    
-    /**
-     * Palauttaa halutun indeksin elementin vanhemman
-     * @param indeksi nykyisen elementin indeksi
-     * @return halutun elementin indeksi
-     */
-
-    private int getVanhempi(int indeksi) {
-        return (indeksi - 1) / 2;
-    }
-    
-    /**
-     * Palauttaa vasemman lapsen
-     * @param indeksi nykyisen elementin indeksi
-     * @return halutun elementin indeksi
-     */
-
-    private int getVasen(int indeksi) {
-        return indeksi * 2 + 1;
-    }
-    
-    /**
-     * Palauttaa oikean lapsen
-     * @param indeksi nykyisen elementin indeksi
-     * @return halutun elementin indeksi
-     */
-
-    private int getOikea(int indeksi) {
-        return indeksi * 2 + 2;
-    }
-    
-    /**
-     * Vaihtaa kahden elemenin paikkaa keskenään
-     * @param indeksi1 ensimmäinen elementti
-     * @param indeksi2 toinen elementti
-     */
-
-    private void vaihdaKeskenaan(int indeksi1, int indeksi2) {
-        E apu = (E) prjono[indeksi1];
-        prjono[indeksi1] = prjono[indeksi2];
-        prjono[indeksi2] = apu;
-    }      
 }
