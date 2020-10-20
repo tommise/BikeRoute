@@ -1,16 +1,15 @@
 
 package komponentit;
 
-import java.util.ArrayList;
-
+import tietorakenteet.ArrayList;
 
 /**
  * Solmua kuvaava luokka
  */
 
-public class Solmu implements Comparable<Solmu> {
+public class Solmu {
     
-    private long id;     
+    private final long id;     
     
     private double gluku;
     private double fluku;
@@ -36,7 +35,7 @@ public class Solmu implements Comparable<Solmu> {
         this.longitude = longitude;
         this.gluku = Double.MAX_VALUE;
         this.minimiEtaisyys = Double.MAX_VALUE;
-        this.kaaret = new ArrayList<Kaari>();
+        this.kaaret = new ArrayList<>();
     }
     
     /**
@@ -193,17 +192,12 @@ public class Solmu implements Comparable<Solmu> {
     }   
     
     /**
-     * Asettaa edellisenSolmun, g luvun ja minimi etäisyyden oletusarvoihinsa, käytetään reitin lukemisen jälkeen
+     * Resetoi arvot alkuperäsarvoonsa
      */
     
     public void resetSolmu() {
         this.edellinenSolmu = null;
         this.gluku = Double.MAX_VALUE;
         this.minimiEtaisyys = Double.MAX_VALUE;
-    }
-    
-    @Override
-    public int compareTo(Solmu verrattava) {
-        return Double.compare(this.minimiEtaisyys, verrattava.minimiEtaisyys);
     }
 }

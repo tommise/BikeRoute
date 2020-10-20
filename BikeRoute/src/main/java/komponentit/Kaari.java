@@ -9,7 +9,7 @@ public final class Kaari {
     
     private final Solmu alku;
     private final Solmu loppu;
-    private double etaisyys;
+    private final double etaisyys;
     private String nimi = "";
     private String tienTyyppi = "";
     private final Heuristiikka heuristiikka;
@@ -28,8 +28,17 @@ public final class Kaari {
         this.nimi = nimi;
         this.tienTyyppi = tienTyyppi;
         this.heuristiikka = new Heuristiikka();
-        // asetetaan kaarelle pituus (paino) haversine tekniikan mukaisesti
-        this.etaisyys = heuristiikka.haversineMetodi(alku.getLatitude(), alku.getLongitude(), loppu.getLatitude(), loppu.getLongitude());
+        
+        double alkuLat = alku.getLatitude();
+        double alkuLon = alku.getLongitude();
+        double loppuLat = loppu.getLatitude();
+        double loppuLon = loppu.getLongitude();
+        
+        /**
+         * Asetetaan kaarelle pituus (paino) haversine tekniikan mukaisesti
+         */
+        
+        this.etaisyys = heuristiikka.haversineMetodi(alkuLat, alkuLon, loppuLat, loppuLon);
     }
     
     /**
@@ -84,7 +93,7 @@ public final class Kaari {
     
     public void setNimi(String nimi) {
         this.nimi = nimi;
-    }   
+    }  
 
     @Override
     public String toString() {

@@ -1,20 +1,21 @@
 
 package komponentit;
 
+import static org.junit.Assert.*;
+
 import algoritmit.AStar;
 import algoritmit.Dijkstra;
 import io.VerkonRakentaja;
-import java.util.ArrayList;
-import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import tietorakenteet.ArrayList;
 
 public class SolmuTest {
     
     Verkko verkko;
     Dijkstra dijkstra;
-    AStar aStar;
+    AStar astar;
     double epsilon = 0.001;
     
     @Before
@@ -22,12 +23,12 @@ public class SolmuTest {
         VerkonRakentaja rakentaja = new VerkonRakentaja();
         this.verkko = rakentaja.luoTestiVerkko();
         this.dijkstra = new Dijkstra();
-        this.aStar = new AStar();
+        this.astar = new AStar();
     }
     
     @Test
     public void resetoiSolmunOikeinDijkstra() {
-        List<Solmu> solmut = verkko.getSolmut();
+        ArrayList<Solmu> solmut = verkko.getSolmut();
         
         Solmu alku = solmut.get(10);
         Solmu loppu = solmut.get(18);
@@ -44,13 +45,13 @@ public class SolmuTest {
     
     @Test
     public void resetoiSolmunOikeinAstar() {
-        List<Solmu> solmut = verkko.getSolmut();
+        ArrayList<Solmu> solmut = verkko.getSolmut();
         
         Solmu alku = solmut.get(10);
         Solmu loppu = solmut.get(18);
         
-        aStar.etsi(alku, loppu);
-        ArrayList<Solmu> reitti = aStar.luoReitti(loppu);
+        astar.etsi(alku, loppu);
+        ArrayList<Solmu> reitti = astar.luoReitti(loppu);
         
         Solmu ensimmainen = reitti.get(0);
         ensimmainen.resetSolmu();

@@ -1,9 +1,7 @@
 
 package komponentit;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import tietorakenteet.ArrayList;
 
 /**
  * Verkko luokka - luokalla verkkoon kuuluvat kaaret
@@ -11,14 +9,14 @@ import java.util.List;
 
 public class Verkko {
     
-    List<Solmu> solmut;
+    ArrayList<Solmu> solmut;
     
     /**
      * Verkon konstruktori, jossa alustetaan uusi ArrayList lista solmuille
      */
     
     public Verkko() {
-        this.solmut = new ArrayList<Solmu>();
+        this.solmut = new ArrayList<>();
     }
     
     /**
@@ -26,7 +24,7 @@ public class Verkko {
      * @param solmut asetettavat solmut listalla
      */
     
-    public Verkko(List<Solmu> solmut) {
+    public Verkko(ArrayList<Solmu> solmut) {
         this.solmut = solmut;
     }    
     
@@ -44,27 +42,7 @@ public class Verkko {
      * @return palautettava ArrayList muotoinen lista
      */
     
-    public List<Solmu> getSolmut() {
+    public ArrayList<Solmu> getSolmut() {
         return solmut;
-    }
-    
-    /**
-     * Palauttaa solmun latitudin ja longitudin perusteella
-     * @param latitude
-     * @param longitude
-     * @return löydettäessä palauttaa solmun, muuten null
-     */
-    
-    public Solmu getSolmuByLatAndLon(double latitude, double longitude) {
-        
-        for (int i = 0; i < solmut.size(); i++) {
-            Solmu solmu = solmut.get(i);
-            
-            if (solmu.getLatitude() == latitude && solmu.getLongitude() == longitude) {
-                return solmu;
-            }
-        }
-
-        return null;
     }
 }
