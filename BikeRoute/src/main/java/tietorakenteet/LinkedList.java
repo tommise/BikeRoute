@@ -12,7 +12,7 @@ public class LinkedList<E> {
     
     public LinkedList() {
         this.koko = 0;         
-        this.head = null;    
+        this.head = null;
     }
     
     /**
@@ -20,7 +20,7 @@ public class LinkedList<E> {
      * @param obj 
      */
     
-    public void addFront(E obj) {
+    public void addFirst(E obj) {
         
         if (isEmpty()) {
             head = new LinkedListSolmu(obj);
@@ -78,7 +78,7 @@ public class LinkedList<E> {
         }
         
         LinkedListSolmu nyky = head;
-        
+
         int laskuri = 0;
         
         while (nyky != null) {
@@ -92,7 +92,27 @@ public class LinkedList<E> {
             laskuri++;
         }
         
-        return (E) nyky.getSolmu();
+        return null;
+    }
+    /**
+     * Tarkistaa löytyykö haluttu objekti listalta
+     * @param obj
+     * @return 
+     */
+    
+    public boolean contains(E obj) {
+        
+        LinkedListSolmu nyky = head;
+        
+        while (nyky != null) {
+            
+            if (nyky.getSolmu() == obj) {
+                return true;
+            }
+
+            nyky = nyky.getSeuraava();
+        }
+        return false;
     }
     
     /**
