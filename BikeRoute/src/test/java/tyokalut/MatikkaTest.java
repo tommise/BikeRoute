@@ -9,7 +9,7 @@ import org.junit.Test;
 public class MatikkaTest {
     
     Matikka mat;
-    double epsilon = 0.001;
+    double epsilon = 0.0001;
     
     @Before
     public void setUp() {
@@ -28,6 +28,15 @@ public class MatikkaTest {
         double omaItseisarvo = mat.itseisarvo(luku);
         
         assertEquals(javanItseisarvo, omaItseisarvo, epsilon);
+    }
+    
+    @Test
+    public void kertomaPalauttaaOikein() {
+        
+        double oikeaTulos = 40320.00;
+        double omaKertoma = mat.kertoma(8);
+        
+        assertEquals(oikeaTulos, omaKertoma, epsilon);
     }
     
     @Test
@@ -70,10 +79,7 @@ public class MatikkaTest {
         
         assertEquals(javanSini, omaSini, epsilon);
     }
-
-    // --- VALMIIT TESTIT KOSINILLE JA ARKUSTANGENTILLE --- //
     
-    /*
     @Test
     public void kosiniPalauttaaOikein() {
         double luku = 1.0517082586552682;
@@ -86,6 +92,16 @@ public class MatikkaTest {
     
     @Test
     public void arkustangenttiPalauttaaOikein() {
+        double luku = 15.93329849;
+        
+        double javanAtan = java.lang.Math.atan(luku);
+        double omaAtan = mat.arkustangentti(luku);
+        
+        assertEquals(javanAtan, omaAtan, epsilon);
+    }
+    
+    @Test
+    public void arkustangentti2PalauttaaOikein() {
         
         double y = 0.9999999999976636;
         double x = 1.5284936435707238E-6;
@@ -95,6 +111,4 @@ public class MatikkaTest {
         
         assertEquals(javanAtan2, omaAtan2, epsilon);
     }
-    */
-    
 }
