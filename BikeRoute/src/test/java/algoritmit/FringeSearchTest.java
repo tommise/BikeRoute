@@ -23,7 +23,6 @@ public class FringeSearchTest {
         this.fringe = new FringeSearch();
 
         this.rakentaja = new VerkonRakentaja();
-        this.rakentaja.luoTestiVerkko();
         this.verkko = rakentaja.luoTestiVerkko();
     } 
  

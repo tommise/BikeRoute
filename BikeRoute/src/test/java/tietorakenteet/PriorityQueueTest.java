@@ -22,7 +22,7 @@ public class PriorityQueueTest {
             @Override
             public int compare(Solmu s1, Solmu s2) {
                 
-                return Double.compare(s1.getMinimiEtaisyys(), s2.getMinimiEtaisyys());
+                return Double.compare(s1.getG(), s2.getG());
             }
         };
         

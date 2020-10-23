@@ -8,9 +8,7 @@ import komponentit.Solmu;
 import komponentit.Verkko;
 import org.junit.Before;
 import org.junit.Test;
-
 import tietorakenteet.ArrayList;
-
 
 public class DijkstraTest {
     
@@ -24,7 +22,6 @@ public class DijkstraTest {
         this.dijkstra = new Dijkstra();
         
         this.rakentaja = new VerkonRakentaja();
-        this.rakentaja.luoTestiVerkko();
         this.verkko = rakentaja.luoTestiVerkko();
     } 
     
@@ -39,7 +36,7 @@ public class DijkstraTest {
         dijkstra.etsi(alku, loppu);
         ArrayList<Solmu> reitti = dijkstra.luoReitti(loppu);
         
-        double lyhyinPolkuDijkstra = reitti.get(reitti.size() - 1).getMinimiEtaisyys();
+        double lyhyinPolkuDijkstra = reitti.get(reitti.size() - 1).getG();
         double reitinOikeaPituus = 802.8398626554501;
         
         assertEquals(lyhyinPolkuDijkstra, reitinOikeaPituus, epsilon);
@@ -56,7 +53,7 @@ public class DijkstraTest {
         dijkstra.etsi(alku, loppu);
         ArrayList<Solmu> reitti = dijkstra.luoReitti(loppu);
         
-        double lyhyinPolkuDijkstra = reitti.get(reitti.size() - 1).getMinimiEtaisyys();
+        double lyhyinPolkuDijkstra = reitti.get(reitti.size() - 1).getG();
         double reitinOikeaPituus = 375.823394569141;
         
         assertEquals(lyhyinPolkuDijkstra, reitinOikeaPituus, epsilon);
@@ -73,7 +70,7 @@ public class DijkstraTest {
         dijkstra.etsi(alku, loppu);
         ArrayList<Solmu> reitti = dijkstra.luoReitti(loppu);
         
-        double lyhyinPolkuDijkstra = reitti.get(reitti.size() - 1).getMinimiEtaisyys();
+        double lyhyinPolkuDijkstra = reitti.get(reitti.size() - 1).getG();
         double reitinOikeaPituus = 293.860036810901;
         
         assertEquals(lyhyinPolkuDijkstra, reitinOikeaPituus, epsilon);
@@ -90,7 +87,7 @@ public class DijkstraTest {
         dijkstra.etsi(alku, loppu);
         ArrayList<Solmu> reitti = dijkstra.luoReitti(loppu);
         
-        double lyhyinPolkuDijkstra = reitti.get(reitti.size() - 1).getMinimiEtaisyys();
+        double lyhyinPolkuDijkstra = reitti.get(reitti.size() - 1).getG();
         double reitinOikeaPituus = 802.8398626554501;
         
         assertEquals(lyhyinPolkuDijkstra, reitinOikeaPituus, epsilon);
@@ -107,7 +104,7 @@ public class DijkstraTest {
         dijkstra.etsi(alku, loppu);
         ArrayList<Solmu> reitti = dijkstra.luoReitti(loppu);
         
-        double lyhyinPolkuDijkstra = reitti.get(reitti.size() - 1).getMinimiEtaisyys();
+        double lyhyinPolkuDijkstra = reitti.get(reitti.size() - 1).getG();
         double reitinOikeaPituus = 375.823394569141;
         
         assertEquals(lyhyinPolkuDijkstra, reitinOikeaPituus, epsilon);
@@ -124,7 +121,7 @@ public class DijkstraTest {
         dijkstra.etsi(alku, loppu);
         ArrayList<Solmu> reitti = dijkstra.luoReitti(loppu);
         
-        double lyhyinPolkuDijkstra = reitti.get(reitti.size() - 1).getMinimiEtaisyys();
+        double lyhyinPolkuDijkstra = reitti.get(reitti.size() - 1).getG();
         double reitinOikeaPituus = 293.860036810901;
         
         assertEquals(lyhyinPolkuDijkstra, reitinOikeaPituus, epsilon);

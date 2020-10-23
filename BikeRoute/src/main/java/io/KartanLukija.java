@@ -4,7 +4,6 @@ import crosby.binary.osmosis.OsmosisReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-
 import java.util.HashMap;
 
 import komponentit.Kaari;
@@ -49,8 +48,8 @@ public class KartanLukija implements Sink {
         this.kaaret = new HashMap<>();
         this.solmut = new HashMap<>();
         
-        //this.polku = "./maps/davis.osm.pbf"; 
-        this.polku = "./maps/talinsiirtolapuutarha.osm.pbf";
+        this.polku = "./maps/davis.osm.pbf"; 
+        //this.polku = "./maps/talinsiirtolapuutarha.osm.pbf";
     }
     
     /**
@@ -437,7 +436,8 @@ public class KartanLukija implements Sink {
 
         public KarttaSolmu noudaEnsimmainen() {
             long karttaSolmuId = this.getSolmuLista().get(0).getID();
-            KarttaSolmu karttaSolmu = this.solmut.remove(karttaSolmuId);
+            KarttaSolmu karttaSolmu = this.solmut.get(karttaSolmuId);
+            this.solmut.remove(karttaSolmuId);
 
             return karttaSolmu;
         }
@@ -451,7 +451,8 @@ public class KartanLukija implements Sink {
             int viimeisenIndeksi = this.getSolmuLista().size() - 1;
             
             long karttaSolmuId = this.getSolmuLista().get(viimeisenIndeksi).getID();
-            KarttaSolmu karttaSolmu = this.solmut.remove(karttaSolmuId);
+            KarttaSolmu karttaSolmu = this.solmut.get(karttaSolmuId);
+            this.solmut.remove(karttaSolmuId);
 
             return karttaSolmu;
         }

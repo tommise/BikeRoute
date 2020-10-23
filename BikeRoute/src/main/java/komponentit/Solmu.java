@@ -14,7 +14,6 @@ public class Solmu {
     private double gluku;
     private double fluku;
     private double hluku;
-    private double minimiEtaisyys;
     
     private double latitude;
     private double longitude;
@@ -34,7 +33,6 @@ public class Solmu {
         this.latitude = latitude;
         this.longitude = longitude;
         this.gluku = Double.MAX_VALUE;
-        this.minimiEtaisyys = Double.MAX_VALUE;
         this.kaaret = new ArrayList<>();
     }
     
@@ -63,24 +61,6 @@ public class Solmu {
     
     public long getID() {
         return this.id;
-    }
-    
-    /**
-     * Palauttaa lyhyimmän etäisyyden alusta solmuun asti
-     * @return palautettava etäisyys double muodossa
-     */
-
-    public double getMinimiEtaisyys() {
-        return minimiEtaisyys;
-    }
-    
-    /**
-     * Asettaa minimi etäisyyden 
-     * @param minimiEtaisyys asetettava uusi etäisyys
-     */
-
-    public void setMinimiEtaisyys(double minimiEtaisyys) {
-        this.minimiEtaisyys = minimiEtaisyys;
     }
     
     /**
@@ -198,6 +178,5 @@ public class Solmu {
     public void resetSolmu() {
         this.edellinenSolmu = null;
         this.gluku = Double.MAX_VALUE;
-        this.minimiEtaisyys = Double.MAX_VALUE;
     }
 }

@@ -8,8 +8,8 @@ import algoritmit.Dijkstra;
 import io.VerkonRakentaja;
 import org.junit.Before;
 import org.junit.Test;
-
 import tietorakenteet.ArrayList;
+
 
 public class SolmuTest {
     
@@ -27,7 +27,7 @@ public class SolmuTest {
     }
     
     @Test
-    public void resetoiSolmunOikeinDijkstra() {
+    public void resetoiSolmunGArvonOikein() {
         ArrayList<Solmu> solmut = verkko.getSolmut();
         
         Solmu alku = solmut.get(10);
@@ -39,12 +39,11 @@ public class SolmuTest {
         Solmu ensimmainen = reitti.get(0);
         ensimmainen.resetSolmu();
         
-        assertEquals(Double.MAX_VALUE, ensimmainen.getMinimiEtaisyys(), epsilon);
-        assertNull(ensimmainen.getEdellinenSolmu());        
+        assertEquals(Double.MAX_VALUE, ensimmainen.getG(), epsilon);  
     }
     
     @Test
-    public void resetoiSolmunOikeinAstar() {
+    public void resetoiSolmunEdellisenSolmunOikein() {
         ArrayList<Solmu> solmut = verkko.getSolmut();
         
         Solmu alku = solmut.get(10);
@@ -56,7 +55,6 @@ public class SolmuTest {
         Solmu ensimmainen = reitti.get(0);
         ensimmainen.resetSolmu();
         
-        assertEquals(Double.MAX_VALUE, ensimmainen.getG(), epsilon);
         assertNull(ensimmainen.getEdellinenSolmu());
     }    
 }

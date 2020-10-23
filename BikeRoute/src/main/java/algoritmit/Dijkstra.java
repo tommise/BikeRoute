@@ -21,10 +21,10 @@ public class Dijkstra {
      */
     
     public void etsi(Solmu alku, Solmu loppu) {
-        
-        alku.setMinimiEtaisyys(0);
+
         PriorityQueue<Solmu> prioriteettijono = new PriorityQueue<>(luoPrioriteetti());
         prioriteettijono.add(alku);
+        alku.setG(0);       
 
         while (!prioriteettijono.isEmpty()) {
             Solmu nyky = prioriteettijono.poll();
@@ -33,11 +33,12 @@ public class Dijkstra {
             for (int i = 0; i < kaaret.size(); i++) {
                 Kaari kaari = kaaret.get(i);
                 Solmu solmu = kaari.getLoppu();
-                double uusiMinimiEtaisyys = nyky.getMinimiEtaisyys() + kaari.getEtaisyys();
+                
+                double uusiG = nyky.getG() + kaari.getEtaisyys();
 
-                if (uusiMinimiEtaisyys < solmu.getMinimiEtaisyys()) {
+                if (uusiG < solmu.getG()) {
+                    solmu.setG(uusiG);                    
                     solmu.setEdellinenSolmu(nyky);
-                    solmu.setMinimiEtaisyys(uusiMinimiEtaisyys);
                     
                     prioriteettijono.add(solmu);
                 }
@@ -81,8 +82,7 @@ public class Dijkstra {
             
             @Override
             public int compare(Solmu s1, Solmu s2) {
-                
-                return Double.compare(s1.getMinimiEtaisyys(), s2.getMinimiEtaisyys());
+                return Double.compare(s1.getG(), s2.getG());
             }
         };
         

@@ -27,18 +27,18 @@ public class LinkedListTest {
     
     @Test
     public void listaSizePalauttaaOikeinKunKaksi() {
-        solmut.addFront(1);
-        solmut.addFront(2);
+        solmut.addFirst(1);
+        solmut.addFirst(2);
         
         assertEquals(2, solmut.size());
     }
     
     @Test
     public void poistoToimiiOikein() {
-        solmut.addFront(4);        
-        solmut.addFront(3);
-        solmut.addFront(2);
-        solmut.addFront(1);
+        solmut.addFirst(4);        
+        solmut.addFirst(3);
+        solmut.addFirst(2);
+        solmut.addFirst(1);
         
         solmut.remove(2);
         
@@ -47,19 +47,19 @@ public class LinkedListTest {
     
     @Test
     public void alkuunLisaysToimiiOikein() {
-        solmut.addFront(3);
-        solmut.addFront(2);
-        solmut.addFront(1);
-        solmut.addFront(4);
+        solmut.addFirst(3);
+        solmut.addFirst(2);
+        solmut.addFirst(1);
+        solmut.addFirst(4);
         
         assertEquals("[4, 1, 2, 3]", solmut.toString());
     }
     
     @Test
     public void halutunElementinJalkeenLisaysToimiiOikein() {
-        solmut.addFront(3);
-        solmut.addFront(2);
-        solmut.addFront(1);
+        solmut.addFirst(3);
+        solmut.addFirst(2);
+        solmut.addFirst(1);
         
         solmut.addAfter(1, 4);
         
@@ -69,9 +69,9 @@ public class LinkedListTest {
     @Test
     public void noutoPalauttaaOikein() {
         
-        solmut.addFront(3);
-        solmut.addFront(2);
-        solmut.addFront(1);
+        solmut.addFirst(3);
+        solmut.addFirst(2);
+        solmut.addFirst(1);
         
         int luku = solmut.get(1);
         
@@ -81,9 +81,9 @@ public class LinkedListTest {
     @Test
     public void noutoPalauttaaOikeinEkaIndeksi() {
         
-        solmut.addFront(3);
-        solmut.addFront(2);
-        solmut.addFront(1);
+        solmut.addFirst(3);
+        solmut.addFirst(2);
+        solmut.addFirst(1);
         
         int luku = solmut.get(0);
         
@@ -93,7 +93,7 @@ public class LinkedListTest {
     @Test
     public void noutoPalauttaaOikeinVikaIndeksi() {
 
-        solmut.addFront(1);
+        solmut.addFirst(1);
         solmut.addAfter(1, 2);
         solmut.addAfter(2, 3);
         solmut.addAfter(3, 4);

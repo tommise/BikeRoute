@@ -36,20 +36,16 @@ public class AStar {
     public void etsi(Solmu alku, Solmu loppu) {
     
         HashSet<Solmu> kasitelty = new HashSet<>();
-        PriorityQueue<Solmu> queue = new PriorityQueue<>(luoPrioriteetti());
         
-        queue.add(alku);
-        alku.setG(0);
+        PriorityQueue<Solmu> prioriteettijono = new PriorityQueue<>(luoPrioriteetti());
+        prioriteettijono.add(alku);
+        alku.setG(0);        
 
-        while (!queue.isEmpty()) {
-            Solmu nykyinenSolmu = queue.poll();
-            kasitelty.add(nykyinenSolmu);
-
-            if (alku.getID() == loppu.getID()) {
-                luoReitti(loppu);
-            }
+        while (!prioriteettijono.isEmpty()) {
+            Solmu nyky = prioriteettijono.poll();
+            ArrayList<Kaari> kaaret = nyky.getKaaret();
             
-            ArrayList<Kaari> kaaret = nykyinenSolmu.getKaaret();
+            kasitelty.add(nyky);            
 
             for (int i = 0; i < kaaret.size(); i++) {
                 Kaari kaari = kaaret.get(i);
@@ -59,23 +55,23 @@ public class AStar {
                     continue;
                 }
                 
-                double tentativeG = nykyinenSolmu.getG() + kaari.getEtaisyys();
+                double uusiG = nyky.getG() + kaari.getEtaisyys();
                 
-                if (tentativeG < solmu.getG()) {
-                    double f = tentativeG + heuristiikka.manhattanEtaisyys(solmu, loppu);
-                    solmu.setF(f);
-                    solmu.setG(tentativeG);
+                if (uusiG < solmu.getG()) {
+                    solmu.setG(uusiG);
+                    solmu.setEdellinenSolmu(nyky);
                     
-                    solmu.setEdellinenSolmu(nykyinenSolmu);
-
-                    if (!queue.contains(solmu)) {
-                        queue.add(solmu);
+                    double f = uusiG + heuristiikka.manhattanEtaisyys(solmu, loppu);
+                    solmu.setF(f);
+                    
+                    if (!prioriteettijono.contains(solmu)) {
+                        prioriteettijono.add(solmu);
                     }
                 }
             }
         }
-    
         
+        luoReitti(loppu);
     }
     
     /**

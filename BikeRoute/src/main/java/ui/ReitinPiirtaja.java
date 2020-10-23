@@ -12,7 +12,6 @@ import java.awt.geom.Point2D;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.painter.Painter;
 import org.jxmapviewer.viewer.GeoPosition;
-
 import tietorakenteet.ArrayList;
 
 public class ReitinPiirtaja implements Painter<JXMapViewer> {
