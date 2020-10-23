@@ -4,6 +4,7 @@ package ui;
 import algoritmit.AStar;
 import algoritmit.Dijkstra;
 import algoritmit.FringeSearch;
+import algoritmit.IDAStar;
 
 import io.VerkonRakentaja;
 
@@ -50,8 +51,8 @@ import org.jxmapviewer.viewer.TileFactoryInfo;
 import org.jxmapviewer.viewer.WaypointPainter;
 
 import suorituskyky.SuorituskykyTestaus;
-
 import tietorakenteet.ArrayList;
+
 
 public class Kayttoliittyma {
     
@@ -118,9 +119,10 @@ public class Kayttoliittyma {
         private boolean zoomMuuttuu = false;
         private final boolean liukuSaadinKaannetty = false;
         
-        private boolean dijkstraKaytossa;
-        private boolean astarKaytossa;
-        private boolean fringeKaytossa;
+        private boolean dijkstraValittu;
+        private boolean astarValittu;
+        private boolean idaStarValittu;
+        private boolean fringeValittu;
         
         private Solmu alku;
         private Solmu loppu;
@@ -147,50 +149,29 @@ public class Kayttoliittyma {
 
             kartta.setTileFactory(tiles);
             
-            /**
-             * Rakennetaan verkko
-             */
-            
-            // Testiverkko
-            
-            VerkonRakentaja rakentaja = new VerkonRakentaja();
-            Verkko verkko = rakentaja.luoTestiVerkko();
-            this.solmut = verkko.getSolmut();
-            
-            GeoPosition talinSiirtolaPuutarha = new GeoPosition(60.217407, 24.860599);
-            kartta.setAddressLocation(talinSiirtolaPuutarha);
-
-            /*
-            // Karttaverkko davis.osm.pbf tiedoston pohjalta
-            
-            VerkonRakentaja rakentaja = new VerkonRakentaja();
-            Verkko verkko = rakentaja.luoVerkko();
-            this.solmut = verkko.getSolmut(); 
-            
-            GeoPosition davis = new GeoPosition(38.556964, -121.743357);
-            kartta.setAddressLocation(davis);
-            
-            // Karttaverkko talinsiirtolapuutarha.osm.pbf tiedoston pohjalta
-            
-            VerkonRakentaja rakentaja = new VerkonRakentaja();
-            Verkko verkko = rakentaja.luoVerkko();
-            this.solmut = verkko.getSolmut(); 
-            
-            GeoPosition talinSiirtolaPuutarhaOsm = new GeoPosition(60.217407, 24.860599);
-            kartta.setAddressLocation(talinSiirtolaPuutarhaOsm);
-            */
-            
-            kartta.setZoom(3);
-            
             MouseInputListener hiiri = new PanMouseInputListener(kartta);
             kartta.addMouseListener(new CenterMapListener(kartta));
             kartta.addMouseWheelListener(new ZoomMouseWheelListenerCenter(kartta));            
             kartta.addMouseListener(hiiri);
             kartta.addMouseMotionListener(hiiri);
             kartta.addKeyListener(new PanKeyListener(kartta));
-
+            
+            kartta.setZoom(3);
+            
             this.karttaMerkit = new ArrayList<>();
             this.reitti = new ArrayList<>();
+            
+            VerkonRakentaja rakentaja = new VerkonRakentaja();
+            
+            Verkko verkko = rakentaja.luoTestiVerkko();
+            // Verkko verkko = rakentaja.luoVerkko();
+            this.solmut = verkko.getSolmut();
+            
+            GeoPosition talinSiirtolaPuutarha = new GeoPosition(60.217407, 24.860599);
+            kartta.setAddressLocation(talinSiirtolaPuutarha);
+            
+            // GeoPosition davis = new GeoPosition(38.556964, -121.743357);
+            // kartta.setAddressLocation(davis); // davis.osm.pbf            
             
             paivitaKarttaMerkit();
             paivitaKartta();
@@ -239,28 +220,14 @@ public class Kayttoliittyma {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     
-                    String[] valinnat = new String[] {"Dijkstra", "A*", "Fringe Search"};
+                    String[] valinnat = new String[] {"Dijkstra", "A*", "IDA*", "Fringe Search"};
                     String teksti = "Valitse algoritmi";
 
                     int valinta = JOptionPane.showOptionDialog(kartta, teksti, "", 
                             JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, 
                             null, valinnat, valinnat[0]);
                     
-                    if (valinta == 0) {
-                        dijkstraKaytossa = true;
-                        astarKaytossa = false;
-                        fringeKaytossa = false;
-                    } else if (valinta == 1) {
-                        dijkstraKaytossa = false;
-                        astarKaytossa = true;
-                        fringeKaytossa = false;
-                    } else if (valinta == 2) {
-                        dijkstraKaytossa = false;
-                        astarKaytossa = false;
-                        fringeKaytossa = true;
-                    }
-                    
-                    JOptionPane.showMessageDialog(kartta, "Algoritmi valittu!");
+                    valitseAlgoritmi(valinta);
                 }
             }); 
             
@@ -385,39 +352,47 @@ public class Kayttoliittyma {
                 return;
             }
             
-            if (dijkstraKaytossa) {
+            double tulos = 0;
+            
+            if (dijkstraValittu) {
                 Dijkstra dj = new Dijkstra();
                 dj.etsi(alku, loppu);
 
                 ArrayList<Solmu> dijkstraReitti = dj.luoReitti(loppu);
 
                 paivitaReitti(dijkstraReitti);
-                double tulos = dijkstraReitti.get(dijkstraReitti.size() - 1).getMinimiEtaisyys();
+                tulos = dijkstraReitti.get(dijkstraReitti.size() - 1).getG();
                 
-                this.tulosLabel.setText("Kokonaisreitti: " + tulos + " m");
-                
-            } else if (astarKaytossa) {
+            } else if (astarValittu) {
                 AStar asta = new AStar();
                 asta.etsi(alku, loppu);
                 
                 ArrayList<Solmu> aStarReitti = asta.luoReitti(loppu);
                 
                 paivitaReitti(aStarReitti);
-                double tulos = aStarReitti.get(aStarReitti.size() - 1).getG();
+                tulos = aStarReitti.get(aStarReitti.size() - 1).getG();
                 
-                this.tulosLabel.setText("Kokonaisreitti: " + tulos + " m");
+            } else if (idaStarValittu) {
+                IDAStar idastar = new IDAStar();
+                idastar.etsi(alku, loppu);
                 
-            } else if (fringeKaytossa) {
-                FringeSearch fringeSearch = new FringeSearch();
-                fringeSearch.etsi(alku, loppu);
+                ArrayList<Solmu> idaStarReitti = idastar.luoReitti(loppu);
                 
-                ArrayList<Solmu> fringeReitti = fringeSearch.luoReitti();
+                paivitaReitti(idaStarReitti);
+                tulos = idaStarReitti.get(idaStarReitti.size() - 1).getG();         
+                
+            } else if (fringeValittu) {
+                FringeSearch fringe = new FringeSearch();
+                fringe.etsi(alku, loppu);
+                
+                ArrayList<Solmu> fringeReitti = fringe.luoReitti();
                 
                 paivitaReitti(fringeReitti);
-                double tulos = fringeReitti.get(fringeReitti.size() - 1).getG();
+                tulos = fringeReitti.get(fringeReitti.size() - 1).getG();         
                 
-                this.tulosLabel.setText("Kokonaisreitti: " + tulos + " m");                
             }
+            
+            this.tulosLabel.setText("Kokonaisreitti: " + tulos + " m");
         }
         
         public void paivitaReitti(ArrayList<Solmu> reitti) {
@@ -448,19 +423,35 @@ public class Kayttoliittyma {
             return null;
         }
         
+        public void valitseAlgoritmi(int valinta) {
+            if (valinta == 0) {
+                dijkstraValittu = true;
+                JOptionPane.showMessageDialog(kartta, "Dijkstra valittu!");
+            } else if (valinta == 1) {
+                astarValittu = true;
+                JOptionPane.showMessageDialog(kartta, "A* valittu!");
+            } else if (valinta == 2) {
+                idaStarValittu = true;
+                JOptionPane.showMessageDialog(kartta, "IDA* valittu!");
+            } else if (valinta == 3) {
+                fringeValittu = true;
+                JOptionPane.showMessageDialog(kartta, "Fringe Search valittu!");   
+            }
+        }
+        
         public void pyyhiReitti() {
             karttaMerkit = new ArrayList();
             reitti = new ArrayList<>();
             
             alkuEtappi = null;
             loppuEtappi = null;
-            
             alku = null;
             loppu = null;
             
-            dijkstraKaytossa = false;
-            astarKaytossa = false;
-            fringeKaytossa = false;
+            dijkstraValittu = false;
+            astarValittu = false;
+            idaStarValittu = false;
+            fringeValittu = false;
             
             tulosLabel.setText("Kokonaisreitti: ");
             
@@ -696,51 +687,13 @@ public class Kayttoliittyma {
     }
     
     /**
-     * Käsittelee testiverkon kolme eri reittiä kaikilla algoritmeillä
-     */
-    
-    public static void kasitteleTestiVerkko() {
-        
-        VerkonRakentaja verkonRakentaja = new VerkonRakentaja();
-        Verkko verkko = verkonRakentaja.luoTestiVerkko();
-        
-        ArrayList<Solmu> solmut = verkko.getSolmut();
-        
-        System.out.println("Reitti 1:");
-        System.out.println("-------");
-        
-        Solmu alku1 = solmut.get(solmut.size() - 1);
-        Solmu loppu1 = solmut.get(0);
-        
-        tulostaKaikkiReitit(alku1, loppu1);
-        
-        System.out.println("");
-        System.out.println("Reitti 2:");
-        System.out.println("-------");
-        
-        Solmu alku2 = solmut.get(3);
-        Solmu loppu2 = solmut.get(12);
-        
-        tulostaKaikkiReitit(alku2, loppu2);
-
-        System.out.println("");
-        System.out.println("Reitti 3:");
-        System.out.println("-------");   
-        
-        Solmu alku3 = solmut.get(5);
-        Solmu loppu3 = solmut.get(10);
-        
-        tulostaKaikkiReitit(alku3, loppu3);        
-    }
-    
-    /**
      * Suoritetaan suorituskykytestaus hyödyntäen SuoritusKykyTestaus luokkaa
      */    
     
     public static void suoritusKykyTestaus() {
         SuorituskykyTestaus suoritus = new SuorituskykyTestaus();
         
-        int kierroksia = 5000000;
+        int kierroksia = 500000;
         
         System.out.println("");
         System.out.println("Suorituskykytestaus:");
@@ -761,6 +714,12 @@ public class Kayttoliittyma {
         System.out.println("Keskiarvo " + astarAika / kierroksia);
         System.out.println("");
         
+        System.out.println("IDA*");
+        double idaStarAika = suoritus.idaStar(1000);
+        System.out.println("Kokonaisaika " + idaStarAika + " s");
+        System.out.println("Keskiarvo " + idaStarAika / kierroksia);
+        System.out.println("");
+        
         /*
         System.out.println("Fringe Search");
         double fringeAika = suoritus.fringe(kierroksia);
@@ -772,49 +731,95 @@ public class Kayttoliittyma {
     }
     
     /**
+     * Käsittelee testiverkon kolme eri reittiä kaikilla algoritmeillä
+     */
+    
+    public static void kasitteleTestiVerkko() {
+        
+        VerkonRakentaja verkonRakentaja = new VerkonRakentaja();
+        System.out.println("-----------------");
+        System.out.println("Reitti 1: (802.8367857851956m)");
+        System.out.println("-----------------");
+        System.out.println("");
+        Verkko verkko = verkonRakentaja.luoTestiVerkko();
+        ArrayList<Solmu> solmut = verkko.getSolmut();
+        tulostaKaikkiReitit(solmut.get(solmut.size() - 1), solmut.get(0));
+        
+        System.out.println("-----------------");
+        System.out.println("Reitti 2: (375.823394569141m)");
+        System.out.println("-----------------");
+        System.out.println("");
+        Verkko verkko2 = verkonRakentaja.luoTestiVerkko();
+        ArrayList<Solmu> solmut2 = verkko2.getSolmut();
+        tulostaKaikkiReitit(solmut2.get(3), solmut2.get(12));
+        
+        System.out.println("-----------------");
+        System.out.println("Reitti 3: (293.860036810901m)");
+        System.out.println("-----------------");
+        System.out.println("");
+        Verkko verkko3 = verkonRakentaja.luoTestiVerkko();
+        ArrayList<Solmu> solmut3 = verkko3.getSolmut();
+        tulostaKaikkiReitit(solmut3.get(10), solmut3.get(18));
+    }
+    
+    /**
      * Tulostetaan kaikkien algoritmien reitit
      * @param alku alkusolmu algoritmeille
      * @param loppu alkusolmu algoritmeille
      */
     
     public static void tulostaKaikkiReitit(Solmu alku, Solmu loppu) {
-        System.out.println("");
-        
+
         Dijkstra dijkstra = new Dijkstra();
         dijkstra.etsi(alku, loppu);
-        
         ArrayList<Solmu> dijkstranReitti = dijkstra.luoReitti(loppu);
-        tulostaDijkstraReitti(dijkstranReitti); 
-        resetoiKaytetytSolmut(dijkstranReitti);           
+        System.out.println("Reitti Dijkstra:");
+        System.out.println("");         
+        tulostaReitti(dijkstranReitti);      
         
         AStar astar = new AStar();
         astar.etsi(alku, loppu);
-        
         ArrayList<Solmu> aStarReitti = astar.luoReitti(loppu);
-        tulostaAstarReitti(aStarReitti); 
-        resetoiKaytetytSolmut(aStarReitti);    
+        System.out.println("Reitti A*:");
+        System.out.println("");
+        tulostaReitti(aStarReitti); 
+        
+        IDAStar idastar = new IDAStar();
+        idastar.etsi(alku, loppu);
+        ArrayList<Solmu> idastarReitti = idastar.luoReitti(loppu);
+        System.out.println("Reitti IDA*:");
+        System.out.println("");
+        tulostaReitti(idastarReitti);
         
         /*
         FringeSearch fringe = new FringeSearch();
         fringe.etsi(alku, loppu);
-        
-        ArrayList<Solmu> fringeReitti = fringe.luoReitti();        
-        tulostaFringeReitti(fringeReitti); 
-        resetoiKaytetytSolmut(fringeReitti);
+        ArrayList<Solmu> fringeReitti = fringe.luoReitti(); 
+        System.out.println("Reitti Fringe Search:");
+        System.out.println("");        
+        tulostaReitti(fringeReitti);
         */
+        
     }
     
     /**
-     * Resetoi käytetyt solmut gluvultaan ja minimietäisyydeltään
-     * @param solmut 
+     * Tulostetaan algortitmin tuottama reitti konsoliin
+     * @param reitti reitti solmulistassa
      */
     
-    public static void resetoiKaytetytSolmut(ArrayList<Solmu> solmut) {
-        for (int i = 0; i < solmut.size(); i++) {
-            Solmu solmu = solmut.get(i);
-            solmu.resetSolmu();
-        }  
-    }  
+    public static void tulostaReitti(ArrayList<Solmu> reitti) {
+        
+        for (int i = 0; i < reitti.size(); i++) {
+            Solmu solmu = reitti.get(i);
+            System.out.println(solmu.getG() + "m");
+        }
+        
+        double tulos = reitti.get(reitti.size() - 1).getG();
+        
+        System.out.println("");
+        System.out.println("Kokonaisreitti yhteensä: " + tulos + "m");
+        System.out.println("");         
+    }    
     
     /**
      * Tulostetaan kartan tiet
@@ -839,76 +844,5 @@ public class Kayttoliittyma {
                 System.out.println("");
             }
         }
-    }  
-    
-    /**
-     * Tulostetaan Dijkstran algoritmin tuottama reitti
-     * @param reitti reitti solmulistassa
-     */
-    
-    public static void tulostaDijkstraReitti(ArrayList<Solmu> reitti) {
-        
-        System.out.println("Reitti Dijkstra:");
-        System.out.println("");
-        
-        for (int i = 0; i < reitti.size(); i++) {
-            Solmu solmu = reitti.get(i);
-            System.out.println(solmu.getMinimiEtaisyys() + "m");
-        }        
-        
-        double tulos = reitti.get(reitti.size() - 1).getMinimiEtaisyys();
-        
-        System.out.println("");
-        System.out.println("Kokonaisreitti yhteensä: " + tulos + "m");
-        System.out.println(""); 
-    }
-    
-    /**
-     * Tulostetaan A* algoritmin tuottama reitti
-     * @param reitti reitti solmulistassa
-     */
-    
-    public static void tulostaAstarReitti(ArrayList<Solmu> reitti) {
-        
-        System.out.println("Reitti A*:");
-        System.out.println("");      
-        
-        for (int i = 0; i < reitti.size(); i++) {
-            Solmu solmu = reitti.get(i);
-            System.out.println(solmu.getG() + "m");
-        }
-        
-        double tulos = reitti.get(reitti.size() - 1).getG();
-        
-        System.out.println("");
-        System.out.println("Kokonaisreitti yhteensä: " + tulos + "m");
-        System.out.println("");         
-    } 
-    
-    /**
-     * Tulostetaan Fringe algoritmin tuottama reitti
-     * @param reitti reitti solmulistassa
-     */
-    
-    public static void tulostaFringeReitti(ArrayList<Solmu> reitti) { 
-        
-        System.out.println("Reitti Fringe Search:");
-        System.out.println(""); 
-        
-        if (reitti.isEmpty()) {
-            System.out.println("Fringe ei nyt toiminut!");
-            return;
-        }   
-        
-        for (int i = 0; i < reitti.size(); i++) {
-            Solmu solmu = reitti.get(i);
-            System.out.println(solmu.getG() + "m");
-        }     
-        
-        double tulos = reitti.get(reitti.size() - 1).getG();
-                
-        System.out.println("");
-        System.out.println("Kokonaisreitti yhteensä: " + tulos + "m");
-        System.out.println("");         
     }
 }
