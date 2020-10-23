@@ -3,10 +3,11 @@ package tietorakenteet;
 
 public class HashMap<K, V> {
     
-    private final int koko;
-    private final ArrayList<K> avaimet;
-    private final ArrayList<V> arvot;
-    private final EntryMap<K, V>[] taulukko;
+    private int koko;
+    private int alkioita;
+    private java.util.ArrayList<K> avaimet;
+    private java.util.ArrayList<V> arvot;
+    private EntryMap<K, V>[] taulukko;
     
     /**
      * HashMapin konstruktori
@@ -14,8 +15,9 @@ public class HashMap<K, V> {
     
     public HashMap() {
         this.koko = 50;
-        this.avaimet = new ArrayList<>();
-        this.arvot = new ArrayList<>();
+        this.alkioita = 0;
+        this.avaimet = new java.util.ArrayList<>();
+        this.arvot = new java.util.ArrayList<>();
         this.taulukko = new EntryMap[this.koko];
     }
     
@@ -30,10 +32,20 @@ public class HashMap<K, V> {
     }
     
     /**
+     * Palauttaa hajautustaulun koon
+     * @return koko int muodossa
+     */
+    
+    public int size() {
+        return this.alkioita;
+    }
+    
+    /**
      * Palauttaa arvon avaimen perusteella
      * @param avain
      * @return 
      */
+    
     public V get(K avain) {
         int hajautusarvo = hajautusarvo(avain);
         
@@ -71,7 +83,25 @@ public class HashMap<K, V> {
             
         }
         return false;
-    }    
+    }  
+    
+    /**
+     * Tarkistaa löytyykö haluttu arvo hajautustaulusta
+     * @param arvo
+     * @return palauttaa trtue jos löytyy, false jos ei
+     */    
+    
+    public boolean containsValue(V arvo) {
+        for (int i = 0; i < arvot.size(); i++) {
+            V verrattavaArvo = arvot.get(i);
+            
+            if (arvo == verrattavaArvo) {
+                return true;
+            }
+            
+        }
+        return false;
+    }      
     
     /**
      * Asettaa hajautustaulukkoo uuden arvon jos tyhjä, muuten lisää avaimelle
@@ -85,9 +115,14 @@ public class HashMap<K, V> {
             return;
         }
         
-        EntryMap<K, V> uusi = new EntryMap<K,V>(avain, arvo, null);
+        if (alkioita == koko - 1) {
+            kasvataListanKokoa();
+        }
+        
+        EntryMap<K, V> uusi = new EntryMap<>(avain, arvo, null);
         
         this.avaimet.add(avain);
+        this.arvot.add(arvo);
         
         int hajautusarvo = hajautusarvo(avain);
         
@@ -121,6 +156,75 @@ public class HashMap<K, V> {
         }
         
         edellinen.setSeuraava(uusi);
+        alkioita++;
+    }
+    
+    /**
+     * Kaksinkertaistaa listan koon
+     */
+    
+    public void kasvataListanKokoa() {
+        int uusiKoko = koko * 2;
+        EntryMap<K, V>[] kasvatettuLista = new EntryMap[uusiKoko];
+        
+        for (int i = 0; i < taulukko.length; i++) {
+            EntryMap<K, V> entryMap = taulukko[i];
+            kasvatettuLista[i] = entryMap;
+        }
+        
+        taulukko = kasvatettuLista;
+        koko = uusiKoko;
+    }
+    
+    /**
+     * Tarkistaa onko lista tyhjä
+     * @return palauttaa true jos on, false jos ei
+     */
+    
+    public boolean isEmpty() {
+        return alkioita == 0;
+    }
+    
+    /**
+     * Palauttaa arvot ArrayListissä
+     * @return values in ArrayList
+     */
+    
+    public java.util.ArrayList<V> values() {
+        return this.arvot;
+    }
+    
+    /**
+     * Poistaa halutun avaimen hajautustaulusta
+     * @param avain 
+     */
+    
+    public void remove(K avain) {
+        
+        if (avain == null || !containsKey(avain)) {
+            return;
+        }
+        
+        int hajautusarvo = hajautusarvo(avain);
+        
+        EntryMap previous = null;
+        EntryMap entry = taulukko[hajautusarvo];
+        
+        while (entry != null) {
+            
+            if (entry.getAvain().equals(avain)) {
+                if (previous == null) {
+                    entry = entry.getSeuraava();
+                    taulukko[hajautusarvo] = entry;
+                    alkioita--;
+                    return;
+                } else {
+                    previous.setSeuraava(entry.getSeuraava());
+                }
+            }
+            previous = entry;
+            entry = entry.getSeuraava();
+        }
     }
     
     /**
