@@ -89,6 +89,39 @@ public class ArrayList<E> {
     }
     
     /**
+     * Tarkistaa löytyykö objekti listalta
+     * @param obj
+     * @return true jos löytyy, false jos ei löydy
+     */
+    
+    public boolean contains(E obj) {
+        for (int i = 0; i < arrayList.length; i++) {
+            if (obj == arrayList[i]) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * Poistaa viimeisen alkion listalta
+     */
+    
+    public void removeLast() {
+        arrayList[size - 1] = null;
+        this.size--;
+    }
+    
+    /**
+     * Palauttaa viimeisen olion listalta
+     * @return viimeinen olio
+     */
+    
+    public E getLast() {
+        return (E) this.arrayList[size - 1];
+    }
+    
+    /**
      * Kaksinkertaistaa listan kokoa
      */
     
