@@ -20,7 +20,7 @@ public class Heuristiikka {
         
         double latitudes = mat.itseisarvo(nyky.getLatitude() - tavoite.getLatitude());
         double longitudes = mat.itseisarvo(nyky.getLongitude() - tavoite.getLongitude());
-        
+
         return latitudes + longitudes;
     }
     
@@ -37,7 +37,7 @@ public class Heuristiikka {
      */
     
     public double haversineMetodi(double alkuLat, double alkuLon, double loppuLat, double loppuLon) {
-        int maapallonSade = 6371; /// Kilometreissä
+        int maapallonSadeKm = 6371;
         
         double latEtaisyys = mat.radiaani(loppuLat - alkuLat);
         double lonEtaisyys = mat.radiaani(loppuLon - alkuLon);
@@ -48,12 +48,12 @@ public class Heuristiikka {
         double apuLat = mat.potenssi(mat.sini(latEtaisyys / 2), 2);
         double apuLon = mat.potenssi(mat.sini(lonEtaisyys / 2), 2);
 
-        double a = apuLat + Math.cos(alkuLat) * Math.cos(loppuLat) * apuLon;
+        double a = apuLat + mat.kosini(alkuLat) * mat.kosini(loppuLat) * apuLon;
         
-        double c = 2 * Math.atan2(Math.sqrt(a), mat.neliojuuri(1 - a));
+        double c = 2 * mat.arkustangentti2(mat.neliojuuri(a), mat.neliojuuri(1 - a));
         
-        double etaisyys = maapallonSade * c * 1000; /// Muutetaan metreiksi
+        double etaisyysMetreissa = maapallonSadeKm * c * 1000;
 
-        return etaisyys;
+        return etaisyysMetreissa;
     } 
 }
