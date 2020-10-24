@@ -11,7 +11,7 @@ public class HashSet<E> {
      */
     
     public HashSet() {
-        this.koko = 50;
+        this.koko = 1000;
         this.alkioita = 0;
         this.alkiot = new EntrySet[koko];
     }
@@ -36,6 +36,15 @@ public class HashSet<E> {
     }
     
     /**
+     * Tarkastaa onko lista tyhja
+     * @return true jos on, false jos ei
+     */
+    
+    public boolean isEmpty() {
+        return this.alkioita == 0;
+    }    
+    
+    /**
      * Lisätään uusi olio listalle
      * @param obj lisättävä olio
      */
@@ -44,10 +53,6 @@ public class HashSet<E> {
         
         if (obj == null) {
             return;
-        }
-        
-        if (alkioita == koko - 1) {
-            kasvataListanKokoa();
         }
         
         int hajautusarvo = hajautusarvo(obj);
@@ -61,19 +66,6 @@ public class HashSet<E> {
 
             while (nyky != null) {
 
-                if (edellinen != null && nyky.getData().equals(obj)) {
-                    uusiEntry.setSeuraava(nyky.getSeuraava());
-                    alkiot[hajautusarvo] = nyky.getSeuraava();
-
-                    return;
-
-                } else if (edellinen == null && nyky.getData().equals(obj)) {
-                    uusiEntry.setSeuraava(nyky.getSeuraava());
-                    edellinen.setSeuraava(uusiEntry);
-
-                    return;
-                }
-
                 edellinen = nyky;
                 nyky = nyky.getSeuraava();
             }
@@ -84,6 +76,7 @@ public class HashSet<E> {
         if (alkiot[hajautusarvo] == null) {
             alkiot[hajautusarvo] = uusiEntry;
         }
+        
         alkioita++;
     }
     
@@ -111,23 +104,6 @@ public class HashSet<E> {
         }
         
         return false;
-    }
-    
-    /**
-     * Kaksinkertaistaa listan koon
-     */
-    
-    public void kasvataListanKokoa() {
-        int uusiKoko = koko * 2;
-        EntrySet<E>[] kasvatettuLista = new EntrySet[uusiKoko];
-        
-        for (int i = 0; i < alkiot.length; i++) {
-            EntrySet<E> entrySet = alkiot[i];
-            kasvatettuLista[i] = entrySet;
-        }
-        
-        alkiot = kasvatettuLista;
-        koko = uusiKoko;
     }
     
     /**
@@ -159,16 +135,7 @@ public class HashSet<E> {
         public E getData() {
             return this.data;
         }
-
-        /**
-         * Asettaa avaimen
-         * @param data
-         */
-
-        public void setData(E data) {
-            this.data = data;
-        }
-
+        
         /**
          * Palauttaa seuraavan
          * @return seuraava

@@ -14,7 +14,7 @@ public class ArrayListTest {
     public void setUp() {
         lista = new ArrayList<>();
     } 
-    
+
     @Test
     public void lisaaElementinListalle() {
         lista.add(100);
@@ -50,4 +50,19 @@ public class ArrayListTest {
         
         assertEquals(3, lista.size());
     }
+    
+    @Test
+    public void listaOnAlussaTyhja() {
+        assertTrue(lista.isEmpty());
+    }
+    
+    @Test(expected = IndexOutOfBoundsException.class) 
+    public void negatiivinenIndeksiAntaaVirheen() {
+        lista.get(-1);
+    }
+    
+    @Test(expected = IndexOutOfBoundsException.class) 
+    public void liianSuuriIndeksiAntaaVirheen() {
+        lista.get(500);
+    }    
 }

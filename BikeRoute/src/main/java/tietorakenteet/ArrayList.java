@@ -20,7 +20,7 @@ public class ArrayList<E> {
      */
     
     public ArrayList() {
-        arrayList = new Object[10];
+        arrayList = new Object[10000];
         this.size = 0;
     }
     
@@ -38,6 +38,28 @@ public class ArrayList<E> {
         
         this.arrayList[this.size] = obj;
         this.size++;
+    }
+    
+    /**
+     * Lisää halutun olion tiettyyn indeksiin
+     * @param indeksi
+     * @param obj 
+     */
+    
+    public void add(int indeksi, E obj) {
+        
+        if (indeksi < 0 || indeksi >= size) {
+            throw new IndexOutOfBoundsException();
+        }
+        
+        if (listaTaysi()) {
+            kasvataKokoa();
+        }
+        
+        if (this.arrayList[indeksi] == null) {
+            this.arrayList[this.size] = obj;
+            this.size++;
+        }
     }
     
     /**
@@ -75,7 +97,7 @@ public class ArrayList<E> {
      */
     
     public boolean isEmpty() {
-        return this.arrayList.length == 0;
+        return size == 0;
     }
     
     /**
@@ -86,39 +108,6 @@ public class ArrayList<E> {
     
     public boolean listaTaysi() {
         return this.arrayList.length == this.size;
-    }
-    
-    /**
-     * Tarkistaa löytyykö objekti listalta
-     * @param obj
-     * @return true jos löytyy, false jos ei löydy
-     */
-    
-    public boolean contains(E obj) {
-        for (int i = 0; i < arrayList.length; i++) {
-            if (obj == arrayList[i]) {
-                return true;
-            }
-        }
-        return false;
-    }
-    
-    /**
-     * Poistaa viimeisen alkion listalta
-     */
-    
-    public void removeLast() {
-        arrayList[size - 1] = null;
-        this.size--;
-    }
-    
-    /**
-     * Palauttaa viimeisen olion listalta
-     * @return viimeinen olio
-     */
-    
-    public E getLast() {
-        return (E) this.arrayList[size - 1];
     }
     
     /**

@@ -42,4 +42,25 @@ public class HashSetTest {
         
         assertEquals(true, hashSet.contains("1000"));
     }
+    
+    @Test
+    public void kokoPaivittyyOikein() {
+        hashSet.add("1000");
+        hashSet.add("2000");
+        hashSet.add("3000");
+        
+        assertEquals(3, hashSet.size());
+    }
+    
+    @Test
+    public void listaOnAlussaTyhja() {
+        assertTrue(hashSet.isEmpty());
+    }
+    
+    @Test
+    public void tyhjanOlionLisaysEiOnnistu() {
+        hashSet.add(null);
+        
+        assertTrue(hashSet.isEmpty());
+    }
 }
