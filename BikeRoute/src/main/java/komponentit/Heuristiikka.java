@@ -8,23 +8,6 @@ public class Heuristiikka {
     Matikka mat = new Matikka();
     
     /**
-     * Manhattan Etaisyys
-     * 
-     * @param nyky - nykyinen solmu
-     * @param tavoite - tavoitesolmu
-     * 
-     * @return Palauttaa heuristiikan manhattan etaisyys tekniikan mukaisesti
-     */    
-    
-    public double manhattanEtaisyys(Solmu nyky, Solmu tavoite) {
-        
-        double latitudes = mat.itseisarvo(nyky.getLatitude() - tavoite.getLatitude());
-        double longitudes = mat.itseisarvo(nyky.getLongitude() - tavoite.getLongitude());
-
-        return latitudes + longitudes;
-    }
-    
-    /**
      * Euclidean etaisyys
      * 
      * @param nyky nykyinen solmu
