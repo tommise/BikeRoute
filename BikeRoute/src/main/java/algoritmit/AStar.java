@@ -3,7 +3,6 @@ package algoritmit;
 
 import java.util.Comparator;
 
-import komponentit.Heuristiikka;
 import komponentit.Kaari;
 import komponentit.Solmu;
 
@@ -16,16 +15,6 @@ import tietorakenteet.PriorityQueue;
  */
 
 public class AStar {
-    
-    Heuristiikka heuristiikka;
-    
-    /**
-     * A* algoritmin konstruktori
-     */
-    
-    public AStar() {
-        this.heuristiikka = new Heuristiikka();
-    }
     
     /**
      * Etsii lyhyimmän reitin halutusta alkusolmusta loppuun A* algoritmin mukaisesti
@@ -61,7 +50,7 @@ public class AStar {
                     solmu.setG(uusiG);
                     solmu.setEdellinenSolmu(nyky);
                     
-                    double f = uusiG + heuristiikka.manhattanEtaisyys(solmu, loppu);
+                    double f = uusiG + solmu.euklidinenHeuristiikka(loppu);
                     solmu.setF(f);
                     
                     if (!prioriteettijono.contains(solmu)) {

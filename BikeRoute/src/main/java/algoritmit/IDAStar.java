@@ -1,10 +1,9 @@
 package algoritmit;
 
-import komponentit.Heuristiikka;
 import komponentit.Kaari;
 import komponentit.Solmu;
-
 import tietorakenteet.ArrayList;
+import tietorakenteet.Stack;
 
 /**
  * Etsii lyhimmän reitin alkusolmusta loppusolmuun ja rakentaa reitin tämän jälkeen
@@ -13,14 +12,12 @@ import tietorakenteet.ArrayList;
 
 public class IDAStar {
 
-    private final Heuristiikka heuristiikka;
     private final double maali;
     
     /**
      * IDA* algoritmin konstruktori jossa alustetaan heuristiikkaolio ja maali arvo
      */
     public IDAStar() {
-        this.heuristiikka = new Heuristiikka();
         this.maali = Double.MIN_VALUE;
     }
     
@@ -35,10 +32,10 @@ public class IDAStar {
         
         boolean found = false;
         
-        double bound = heuristiikka.manhattanEtaisyys(alku, loppu);
+        double bound = alku.euklidinenHeuristiikka(loppu);
 
-        ArrayList<Solmu> path = new ArrayList<>();
-        path.add(alku);
+        Stack<Solmu> path = new Stack<>();
+        path.push(alku);
         
         while (bound != Double.MAX_VALUE) {
 
@@ -67,11 +64,11 @@ public class IDAStar {
      * @return Double.MIN_VALUE jos reitti löytyi, muuten min
      */
 
-    private double rekursiivinenHaku(ArrayList<Solmu> path, double g, double bound, Solmu loppu) {
+    private double rekursiivinenHaku(Stack<Solmu> path, double g, double bound, Solmu loppu) {
 
-        Solmu solmu = path.getLast();
+        Solmu solmu = path.peek();
 
-        double h = heuristiikka.manhattanEtaisyys(solmu, loppu);
+        double h = solmu.euklidinenHeuristiikka(loppu);
         double f = g + h;
 
         if (f > bound) {
@@ -96,7 +93,7 @@ public class IDAStar {
 
             if (!path.contains(lapsi)) {
 
-                path.add(lapsi);
+                path.push(lapsi);
                 lapsi.setEdellinenSolmu(solmu);
                 
                 double uusiMin = rekursiivinenHaku(path, solmu.getG() + kaari.getEtaisyys(), bound, loppu);
@@ -107,7 +104,7 @@ public class IDAStar {
                     min = uusiMin;
                 }
                 
-                path.removeLast();
+                path.pop();
             }
         }
 
