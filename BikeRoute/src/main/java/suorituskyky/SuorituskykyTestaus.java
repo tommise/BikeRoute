@@ -3,7 +3,6 @@ package suorituskyky;
 
 import algoritmit.AStar;
 import algoritmit.Dijkstra;
-import algoritmit.FringeSearch;
 import algoritmit.IDAStar;
 
 import io.VerkonRakentaja;
@@ -250,77 +249,6 @@ public class SuorituskykyTestaus {
             
             aloita();
             ida.etsi(alku, loppu);
-            lopeta();
-            
-            reset();
-            k++;
-        }             
-        
-        return kokonaisaika;
-    }
-    
-    /**
-     * Fringe search algoritmin testailun metodi
-     * @param kierroksia kierrosten lukumäärä
-     * @return kokonaisaika double muodossa
-     */
-    
-    public double fringe(int kierroksia) {
-        
-        this.kokonaisaika = 0;
-        
-        VerkonRakentaja rakentaja = new VerkonRakentaja();
-        Verkko verkko1 = rakentaja.luoTestiVerkko();
-        
-        int i = 0;
-        
-        while (i <= kierroksia) {
-            
-            Solmu alku = verkko1.getSolmut().get(0);
-            Solmu loppu = verkko1.getSolmut().get(verkko1.getSolmut().size() - 1);    
-            
-            FringeSearch fringe = new FringeSearch();
-            
-            aloita();
-            fringe.etsi(alku, loppu);
-            lopeta();
-            
-            reset();
-            i++;
-        }
-        
-        Verkko verkko2 = rakentaja.luoTestiVerkko();
-        
-        int j = 0;
-        
-        while (j <= kierroksia) {
-            
-            Solmu alku = verkko2.getSolmut().get(10);
-            Solmu loppu = verkko2.getSolmut().get(18);   
-            
-            FringeSearch fringe = new FringeSearch();
-            
-            aloita();
-            fringe.etsi(alku, loppu);
-            lopeta();
-            
-            reset();
-            j++;
-        }
-        
-        Verkko verkko3 = rakentaja.luoTestiVerkko();
-        
-        int k = 0;
-        
-        while (k <= kierroksia) {
-
-            Solmu alku = verkko3.getSolmut().get(3);
-            Solmu loppu = verkko3.getSolmut().get(12);    
-            
-            FringeSearch fringe = new FringeSearch();
-            
-            aloita();
-            fringe.etsi(alku, loppu);
             lopeta();
             
             reset();
