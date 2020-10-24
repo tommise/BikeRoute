@@ -38,7 +38,7 @@ public final class Kaari {
          * Asetetaan kaarelle pituus (paino) haversine tekniikan mukaisesti
          */
         
-        this.etaisyys = heuristiikka.haversineMetodi(alkuLat, alkuLon, loppuLat, loppuLon);
+        this.etaisyys = heuristiikka.haversineFormula(alkuLat, alkuLon, loppuLat, loppuLon);
     }
     
     /**

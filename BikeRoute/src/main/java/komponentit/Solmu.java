@@ -18,8 +18,9 @@ public class Solmu {
     private double latitude;
     private double longitude;
     
-    private ArrayList<Kaari> kaaret;    
-    private Solmu edellinenSolmu;    
+    private ArrayList<Kaari> kaaret;  
+    private Solmu edellinenSolmu;   
+    private Heuristiikka heur;
     
     /**
      * Solmu luokan konstruktori
@@ -34,6 +35,7 @@ public class Solmu {
         this.longitude = longitude;
         this.gluku = Double.MAX_VALUE;
         this.kaaret = new ArrayList<>();
+        this.heur = new Heuristiikka();
     }
     
     /**
@@ -52,6 +54,16 @@ public class Solmu {
     
     public ArrayList<Kaari> getKaaret() {
         return kaaret;
+    }
+    
+    /**
+     * Palauttaa heuristisen etäisyyden euklidisen etäisyyden perusteella
+     * @param solmu haluttu solmu
+     * @return heuristinen etäisyys double muodossa
+     */
+    
+    public double euklidinenHeuristiikka(Solmu solmu) {
+        return heur.euklidinenEtaisyys(this, solmu);
     }
     
     /**

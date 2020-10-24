@@ -32,7 +32,7 @@ public class HeuristiikkaTest {
         double gurlat = gurula.getLatitude();
         double gurlon = gurula.getLongitude();
         
-        double etaisyys = heuristiikka.haversineMetodi(klulat, klulon, gurlat, gurlon);
+        double etaisyys = heuristiikka.haversineFormula(klulat, klulon, gurlat, gurlon);
         
         double oikeaEtaisyys = 4440;
         
