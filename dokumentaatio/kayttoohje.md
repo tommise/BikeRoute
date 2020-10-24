@@ -26,7 +26,7 @@ x Poistu
 x Poistu
 ```
 
-- **1 Kasittele testiverkko** tulostaa kolme eri reittiä kaikilla algoritmeilla (A*, Dijkstra ja Fringe Search)
+- **1 Kasittele testiverkko** tulostaa kolme eri reittiä kaikilla algoritmeilla (A*, Dijkstra ja IDA Star)
 - **2 Suorituskykytestaus** suorittaa jokaista algoritmia 10 000 kierrosta kolmella eri reitillä ja laskee näiden yhteisajan ja keskiarvon
 - **3 Lue kartan tiet** lukee karttadatan tiet
 
@@ -37,7 +37,7 @@ x Poistu
 Visuaalisessa käyttöliittymässä voidaan mallintaa haettu reitti haluttua algoritmia hyödyntäen seuraavanlaisesti:
 - **Valitse alku** - valitaan reitille alku
 - **Valitse loppu** - valitaan reitille haluttu loppu
-- **Valitse algoritmi** - valitaan käytettävä algoritmi, A*, Dijkstra tai Fringe Search
+- **Valitse algoritmi** - valitaan käytettävä algoritmi, A Star, Dijkstra tai IDA Star
 - **Hae reitti!** - hakee reitin valittua algoritmia ja alkua sekä loppu hyödyntäen sekä tulostaa matkan _Hae reitti!_ napin alle
 - **Pyyhi reitti** - pyyhkii käytetyn reitin 
 

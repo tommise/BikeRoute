@@ -2,12 +2,12 @@
 
 ## Ohjelman yleisrakenne
 
-Projektissa toteutettiin kolme erilaista reitinhakualgoritmia. Nämä algoritmit ovat Dijkstra, A Star, IDA Star sekä Fringe Search. Käytännössä A Star on paranneltu versio Dijkstrasta, IDA Star paranneltu versio A Starista ja Fringe Search paranneltu versio IDA Starista.
+Projektissa toteutettiin kolme erilaista reitinhakualgoritmia. Nämä algoritmit ovat Dijkstra, A Star ja IDA Star. Käytännössä A Star on paranneltu versio Dijkstrasta ja IDA Star paranneltu versio A Starista.
 
 Projektin rakenne on seuraava:
-- Paketissa _algoritmit_ on A Star, IDA Star, Dijkstra sekä Fringe Search
+- Paketissa _algoritmit_ on A Star, Dijkstra sekä IDA Star
 - Paketissa _komponentit_ on Heuristiikka, Kaari, Solmu ja Verkko
-- Paketissa _tietorakenteet_ on ArrayList, HashMap, HashSet, LinkedList ja PriorityQueue
+- Paketissa _tietorakenteet_ on ArrayList, HashMap, HashSet, PriorityQueue ja Stack
 - Paketissa _io_ on Kartanlukija ja Verkonrakentaja
 - Paketissa _suorituskykytestaus_ on suorituskykytestaukselle luokka SuorituskykyTestaus
 - Paketissa _tyokalut_ on luokka Matikka joka pitää sisällään omia toteutuksia javan Math.x metodeista _(itseisarvo, kertoma, potenssi, neliöjuuri, radiaani, sini, kosini, arkustangentti ja arkustangentti2)_
@@ -31,35 +31,54 @@ Tilavaativuus: O(d)
 
 Missä b on uloimpien solmujen lapsisolmujen lukumäärä _(branching factor)_ ja missä d on ensimmäisen löydetyn reitin syvyys
 
-**Fringe Search:**
-Aikavaativuus:
-Tilavaativuus:
-
 ### Tietorakenteet
 
-**ArrayListin** lisäyksen _(add)_ aikavaativuus on O(1) ellei kokoa joudu kasvattamaan jolloin O(n). Noudon _(get)_ aikavaativuus on O(1).
+Toteutettujen metodien aikavaativuudet:
+
+**ArrayList** 
+
+- _add()_, O(1) (listan kokoa kasvatettaessa O(n))
+- _get()_, O(1)
+- _contains()_, O(n)
+- _listaTaysi()_, O(1)
+- _size()_, O(1)
+- _isEmpty()_, O(1)
 
 **HashSet** 
+- _add()_, O(1) (listan kokoa kasvatettaessa O(n))
+- _contains_, O(n)
+- _size()_, O(1)
 
 **HashMap**
+- _get()_, O(1)
+- _remove_, O(n)
+- _size()_, O(1)
 
-**LinkedList**
+**PriorityQueuen** 
+- _add()_, O(n)
+- _contains()_, O(n)
+- _poll()_, O(n)
+- _size()_, O(1)
+- _isEmpty()_, O(1)
+- _isFull()_, O(1)
 
-**PriorityQueuen** lisäyksen _(add)_, poiston _(remove)_ ja pollin _(poll)_ aikavaativuudet ovat O(log(n)).
+**Stack** Last In First Out -menetelmällä
+- _push()_, O(1)
+- _pop()_, O(1)
+- _peek()_, O(1)
+- _contains()_, O(n)
 
 ## Puutteet ja parannusehdotukset
 
-- IDA Star sekä Fringe Search toimivat hitaanlaisesti
 - Esimerkkiverkko kattaa vain pienen alueen - OSM tiedoston lukemisen yhteydessä solmut luetaan normaalisti, mutta kaaret eivät yhdisty osm.pbf tiedoston kautta oikein - siksi tehty esimerkkiverkko Talin siirtolapuutarhasta
 - Osa matikkaluokan omista Math.x metodeista palvelee vain projektin käyttötarkoitusta eikä rajatapauksia, ei sinänsä projektin toimivuuden kannalta olennainen
+- IDA Star toimii hitaanlaisesti
+- A Star algoritmiin voisi tehdä mahdollisesti nopeuttavia muutoksia kuten kaksisuuntainen _(bidirectional)_ A Star joka etsii alusta ja lopusti reittiä
 
 #### Lähteet
 
 - [A* algorithm](https://en.wikipedia.org/wiki/A*_search_algorithm), Wikipedia
 - [Introduction to the A* Algorithm](https://www.redblobgames.com/pathfinding/a-star/introduction.html), Red Blob Games
 - [Dijkstra's algorithm](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm), Wikipedia
-- [Fringe Search](https://en.wikipedia.org/wiki/Fringe_search), Wikipedia
-- [Fringe Search: Beating A* at Pathfinding on Game Maps](http://webdocs.cs.ualberta.ca/~games/pathfind/publications/cig2005.pdf), Bjornsson, Y., Enzenberger, M., Holte R. & Schaeffer J.
-- [Introduction to the A* Algorithm](https://www.redblobgames.com/pathfinding/a-star/introduction.html), Red Blob Games
 - [Iterative deepening A*](https://en.wikipedia.org/wiki/Iterative_deepening_A*), Wikipedia
 - [Time complexity of iterative-deepening-A∗](https://www.sciencedirect.com/science/article/pii/S0004370201000947), Richard E. Korf,  Michael Reid & Stefan Edelkamp
