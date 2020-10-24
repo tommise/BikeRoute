@@ -3,7 +3,6 @@ package ui;
 
 import algoritmit.AStar;
 import algoritmit.Dijkstra;
-import algoritmit.FringeSearch;
 import algoritmit.IDAStar;
 
 import io.VerkonRakentaja;
@@ -67,7 +66,7 @@ public class Kayttoliittyma {
         
         VerkonRakentaja rakentaja = new VerkonRakentaja();
         Verkko verkko = rakentaja.luoVerkko();
-        ArrayList<Solmu> solmut = verkko.getSolmut();       
+        ArrayList<Solmu> solmut = verkko.getSolmut();
         
         System.out.println("Kaikki valmista!");
 
@@ -109,7 +108,7 @@ public class Kayttoliittyma {
         private ArrayList<GeoPosition> reitti;
         private ArrayList<Solmu> solmut;       
         private ArrayList<Painter<JXMapViewer>> piirtajat;
-        private ArrayList<Etappi> karttaMerkit;         
+        private ArrayList<Etappi> karttaMerkit;   
         
         private JXMapViewer kartta;
         private ReitinPiirtaja kartanPiirtaja;
@@ -122,7 +121,6 @@ public class Kayttoliittyma {
         private boolean dijkstraValittu;
         private boolean astarValittu;
         private boolean idaStarValittu;
-        private boolean fringeValittu;
         
         private Solmu alku;
         private Solmu loppu;
@@ -220,7 +218,7 @@ public class Kayttoliittyma {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     
-                    String[] valinnat = new String[] {"Dijkstra", "A*", "IDA*", "Fringe Search"};
+                    String[] valinnat = new String[] {"Dijkstra", "A*", "IDA*"};
                     String teksti = "Valitse algoritmi";
 
                     int valinta = JOptionPane.showOptionDialog(kartta, teksti, "", 
@@ -381,15 +379,6 @@ public class Kayttoliittyma {
                 paivitaReitti(idaStarReitti);
                 tulos = idaStarReitti.get(idaStarReitti.size() - 1).getG();         
                 
-            } else if (fringeValittu) {
-                FringeSearch fringe = new FringeSearch();
-                fringe.etsi(alku, loppu);
-                
-                ArrayList<Solmu> fringeReitti = fringe.luoReitti();
-                
-                paivitaReitti(fringeReitti);
-                tulos = fringeReitti.get(fringeReitti.size() - 1).getG();         
-                
             }
             
             this.tulosLabel.setText("Kokonaisreitti: " + tulos + " m");
@@ -433,9 +422,6 @@ public class Kayttoliittyma {
             } else if (valinta == 2) {
                 idaStarValittu = true;
                 JOptionPane.showMessageDialog(kartta, "IDA* valittu!");
-            } else if (valinta == 3) {
-                fringeValittu = true;
-                JOptionPane.showMessageDialog(kartta, "Fringe Search valittu!");   
             }
         }
         
@@ -451,7 +437,6 @@ public class Kayttoliittyma {
             dijkstraValittu = false;
             astarValittu = false;
             idaStarValittu = false;
-            fringeValittu = false;
             
             tulosLabel.setText("Kokonaisreitti: ");
             
@@ -693,7 +678,7 @@ public class Kayttoliittyma {
     public static void suoritusKykyTestaus() {
         SuorituskykyTestaus suoritus = new SuorituskykyTestaus();
         
-        int kierroksia = 500000;
+        int kierroksia = 10000;
         
         System.out.println("");
         System.out.println("Suorituskykytestaus:");
@@ -714,19 +699,12 @@ public class Kayttoliittyma {
         System.out.println("Keskiarvo " + astarAika / kierroksia);
         System.out.println("");
         
+        
         System.out.println("IDA*");
         double idaStarAika = suoritus.idaStar(1000);
         System.out.println("Kokonaisaika " + idaStarAika + " s");
         System.out.println("Keskiarvo " + idaStarAika / kierroksia);
         System.out.println("");
-        
-        /*
-        System.out.println("Fringe Search");
-        double fringeAika = suoritus.fringe(kierroksia);
-        System.out.println("Kokonaisaika " + fringeAika + " s");
-        System.out.println("Keskiarvo " + fringeAika / kierroksia);
-        System.out.println("");   
-        */
         
     }
     
@@ -790,16 +768,6 @@ public class Kayttoliittyma {
         System.out.println("Reitti IDA*:");
         System.out.println("");
         tulostaReitti(idastarReitti);
-        
-        /*
-        FringeSearch fringe = new FringeSearch();
-        fringe.etsi(alku, loppu);
-        ArrayList<Solmu> fringeReitti = fringe.luoReitti(); 
-        System.out.println("Reitti Fringe Search:");
-        System.out.println("");        
-        tulostaReitti(fringeReitti);
-        */
-        
     }
     
     /**
