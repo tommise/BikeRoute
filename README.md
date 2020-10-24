@@ -1,6 +1,6 @@
 # BikeRoute
 
-BikeRoute sovelluksen tarkoitus on etsiä lyhyin pyöräilyreitti paikasta A paikkaan B ja vertailemaan kuinka kauan käytetyillä algoritmeilla (Dijkstra, A Star, IDA Star tai Fringe Search) menee tähän aikaa. Sovellus hyödyntää [Openstreetmap](https://www.openstreetmap.org/) karttadataa ja se on toteutettu Javalla.
+BikeRoute sovelluksen tarkoitus on etsiä lyhyin pyöräilyreitti paikasta A paikkaan B ja vertailemaan kuinka kauan käytetyillä algoritmeilla (Dijkstra, A Star tai IDA Star) menee tähän aikaa. Sovellus hyödyntää JXMapViewer2 kirjastoa ja se on toteutettu Javalla.
 
 ## Dokumentaatio
 
