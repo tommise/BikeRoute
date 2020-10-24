@@ -25,6 +25,32 @@ public class Heuristiikka {
     }
     
     /**
+     * Euclidean etaisyys
+     * 
+     * @param nyky nykyinen solmu
+     * @param tavoite tavoite solmu
+     * 
+     * @return Palauttaa heuristiikan Euclidean etaisyyden mukaisesti
+     */
+    
+    public double euklidinenEtaisyys(Solmu nyky, Solmu tavoite) {
+        double longitudeA = nyky.getLongitude();
+        double latitudeA = nyky.getLatitude();
+
+        double longitudeB = tavoite.getLongitude();
+        double latitudeB = tavoite.getLatitude();
+
+        double latDistance = latitudeB - latitudeA;
+        double lngDistance = longitudeB - longitudeA;
+        double result = 0;
+        
+        result += latDistance * latDistance;
+        result += lngDistance * lngDistance;
+        
+        return Math.sqrt(result);
+    }
+    
+    /**
      * Laskee Haversine tekniikan mukaisesti suoran pituuden kahden geopisteen välillä
      * - Käytetään kahden kaaren etaisyyden mittaamiseen
      * 
@@ -36,7 +62,7 @@ public class Heuristiikka {
      * @return palauttaa etaisyyden metreissä double muodossa
      */
     
-    public double haversineMetodi(double alkuLat, double alkuLon, double loppuLat, double loppuLon) {
+    public double haversineFormula(double alkuLat, double alkuLon, double loppuLat, double loppuLon) {
         int maapallonSadeKm = 6371;
         
         double latEtaisyys = mat.radiaani(loppuLat - alkuLat);
