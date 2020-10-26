@@ -7,8 +7,8 @@ import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,9 +33,13 @@ public final class EtappienKasittelija implements WaypointRenderer<Etappi> {
     public EtappienKasittelija() {
 
         try {
-            Image alkuImage = ImageIO.read(new File("./images/alku.png"));
-            Image loppuImage = ImageIO.read(new File("./images/loppu.png"));
-            Image pisteImage = ImageIO.read(new File("./images/piste.png"));
+            InputStream alkuis = haeKuvaInputStreamina("alku.png");
+            InputStream loppuis = haeKuvaInputStreamina("loppu.png");
+            InputStream pisteis = haeKuvaInputStreamina("piste.png");
+            
+            Image alkuImage = ImageIO.read(alkuis);
+            Image loppuImage = ImageIO.read(loppuis);
+            Image pisteImage = ImageIO.read(pisteis);
             
             alku = muunnaBufferoiduksiKuvaksi(alkuImage);
             loppu = muunnaBufferoiduksiKuvaksi(loppuImage);
@@ -110,4 +114,21 @@ public final class EtappienKasittelija implements WaypointRenderer<Etappi> {
         
         grafiikka.dispose();
     }
+    
+    /**
+     * Lukee kuvat etappien käsittelijälle parametrina annetusta polusta
+     * @param kaariTiedosto kaaritiedosto
+     */
+    
+    private InputStream haeKuvaInputStreamina(String kuvanNimi) {
+
+        ClassLoader classLoader = getClass().getClassLoader();
+        InputStream inputStream = classLoader.getResourceAsStream(kuvanNimi);
+
+        if (inputStream == null) {
+            throw new IllegalArgumentException("Tiedostoa " + kuvanNimi + " ei löytynyt!");
+        } else {
+            return inputStream;
+        }
+    }  
 }

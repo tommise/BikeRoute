@@ -4,8 +4,7 @@ package ui;
 import algoritmit.AStar;
 import algoritmit.Dijkstra;
 import algoritmit.IDAStar;
-
-import io.VerkonRakentaja;
+import io.VerkonLukija;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -31,7 +30,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.MouseInputListener;
 
-import komponentit.Kaari;
 import komponentit.Solmu;
 import komponentit.Verkko;
 
@@ -62,14 +60,6 @@ public class Kayttoliittyma {
 
     public static void main(String[] args) {
 
-        System.out.println("Luodaan verkko karttadatan pohjalta... (odota hetki)");     
-        
-        VerkonRakentaja rakentaja = new VerkonRakentaja();
-        Verkko verkko = rakentaja.luoVerkko();
-        ArrayList<Solmu> solmut = verkko.getSolmut();
-        
-        System.out.println("Kaikki valmista!");
-
         Scanner lukija = new Scanner(System.in);
         
         System.out.println("");
@@ -77,7 +67,7 @@ public class Kayttoliittyma {
         System.out.println("");
         System.out.println("Valitse seuraavista:");
         System.out.println("-------------------------");
-        System.out.println("1 Tekstipohjainen käyttöliittymä");
+        System.out.println("1 Suorituskykytestaus");
         System.out.println("2 Visuaalinen käyttöliittymä");
         System.out.println("");
         System.out.println("x Poistu");
@@ -87,7 +77,17 @@ public class Kayttoliittyma {
             String komento = lukija.nextLine();
         
             if (komento.equals("1")) {
-                tekstiKayttoliittyma(lukija, solmut);
+                suoritusKykyTestaus();
+                
+                System.out.println("");
+                System.out.println("Valitse seuraavista:");
+                System.out.println("-------------------------");
+                System.out.println("1 Suorituskykytestaus");
+                System.out.println("2 Visuaalinen käyttöliittymä");
+                System.out.println("");
+                System.out.println("x Poistu");
+                System.out.println("");  
+                
             } else if (komento.equals("2")) {
                 Thread kayttis = new Thread(new Kayttoliittyma().new VisuaalinenKayttoliittyma()); 
                 kayttis.start();
@@ -97,7 +97,41 @@ public class Kayttoliittyma {
                 System.out.println("Väärä komento, yritä uudelleen");
             } 
         }
-    }   
+    }
+        
+    /**
+     * Suoritetaan suorituskykytestaus hyödyntäen SuoritusKykyTestaus luokkaa
+     */    
+    
+    public static void suoritusKykyTestaus() {
+        SuorituskykyTestaus suoritus = new SuorituskykyTestaus();
+        
+        System.out.println("Suorituskykytestaus:");
+        
+        System.out.println("");
+        System.out.println("Dijkstra");
+        System.out.println("-------");
+        System.out.println("Reitti 1: " + suoritus.reitti1("Dijkstra", 100000) + " s");
+        System.out.println("Reitti 2: " + suoritus.reitti2("Dijkstra", 100000) + " s");
+        System.out.println("Reitti 3: " + suoritus.reitti3("Dijkstra", 100000) + " s");
+        System.out.println("Reitti 4: " + suoritus.reitti4("Dijkstra", 100000) + " s");
+        System.out.println("Reitti 5: " + suoritus.reitti5("Dijkstra", 100000) + " s");    
+        
+        System.out.println("");
+        System.out.println("A Star");
+        System.out.println("-------");
+        System.out.println("Reitti 1: " + suoritus.reitti1("A Star", 100000) + " s");
+        System.out.println("Reitti 2: " + suoritus.reitti2("A Star", 100000) + " s");
+        System.out.println("Reitti 3: " + suoritus.reitti3("A Star", 100000) + " s");
+        System.out.println("Reitti 4: " + suoritus.reitti4("A Star", 100000) + " s");
+        System.out.println("Reitti 5: " + suoritus.reitti5("A Star", 100000) + " s");  
+        
+        System.out.println("");
+        System.out.println("IDA Star");
+        System.out.println("-------");
+        System.out.println("Reitti 4: " + suoritus.reitti4("IDA Star", 100) + " s");
+        System.out.println("Reitti 5: " + suoritus.reitti5("IDA Star", 1000) + " s");  
+    }
     
     /**
      * Visuaalinen käyttöliittymä
@@ -122,6 +156,7 @@ public class Kayttoliittyma {
         private boolean astarValittu;
         private boolean idaStarValittu;
         
+        private Verkko verkko;
         private Solmu alku;
         private Solmu loppu;
         private JLabel tulosLabel;        
@@ -135,7 +170,7 @@ public class Kayttoliittyma {
             /**
              * Alustetaan kartta
              */
-
+            
             TileFactoryInfo osmTile = new OSMTileFactoryInfo();
             DefaultTileFactory tiles = new DefaultTileFactory(osmTile);
 
@@ -153,24 +188,30 @@ public class Kayttoliittyma {
             kartta.addMouseListener(hiiri);
             kartta.addMouseMotionListener(hiiri);
             kartta.addKeyListener(new PanKeyListener(kartta));
-            
             kartta.setZoom(3);
             
+            VerkonLukija verkonLukija = new VerkonLukija();
             this.karttaMerkit = new ArrayList<>();
             this.reitti = new ArrayList<>();
             
-            VerkonRakentaja rakentaja = new VerkonRakentaja();
+            String karttaValinta = "Valitse kartta";
+            String[] karttaValinnat = new String[] {"Davis, USA", "Tali, FI"};
             
-            Verkko verkko = rakentaja.luoTestiVerkko();
-            // Verkko verkko = rakentaja.luoVerkko();
-            this.solmut = verkko.getSolmut();
+            int valinta = JOptionPane.showOptionDialog(kartta, karttaValinta, "", 
+                            JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, 
+                            null, karttaValinnat, karttaValinnat[0]);
+                
+            if (valinta == 0) {
+                this.verkko = verkonLukija.luoVerkkoDavisista();
+                GeoPosition davis = new GeoPosition(28.182350, -81.834746);
+                kartta.setAddressLocation(davis);
+            } else if (valinta == 1) {
+                this.verkko = verkonLukija.luoVerkkoTalista();        
+                GeoPosition talinSiirtolaPuutarha = new GeoPosition(60.217407, 24.860599);
+                kartta.setAddressLocation(talinSiirtolaPuutarha);
+            }
             
-            GeoPosition talinSiirtolaPuutarha = new GeoPosition(60.217407, 24.860599);
-            kartta.setAddressLocation(talinSiirtolaPuutarha);
-            
-            // GeoPosition davis = new GeoPosition(38.556964, -121.743357);
-            // kartta.setAddressLocation(davis); // davis.osm.pbf            
-            
+            this.solmut = verkko.getSolmut(); 
             paivitaKarttaMerkit();
             paivitaKartta();
 
@@ -329,7 +370,7 @@ public class Kayttoliittyma {
             }
             
             zoomMuuttuu = false;
-        }        
+        }
         
         public void valitseAlku() {
             JOptionPane.showMessageDialog(kartta, "Valitse reitille alku");
@@ -628,189 +669,5 @@ public class Kayttoliittyma {
             public void mouseExited(MouseEvent e) {
             }
         }           
-    }
-    
-    /**
-     * Tekstikäyttöliittymä ohjelmalle
-     * @param lukija
-     * @param solmut verkon kaikki solmut
-     */
-    
-    public static void tekstiKayttoliittyma(Scanner lukija, ArrayList<Solmu> solmut) {
-        
-        while (true) {
-            System.out.println("");
-            System.out.println("-------------------------");
-            System.out.println("");
-            System.out.println("Tervetuloa!");
-            System.out.println("");
-            System.out.println("1 Kasittele testiverkko");
-            System.out.println("2 Suorituskykytestaus");
-            System.out.println("3 Lue kartan tiet");
-            System.out.println("");
-            System.out.println("x Poistu");
-            System.out.println("");
-            System.out.println("-------------------------");
-            System.out.println("");
-            
-            String komento = lukija.nextLine();
-            System.out.println("");
-            
-            if (komento.equals("1")) {
-                kasitteleTestiVerkko();
-            } else if (komento.equals("2")) {
-                suoritusKykyTestaus();
-            } else if (komento.equals("3")) {
-                lueKartanTiet(solmut);
-            } else if (komento.equals("x")) {
-                System.out.println("Kiitos ja näkemiin!");
-                break;
-            } else {
-                System.out.println("Väärä komento.");
-            }
-        }
-    }
-    
-    /**
-     * Suoritetaan suorituskykytestaus hyödyntäen SuoritusKykyTestaus luokkaa
-     */    
-    
-    public static void suoritusKykyTestaus() {
-        SuorituskykyTestaus suoritus = new SuorituskykyTestaus();
-        
-        int kierroksia = 10000;
-        
-        System.out.println("");
-        System.out.println("Suorituskykytestaus:");
-        System.out.println("Kierroksia: " + kierroksia);
-        System.out.println("");
-        System.out.println("(odota hetki)");
-        System.out.println("");
-        
-        System.out.println("Dijkstra");
-        double dijkstraAika = suoritus.dijkstra(kierroksia);
-        System.out.println("Kokonaisaika " + dijkstraAika + " s");
-        System.out.println("Keskiarvo " + dijkstraAika / kierroksia);
-        System.out.println("");
-        
-        System.out.println("A*");
-        double astarAika = suoritus.astar(kierroksia);
-        System.out.println("Kokonaisaika " + astarAika + " s");
-        System.out.println("Keskiarvo " + astarAika / kierroksia);
-        System.out.println("");
-        
-        
-        System.out.println("IDA*");
-        double idaStarAika = suoritus.idaStar(1000);
-        System.out.println("Kokonaisaika " + idaStarAika + " s");
-        System.out.println("Keskiarvo " + idaStarAika / kierroksia);
-        System.out.println("");
-        
-    }
-    
-    /**
-     * Käsittelee testiverkon kolme eri reittiä kaikilla algoritmeillä
-     */
-    
-    public static void kasitteleTestiVerkko() {
-        
-        VerkonRakentaja verkonRakentaja = new VerkonRakentaja();
-        System.out.println("-----------------");
-        System.out.println("Reitti 1: (802.8367857851956m)");
-        System.out.println("-----------------");
-        System.out.println("");
-        Verkko verkko = verkonRakentaja.luoTestiVerkko();
-        ArrayList<Solmu> solmut = verkko.getSolmut();
-        tulostaKaikkiReitit(solmut.get(solmut.size() - 1), solmut.get(0));
-        
-        System.out.println("-----------------");
-        System.out.println("Reitti 2: (375.823394569141m)");
-        System.out.println("-----------------");
-        System.out.println("");
-        Verkko verkko2 = verkonRakentaja.luoTestiVerkko();
-        ArrayList<Solmu> solmut2 = verkko2.getSolmut();
-        tulostaKaikkiReitit(solmut2.get(3), solmut2.get(12));
-        
-        System.out.println("-----------------");
-        System.out.println("Reitti 3: (293.860036810901m)");
-        System.out.println("-----------------");
-        System.out.println("");
-        Verkko verkko3 = verkonRakentaja.luoTestiVerkko();
-        ArrayList<Solmu> solmut3 = verkko3.getSolmut();
-        tulostaKaikkiReitit(solmut3.get(10), solmut3.get(18));
-    }
-    
-    /**
-     * Tulostetaan kaikkien algoritmien reitit
-     * @param alku alkusolmu algoritmeille
-     * @param loppu alkusolmu algoritmeille
-     */
-    
-    public static void tulostaKaikkiReitit(Solmu alku, Solmu loppu) {
-
-        Dijkstra dijkstra = new Dijkstra();
-        dijkstra.etsi(alku, loppu);
-        ArrayList<Solmu> dijkstranReitti = dijkstra.luoReitti(loppu);
-        System.out.println("Reitti Dijkstra:");
-        System.out.println("");         
-        tulostaReitti(dijkstranReitti);      
-        
-        AStar astar = new AStar();
-        astar.etsi(alku, loppu);
-        ArrayList<Solmu> aStarReitti = astar.luoReitti(loppu);
-        System.out.println("Reitti A*:");
-        System.out.println("");
-        tulostaReitti(aStarReitti); 
-        
-        IDAStar idastar = new IDAStar();
-        idastar.etsi(alku, loppu);
-        ArrayList<Solmu> idastarReitti = idastar.luoReitti(loppu);
-        System.out.println("Reitti IDA*:");
-        System.out.println("");
-        tulostaReitti(idastarReitti);
-    }
-    
-    /**
-     * Tulostetaan algortitmin tuottama reitti konsoliin
-     * @param reitti reitti solmulistassa
-     */
-    
-    public static void tulostaReitti(ArrayList<Solmu> reitti) {
-        
-        for (int i = 0; i < reitti.size(); i++) {
-            Solmu solmu = reitti.get(i);
-            System.out.println(solmu.getG() + "m");
-        }
-        
-        double tulos = reitti.get(reitti.size() - 1).getG();
-        
-        System.out.println("");
-        System.out.println("Kokonaisreitti yhteensä: " + tulos + "m");
-        System.out.println("");         
-    }    
-    
-    /**
-     * Tulostetaan kartan tiet
-     * @param solmut annettu solmulista
-     */
-    
-    public static void lueKartanTiet(ArrayList<Solmu> solmut) {
-        
-        for (int i = 0; i < solmut.size(); i++) {
-            Solmu solmu = solmut.get(i);
-            
-            ArrayList<Kaari> kaaret = solmu.getKaaret();
-            
-            for (int j = 0; j < kaaret.size(); j++) {
-                
-                Kaari kaari = kaaret.get(j);
-                
-                System.out.println("Käsiteltävän solmun ID: " + solmu.getID());
-                System.out.println("Tien nimi: " + kaari.getNimi());
-                System.out.println("Tien tyyppi: " + kaari.getTienTyyppi());
-                System.out.println("Tien pituus: " + kaari.getEtaisyys() + "m");
-                System.out.println("");
-            }
-        }
     }
 }
