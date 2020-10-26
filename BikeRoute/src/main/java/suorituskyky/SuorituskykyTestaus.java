@@ -4,16 +4,24 @@ package suorituskyky;
 import algoritmit.AStar;
 import algoritmit.Dijkstra;
 import algoritmit.IDAStar;
+import io.VerkonLukija;
 
-import io.VerkonRakentaja;
 import komponentit.Solmu;
 import komponentit.Verkko;
+
+/**
+ * Luokka suorituskyvyn testaamiseen eri algoritmien välillä
+ */
 
 public class SuorituskykyTestaus {
     
     private long alkuAika = 0;
     private long loppuAika = 0;
     private double kokonaisaika = 0;
+    
+    private boolean dijkstraValittu = false;
+    private boolean astarValittu = false;
+    private boolean idaStarValittu = false;
     
     /**
      * Aloittaa ajanoton
@@ -33,8 +41,6 @@ public class SuorituskykyTestaus {
         double tulos = ((loppuAika - alkuAika) / 1e9);
         
         this.kokonaisaika += tulos;
-        
-        reset();
     }
     
     /**
@@ -44,217 +50,323 @@ public class SuorituskykyTestaus {
     public void reset() {
         this.alkuAika = 0;
         this.loppuAika = 0;
-    }
+    } 
     
     /**
-     * Dijkstran algoritmin testailun metodi
-     * @param kierroksia kierrosten lukumäärä
-     * @return kokonaisaika double muodossa
+     * Laskee kuinka kauan käytetyllä algoritmilla menee aikaa etsiä
+     * lyhin reitti reitilla 1
+     * @param algoritmi haluttu algoritmi
+     * @param kierroksia kierrosten määrä
+     * @return käytetty aika double muodossa
      */
     
-    public double dijkstra(int kierroksia) {
-        
+    public double reitti1(String algoritmi, int kierroksia) {
         this.kokonaisaika = 0;
         
-        VerkonRakentaja rakentaja = new VerkonRakentaja();
-        Verkko verkko1 = rakentaja.luoTestiVerkko();
+        VerkonLukija reader = new VerkonLukija();
+        Verkko verkko = reader.luoVerkkoDavisista();
+        
+        int alkuSolmunIndeksi = 2;
+        int loppuSolmunIndeksi = 89;
+        
+        paivitaKaytettyAlgoritmi(algoritmi);  
         
         int i = 0;
         
         while (i <= kierroksia) {
             
-            Solmu alku = verkko1.getSolmut().get(0);
-            Solmu loppu = verkko1.getSolmut().get(verkko1.getSolmut().size() - 1);    
+            Solmu alku = verkko.getSolmut().get(alkuSolmunIndeksi);
+            Solmu loppu = verkko.getSolmut().get(loppuSolmunIndeksi);  
             
-            Dijkstra dijkstra = new Dijkstra();
-            
-            aloita();
-            dijkstra.etsi(alku, loppu);
-            lopeta();
-            
-            reset();
-            i++;
-        }
-        
-        Verkko verkko2 = rakentaja.luoTestiVerkko();
-        
-        int j = 0;
-        
-        while (j <= kierroksia) {
-            
-            Solmu alku = verkko2.getSolmut().get(10);
-            Solmu loppu = verkko2.getSolmut().get(18);   
-            
-            Dijkstra dijkstra = new Dijkstra();
-            
-            aloita();
-            dijkstra.etsi(alku, loppu);
-            lopeta();
-            
-            reset();
-            j++;
-        }
-        
-        Verkko verkko3 = rakentaja.luoTestiVerkko();
-        
-        int k = 0;
-        
-        while (k <= kierroksia) {
+            if (astarValittu) {
+                AStar astar = new AStar();
 
-            Solmu alku = verkko3.getSolmut().get(3);
-            Solmu loppu = verkko3.getSolmut().get(12);    
-            
-            Dijkstra dijkstra = new Dijkstra();
-            
-            aloita();
-            dijkstra.etsi(alku, loppu);
-            lopeta();
-            
-            reset();
-            k++;
-        }             
+                aloita();
+                astar.etsi(alku, loppu);
+                lopeta();
+                reset();
+                
+            } else if (dijkstraValittu) {
+                Dijkstra dijkstra = new Dijkstra();
+
+                aloita();
+                dijkstra.etsi(alku, loppu);
+                lopeta();
+                reset();
+                
+            } else if (idaStarValittu) {
+                IDAStar ida = new IDAStar();
+
+                aloita();
+                ida.etsi(alku, loppu);
+                lopeta();
+                reset();
+            }
+
+            i++;
+        }      
         
-        return kokonaisaika;
+        resetAlgoritmit();
+        
+        return this.kokonaisaika;
     }
     
     /**
-     * AStar algoritmin testailun metodi
-     * @param kierroksia kierrosten lukumäärä
-     * @return kokonaisaika double muodossa
+     * Laskee kuinka kauan käytetyllä algoritmilla menee aikaa etsiä
+     * lyhin reitti reitilla 2
+     * @param algoritmi haluttu algoritmi
+     * @param kierroksia kierrosten määrä
+     * @return käytetty aika double muodossa
      */
     
-    public double astar(int kierroksia) {
-        
+    public double reitti2(String algoritmi, int kierroksia) {
         this.kokonaisaika = 0;
         
-        VerkonRakentaja rakentaja = new VerkonRakentaja();
-        Verkko verkko1 = rakentaja.luoTestiVerkko();
+        VerkonLukija reader = new VerkonLukija();
+        Verkko verkko = reader.luoVerkkoDavisista();
         
-        int i = 0;
+        int alkuSolmunIndeksi = 151;
+        int loppuSolmunIndeksi = 42;
         
-        while (i <= kierroksia) {
-
-            Solmu alku = verkko1.getSolmut().get(0);
-            Solmu loppu = verkko1.getSolmut().get(verkko1.getSolmut().size() - 1);    
-            
-            AStar astar = new AStar();
-            
-            aloita();
-            astar.etsi(alku, loppu);
-            lopeta();
-            
-            reset();
-            i++;
-        }
-        
-        Verkko verkko2 = rakentaja.luoTestiVerkko();
-        
-        int j = 0;
-        
-        while (j <= kierroksia) {
-
-            Solmu alku = verkko2.getSolmut().get(10);
-            Solmu loppu = verkko2.getSolmut().get(18);    
-            
-            AStar astar = new AStar();
-            
-            aloita();
-            astar.etsi(alku, loppu);
-            lopeta();
-            
-            reset();
-            j++;
-        }   
-        
-        Verkko verkko3 = rakentaja.luoTestiVerkko();
-        
-        int k = 0;
-        
-        while (k <= kierroksia) {
-
-            Solmu alku = verkko3.getSolmut().get(3);
-            Solmu loppu = verkko3.getSolmut().get(12);    
-            
-            AStar astar = new AStar();
-            
-            aloita();
-            astar.etsi(alku, loppu);
-            lopeta();
-            
-            reset();
-            k++;
-        }          
-        
-        return kokonaisaika;
-    }
-    
-    /**
-     * IDAStar algoritmin testailun metodi
-     * @param kierroksia kierrosten lukumäärä
-     * @return kokonaisaika double muodossa
-     */
-    
-    public double idaStar(int kierroksia) {
-        this.kokonaisaika = 0;
-        
-        VerkonRakentaja rakentaja = new VerkonRakentaja();
-        Verkko verkko1 = rakentaja.luoTestiVerkko();
+        paivitaKaytettyAlgoritmi(algoritmi);  
         
         int i = 0;
         
         while (i <= kierroksia) {
             
-            Solmu alku = verkko1.getSolmut().get(0);
-            Solmu loppu = verkko1.getSolmut().get(verkko1.getSolmut().size() - 1);    
+            Solmu alku = verkko.getSolmut().get(alkuSolmunIndeksi);
+            Solmu loppu = verkko.getSolmut().get(loppuSolmunIndeksi);  
             
-            IDAStar ida = new IDAStar();
-            
-            aloita();
-            ida.etsi(alku, loppu);
-            lopeta();
-            
-            reset();
-            i++;
-        }
-        
-        Verkko verkko2 = rakentaja.luoTestiVerkko();
-        
-        int j = 0;
-        
-        while (j <= kierroksia) {
-            
-            Solmu alku = verkko2.getSolmut().get(10);
-            Solmu loppu = verkko2.getSolmut().get(18);   
-            
-            IDAStar ida = new IDAStar();
-            
-            aloita();
-            ida.etsi(alku, loppu);
-            lopeta();
-            
-            reset();
-            j++;
-        }
-        
-        Verkko verkko3 = rakentaja.luoTestiVerkko();
-        
-        int k = 0;
-        
-        while (k <= kierroksia) {
+            if (astarValittu) {
+                AStar astar = new AStar();
 
-            Solmu alku = verkko3.getSolmut().get(3);
-            Solmu loppu = verkko3.getSolmut().get(12);    
-            
-            IDAStar ida = new IDAStar();
-            
-            aloita();
-            ida.etsi(alku, loppu);
-            lopeta();
-            
-            reset();
-            k++;
-        }             
+                aloita();
+                astar.etsi(alku, loppu);
+                lopeta();
+                reset();
+            } else if (dijkstraValittu) {
+                Dijkstra dijkstra = new Dijkstra();
+
+                aloita();
+                dijkstra.etsi(alku, loppu);
+                lopeta();
+                reset();
+                
+            } else if (idaStarValittu) {
+                IDAStar ida = new IDAStar();
+
+                aloita();
+                ida.etsi(alku, loppu);
+                lopeta();
+                reset();
+            }
+            i++;
+        }      
         
-        return kokonaisaika;
+        resetAlgoritmit();
+        
+        return this.kokonaisaika;
+    }
+    
+    /**
+     * Laskee kuinka kauan käytetyllä algoritmilla menee aikaa etsiä
+     * lyhin reitti reitilla 3
+     * @param algoritmi haluttu algoritmi
+     * @param kierroksia kierrosten määrä
+     * @return käytetty aika double muodossa
+     */
+    
+    public double reitti3(String algoritmi, int kierroksia) {
+        this.kokonaisaika = 0;
+        
+        VerkonLukija reader = new VerkonLukija();
+        Verkko verkko = reader.luoVerkkoDavisista();
+        
+        int alkuSolmunIndeksi = 88;
+        int loppuSolmunIndeksi = 184;
+        
+        paivitaKaytettyAlgoritmi(algoritmi);  
+        
+        int i = 0;
+        
+        while (i <= kierroksia) {
+            
+            Solmu alku = verkko.getSolmut().get(alkuSolmunIndeksi);
+            Solmu loppu = verkko.getSolmut().get(loppuSolmunIndeksi);  
+            
+            if (astarValittu) {
+                AStar astar = new AStar();
+
+                aloita();
+                astar.etsi(alku, loppu);
+                lopeta();
+                reset();
+                
+            } else if (dijkstraValittu) {
+                Dijkstra dijkstra = new Dijkstra();
+
+                aloita();
+                dijkstra.etsi(alku, loppu);
+                lopeta();
+                reset();
+                
+            } else if (idaStarValittu) {
+                IDAStar ida = new IDAStar();
+
+                aloita();
+                ida.etsi(alku, loppu);
+                lopeta();
+                reset();
+            }
+            
+            i++;
+        }      
+        
+        resetAlgoritmit();
+        
+        return this.kokonaisaika;
+    }   
+    
+    /**
+     * Laskee kuinka kauan käytetyllä algoritmilla menee aikaa etsiä
+     * lyhin reitti reitilla 4
+     * @param algoritmi haluttu algoritmi
+     * @param kierroksia kierrosten määrä
+     * @return käytetty aika double muodossa
+     */
+    
+    public double reitti4(String algoritmi, int kierroksia) {
+        this.kokonaisaika = 0;
+        
+        VerkonLukija reader = new VerkonLukija();
+        Verkko verkko = reader.luoVerkkoDavisista();
+        
+        int alkuSolmunIndeksi = 17;
+        int loppuSolmunIndeksi = 37;
+        
+        paivitaKaytettyAlgoritmi(algoritmi);  
+        
+        int i = 0;
+        
+        while (i <= kierroksia) {
+            
+            Solmu alku = verkko.getSolmut().get(alkuSolmunIndeksi);
+            Solmu loppu = verkko.getSolmut().get(loppuSolmunIndeksi);  
+            
+            if (astarValittu) {
+                AStar astar = new AStar();
+
+                aloita();
+                astar.etsi(alku, loppu);
+                lopeta();
+                reset();
+                
+            } else if (dijkstraValittu) {
+                Dijkstra dijkstra = new Dijkstra();
+
+                aloita();
+                dijkstra.etsi(alku, loppu);
+                lopeta();
+                reset();
+                
+            } else if (idaStarValittu) {
+                IDAStar ida = new IDAStar();
+
+                aloita();
+                ida.etsi(alku, loppu);
+                lopeta();
+                reset();
+            }
+
+            i++;
+        }      
+        
+        resetAlgoritmit();
+        
+        return this.kokonaisaika;
+    } 
+    
+    /**
+     * Laskee kuinka kauan käytetyllä algoritmilla menee aikaa etsiä
+     * lyhin reitti reitilla 5
+     * @param algoritmi haluttu algoritmi
+     * @param kierroksia kierrosten määrä
+     * @return käytetty aika double muodossa
+     */
+    
+    public double reitti5(String algoritmi, int kierroksia) {
+        this.kokonaisaika = 0;
+        
+        VerkonLukija reader = new VerkonLukija();
+        Verkko verkko = reader.luoVerkkoTalista();
+        
+        int alkuSolmunIndeksi = 0;
+        int loppuSolmunIndeksi = 23;
+        
+        paivitaKaytettyAlgoritmi(algoritmi);  
+        
+        int i = 0;
+        
+        while (i <= kierroksia) {
+            
+            Solmu alku = verkko.getSolmut().get(alkuSolmunIndeksi);
+            Solmu loppu = verkko.getSolmut().get(loppuSolmunIndeksi);  
+            
+            if (astarValittu) {
+                AStar astar = new AStar();
+
+                aloita();
+                astar.etsi(alku, loppu);
+                lopeta();
+                reset();
+                
+            } else if (dijkstraValittu) {
+                Dijkstra dijkstra = new Dijkstra();
+
+                aloita();
+                dijkstra.etsi(alku, loppu);
+                lopeta();
+                reset();
+                
+            } else if (idaStarValittu) {
+                IDAStar ida = new IDAStar();
+
+                aloita();
+                ida.etsi(alku, loppu);
+                lopeta();
+                reset();
+            }
+
+            i++;
+        }      
+        
+        resetAlgoritmit();
+        
+        return this.kokonaisaika;
+    }    
+    
+    /**
+     * Päivittää käyttöön halutun algoritmin
+     * @param algoritmi parametrina annettu haluttu algoritmi
+     */
+    
+    public void paivitaKaytettyAlgoritmi(String algoritmi) {
+        if (algoritmi.equals("Dijkstra")) {
+            this.dijkstraValittu = true;
+        } else if (algoritmi.equals("IDA Star")) {
+            this.idaStarValittu = true;
+        } else if (algoritmi.equals("A Star")) {
+            this.astarValittu = true;
+        }
+    }
+    
+    /**
+     * Resetoi käytetyn algoritmin
+     */
+    
+    public void resetAlgoritmit() {
+        this.astarValittu = false;
+        this.dijkstraValittu = false;
+        this.idaStarValittu = false;
     }
 }
