@@ -20,7 +20,7 @@ public class ArrayList<E> {
      */
     
     public ArrayList() {
-        arrayList = new Object[10000];
+        arrayList = new Object[1000];
         this.size = 0;
     }
     
@@ -38,28 +38,6 @@ public class ArrayList<E> {
         
         this.arrayList[this.size] = obj;
         this.size++;
-    }
-    
-    /**
-     * Lisää halutun olion tiettyyn indeksiin
-     * @param indeksi
-     * @param obj 
-     */
-    
-    public void add(int indeksi, E obj) {
-        
-        if (indeksi < 0 || indeksi >= size) {
-            throw new IndexOutOfBoundsException();
-        }
-        
-        if (listaTaysi()) {
-            kasvataKokoa();
-        }
-        
-        if (this.arrayList[indeksi] == null) {
-            this.arrayList[this.size] = obj;
-            this.size++;
-        }
     }
     
     /**
@@ -89,15 +67,6 @@ public class ArrayList<E> {
     
     public int size() {
         return this.size;
-    }
-    
-    /**
-     * Tarkistaa onko lista tyhjä
-     * @return true jos tyhjä, false jos listalla alkioita
-     */
-    
-    public boolean isEmpty() {
-        return size == 0;
     }
     
     /**

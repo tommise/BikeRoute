@@ -1,12 +1,19 @@
 
 package tietorakenteet;
 
+/**
+ * Geneerinen hajautustaulu solmujen ja kaarten läpikäyntiin
+ * .txt muotoisesta tiedostosta luokassa io
+ * @param <K> avain
+ * @param <V> arvo
+ */
+
 public class HashMap<K, V> {
     
     private int koko;
     private int alkioita;
-    private java.util.ArrayList<K> avaimet;
-    private java.util.ArrayList<V> arvot;
+    private ArrayList<K> avaimet;
+    private ArrayList<V> arvot;
     private EntryMap<K, V>[] taulukko;
     
     /**
@@ -14,10 +21,9 @@ public class HashMap<K, V> {
      */
     
     public HashMap() {
-        this.koko = 50;
-        this.alkioita = 0;
-        this.avaimet = new java.util.ArrayList<>();
-        this.arvot = new java.util.ArrayList<>();
+        this.koko = 1000;
+        this.avaimet = new ArrayList<>();
+        this.arvot = new ArrayList<>();
         this.taulukko = new EntryMap[this.koko];
     }
     
@@ -29,15 +35,6 @@ public class HashMap<K, V> {
     
     private int hajautusarvo(K avain) {
         return Math.abs(avain.hashCode()) % koko;
-    }
-    
-    /**
-     * Palauttaa hajautustaulun koon
-     * @return koko int muodossa
-     */
-    
-    public int size() {
-        return this.alkioita;
     }
     
     /**
@@ -55,53 +52,21 @@ public class HashMap<K, V> {
         
         EntryMap<K, V> pari = taulukko[hajautusarvo];
         
+        V arvo = null;
+        
         while (pari != null) {
             
             if (pari.getAvain().equals(avain)) {
-                return pari.getArvo();
+                arvo = pari.getArvo();
+                break;
             }
             
             pari = pari.getSeuraava();
         }
         
-        return null;
+        return arvo;
     }
-    
-    /**
-     * Tarkistaa löytyykö haluttu avain hajautustaulusta
-     * @param avain
-     * @return palauttaa trtue jos löytyy, false jos ei
-     */
-    
-    public boolean containsKey(K avain) {
-        for (int i = 0; i < avaimet.size(); i++) {
-            K verrattavaAvain = avaimet.get(i);
-            
-            if (avain == verrattavaAvain) {
-                return true;
-            }
-            
-        }
-        return false;
-    }  
-    
-    /**
-     * Tarkistaa löytyykö haluttu arvo hajautustaulusta
-     * @param arvo
-     * @return palauttaa trtue jos löytyy, false jos ei
-     */    
-    
-    public boolean containsValue(V arvo) {
-        for (int i = 0; i < arvot.size(); i++) {
-            V verrattavaArvo = arvot.get(i);
-            
-            if (arvo == verrattavaArvo) {
-                return true;
-            }
-            
-        }
-        return false;
-    }      
+     
     
     /**
      * Asettaa hajautustaulukkoo uuden arvon jos tyhjä, muuten lisää avaimelle
@@ -115,48 +80,30 @@ public class HashMap<K, V> {
             return;
         }
         
-        if (alkioita == koko - 1) {
+        if (koko == alkioita) {
             kasvataListanKokoa();
         }
-        
+
         EntryMap<K, V> uusi = new EntryMap<>(avain, arvo, null);
         
         this.avaimet.add(avain);
         this.arvot.add(arvo);
+        alkioita++;
         
         int hajautusarvo = hajautusarvo(avain);
         
         if (taulukko[hajautusarvo] == null) {
             taulukko[hajautusarvo] = uusi;
-            return;
         }
-        
-        EntryMap<K, V> nyky = taulukko[hajautusarvo];
-        EntryMap<K, V> edellinen = null;
-        
-        while (nyky != null) {
-            
-            if (nyky.getAvain().equals(uusi)) {
-                
-                uusi.setSeuraava(nyky.getSeuraava());
-                
-                if (edellinen != null) {
-                    edellinen.setSeuraava(uusi);
-                    return;
-                }
-                
-                if (edellinen == null) {
-                    taulukko[hajautusarvo] = uusi;
-                    return;
-                }
-            }
-            
-            edellinen = nyky;
-            nyky = nyky.getSeuraava();
-        }
-        
-        edellinen.setSeuraava(uusi);
-        alkioita++;
+    }
+    
+    /**
+     * Palauttaa hajautustaulun koon
+     * @return koko int muodossa
+     */
+    
+    public int size() {
+        return this.alkioita;
     }
     
     /**
@@ -174,58 +121,16 @@ public class HashMap<K, V> {
         
         taulukko = kasvatettuLista;
         koko = uusiKoko;
-    }
-    
-    /**
-     * Tarkistaa onko lista tyhjä
-     * @return palauttaa true jos on, false jos ei
-     */
-    
-    public boolean isEmpty() {
-        return alkioita == 0;
-    }
+    }    
     
     /**
      * Palauttaa arvot ArrayListissä
      * @return values in ArrayList
      */
     
-    public java.util.ArrayList<V> values() {
+    public ArrayList<V> values() {
         return this.arvot;
-    }
-    
-    /**
-     * Poistaa halutun avaimen hajautustaulusta
-     * @param avain 
-     */
-    
-    public void remove(K avain) {
-        
-        if (avain == null || !containsKey(avain)) {
-            return;
-        }
-        
-        int hajautusarvo = hajautusarvo(avain);
-        
-        EntryMap previous = null;
-        EntryMap entry = taulukko[hajautusarvo];
-        
-        while (entry != null) {
-            
-            if (entry.getAvain().equals(avain)) {
-                if (previous == null) {
-                    entry = entry.getSeuraava();
-                    taulukko[hajautusarvo] = entry;
-                    alkioita--;
-                    return;
-                } else {
-                    previous.setSeuraava(entry.getSeuraava());
-                }
-            }
-            previous = entry;
-            entry = entry.getSeuraava();
-        }
-    }
+    }  
     
     /**
      * HashMapin avain-arvo parit sekä seuraava pari
@@ -271,39 +176,12 @@ public class HashMap<K, V> {
         }
 
         /**
-         * Asettaa avaimen
-         * @param avain 
-         */
-
-        public void setAvain(K avain) {
-            this.avain = avain;
-        }
-
-        /**
-         * Asettaa arvon
-         * @param arvo 
-         */
-
-        public void setArvo(V arvo) {
-            this.arvo = arvo;
-        }
-
-        /**
          * Palauttaa seuraavan
          * @return seuraava
          */
 
         public EntryMap<K, V> getSeuraava() {
             return this.seuraava;
-        }
-
-        /**
-         * Asettaa seuraavan
-         * @param obj 
-         */
-
-        public void setSeuraava(EntryMap<K, V> obj) {
-            this.seuraava = obj;
         }
     }    
 }
