@@ -13,10 +13,9 @@ public class Solmu {
     
     private double gluku;
     private double fluku;
-    private double hluku;
     
-    private double latitude;
-    private double longitude;
+    private final double latitude;
+    private final double longitude;
     
     private ArrayList<Kaari> kaaret;  
     private Solmu edellinenSolmu;   
@@ -55,7 +54,7 @@ public class Solmu {
     public ArrayList<Kaari> getKaaret() {
         return kaaret;
     }
-    
+     
     /**
      * Palauttaa heuristisen etäisyyden euklidisen etäisyyden perusteella
      * @param solmu haluttu solmu
@@ -64,15 +63,6 @@ public class Solmu {
     
     public double euklidinenHeuristiikka(Solmu solmu) {
         return heur.euklidinenEtaisyys(this, solmu);
-    }
-    
-    /**
-     * Palauttaa solmun ID:n
-     * @return palautettava id long muodossa
-     */
-    
-    public long getID() {
-        return this.id;
     }
     
     /**
@@ -127,25 +117,7 @@ public class Solmu {
     
     public void setF(double f) {
         this.fluku = f;
-    }  
-    
-    /**
-     * Palauttaa h luvun
-     * @return h luku double muodossa
-     */
-    
-    public double getH() {
-        return this.hluku;
     }
-    
-    /**
-     * Asettaa h luvun
-     * @param luku 
-     */
-    
-    public void setH(double luku) {
-        this.hluku = luku;
-    }    
     
     /**
      * Palauttaa leveys koordinaatin
@@ -164,24 +136,6 @@ public class Solmu {
     public double getLongitude() {
         return this.longitude;
     }
-    
-    /**
-     * Asettaa uuden leveys koordinaatin
-     * @param latitude asetettava leveys koordinaatti int muodossa
-     */
-    
-    public void setLatitude(int latitude) {
-        this.latitude = latitude;
-    }
-
-    /**
-     * Asettaa uuden korkeus koordinaatin
-     * @param longitude asetettava korkeus koordinaatti int muodossa
-     */    
-    
-    public void setLongitude(int longitude) {
-        this.longitude = longitude;
-    }   
     
     /**
      * Resetoi arvot alkuperäsarvoonsa

@@ -5,28 +5,22 @@ package komponentit;
 * Kaari luokka, jota hyödynnetään verkkojen komponentteina
 */
 
-public final class Kaari {
+public class Kaari {
     
     private final Solmu alku;
     private final Solmu loppu;
     private final double etaisyys;
-    private String nimi = "";
-    private String tienTyyppi = "";
     private final Heuristiikka heuristiikka;
-    
+
     /**
-     * Kaari luokan pääkonstruktori jota hyödynnetään karttadatan kanssa
-     * @param alku Solmu josta kaari lähtee, solmu tarvitsee tämän laskeakseen etäisyytensä
-     * @param loppu Solmu johon kaari päättyy
-     * @param nimi Tien nimi
-     * @param tienTyyppi Tien tyyppi
+     * Kaaren konstruktori jossa asetetaan alku ja loppusolmut
+     * @param alku
+     * @param loppu 
      */
     
-    public Kaari(Solmu alku, Solmu loppu, String nimi, String tienTyyppi) {
+    public Kaari(Solmu alku, Solmu loppu) {
         this.alku = alku;
         this.loppu = loppu;
-        this.nimi = nimi;
-        this.tienTyyppi = tienTyyppi;
         this.heuristiikka = new Heuristiikka();
         
         double alkuLat = alku.getLatitude();
@@ -38,9 +32,9 @@ public final class Kaari {
          * Asetetaan kaarelle pituus (paino) haversine tekniikan mukaisesti
          */
         
-        this.etaisyys = heuristiikka.haversineFormula(alkuLat, alkuLon, loppuLat, loppuLon);
+        this.etaisyys = heuristiikka.haversineFormula(alkuLat, alkuLon, loppuLat, loppuLon);        
     }
-    
+
     /**
      * Palauttaa solmun, mistä kaari alkaa
      * @return solmu olio
@@ -66,37 +60,5 @@ public final class Kaari {
     
     public double getEtaisyys() {
         return this.etaisyys;
-    }   
-    
-    /**
-     * Palauttaa tien tyypin
-     * @return tien tyyppi String muodossa
-     */
-    
-    public String getTienTyyppi() {
-        return this.tienTyyppi;
-    }
-    
-    /**
-     * Palauttaa kaaren nimen
-     * @return nimi String muodossa
-     */
-    
-    public String getNimi() {
-        return this.nimi;
-    }
-    
-    /**
-     * Asettaa kaarelle nimen
-     * @param nimi joka asetetaan
-     */
-    
-    public void setNimi(String nimi) {
-        this.nimi = nimi;
-    }  
-
-    @Override
-    public String toString() {
-        return this.nimi;
     }
 }
