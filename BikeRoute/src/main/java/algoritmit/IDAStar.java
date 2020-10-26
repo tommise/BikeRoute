@@ -2,30 +2,31 @@ package algoritmit;
 
 import komponentit.Kaari;
 import komponentit.Solmu;
+
 import tietorakenteet.ArrayList;
 import tietorakenteet.Stack;
 
 /**
- * Etsii lyhimmän reitin alkusolmusta loppusolmuun ja rakentaa reitin tämän jälkeen
- * Pseudokoodia https://en.wikipedia.org/wiki/Iterative_deepening_A* mukaillen
+ * Luokka IDA* algoritmille
 */
 
 public class IDAStar {
 
-    private final double maali;
+    private final double tavoite;
     
     /**
-     * IDA* algoritmin konstruktori jossa alustetaan heuristiikkaolio ja maali arvo
+     * IDA* algoritmin konstruktori jossa alustetaan loppusolmulle haluttu "tavoite" arvo eli 0
      */
+    
     public IDAStar() {
-        this.maali = Double.MIN_VALUE;
+        this.tavoite = Double.MIN_VALUE;
     }
     
     /**
-     * Etsitään solmua niin kauan kunnes tulos löytyy
-     * @param alku
-     * @param loppu
-     * @return 
+     * Etsii lyhyimmän reitin halutusta alkusolmusta loppuun IDA* algoritmin mukaisesti
+     * @param alku alkusolmu mistä lähdetään liikkeelle
+     * @param loppu tavoitesolmu mihin halutaan päätyä
+     * @return true jos reitti löytyy, false jos ei löydy
      */
     
     public boolean etsi(Solmu alku, Solmu loppu) {
@@ -41,7 +42,7 @@ public class IDAStar {
 
             double t = rekursiivinenHaku(path, 0, bound, loppu);
 
-            if (t == maali) {
+            if (t == tavoite) {
                 found = true;
                 break;
             } else if (t == Double.MAX_VALUE) {
@@ -74,13 +75,12 @@ public class IDAStar {
         if (f > bound) {
             return f;
         }
-        
-        solmu.setH(h);
+
         solmu.setG(g);
         solmu.setF(f);
 
         if (solmu == loppu) {
-            return maali;
+            return tavoite;
         }
 
         double min = Double.MAX_VALUE;
@@ -98,8 +98,8 @@ public class IDAStar {
                 
                 double uusiMin = rekursiivinenHaku(path, solmu.getG() + kaari.getEtaisyys(), bound, loppu);
 
-                if (uusiMin == maali) {
-                    return maali;
+                if (uusiMin == tavoite) {
+                    return tavoite;
                 } else if (uusiMin < min) {
                     min = uusiMin;
                 }
@@ -112,10 +112,10 @@ public class IDAStar {
     }
     
     /**
-     * Luodaan reitti loppusolmun perusteella ja käännetään tämä
-     * @param loppu
-     * @return reitti ArrayList olion muodossa
-     */
+     * Luodaan reitti saadun tuloksen perusteella
+     * @param loppu solmu johon reitti päättyy
+     * @return luotu lyhyin reitti lista muodossa
+     */ 
 
     public ArrayList<Solmu> luoReitti(Solmu loppu) {
         ArrayList<Solmu> reitti = new ArrayList<>();
@@ -124,7 +124,7 @@ public class IDAStar {
             reitti.add(solmu);
         }
         
-        ArrayList<Solmu> kaannettyReitti = new tietorakenteet.ArrayList<>(); 
+        ArrayList<Solmu> kaannettyReitti = new ArrayList<>(); 
         
         for (int i = reitti.size() - 1; i >= 0; i--) {
             Solmu solmu = reitti.get(i);

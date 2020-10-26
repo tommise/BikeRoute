@@ -9,7 +9,7 @@ import tietorakenteet.ArrayList;
 import tietorakenteet.PriorityQueue;
 
 /**
- * Dijkstran algoritmi hyödyntäen PriorityQueta sekä lyhyimmän reitin tallettaminen listaan
+ * Luokka Dijkstran algoritmille
  */
 
 public class Dijkstra {
@@ -50,14 +50,14 @@ public class Dijkstra {
 
     /**
      * Luodaan reitti saadun tuloksen perusteella
-     * @param tavoiteSolmu solmu johon reitti päättyy
-     * @return lyhyin reitti lista muodossa
+     * @param loppu solmu johon reitti päättyy
+     * @return luotu lyhyin reitti lista muodossa
      */    
     
-    public ArrayList<Solmu> luoReitti(Solmu tavoiteSolmu) {
+    public ArrayList<Solmu> luoReitti(Solmu loppu) {
         ArrayList<Solmu> reitti = new ArrayList<>();
 
-        for (Solmu solmu = tavoiteSolmu; solmu != null; solmu = solmu.getEdellinenSolmu()) {
+        for (Solmu solmu = loppu; solmu != null; solmu = solmu.getEdellinenSolmu()) {
             reitti.add(solmu);
         }
         
