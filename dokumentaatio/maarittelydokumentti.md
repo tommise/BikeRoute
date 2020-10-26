@@ -23,7 +23,7 @@ IDA* hyödyntää:
 
 ### Mitä syötteitä ohjelma saa ja miten näitä käytetään?
 
-Ohjelma rakentaa itse verkon tai lukee vaihtoehtoisesti Openstreetmapin XML muotoista karttadataa. Käyttäjä valitsee lähtöpisteen ja saapumispisteen ohjelman visuaalisen käyttöliittymän kautta sekä käytettävän algoritmin. Valittujen koordinaattien pohjalta piirtyy käyttöliittymään lyhin reitti sekä lyhimmän reitin kokonaismatka. 
+Ohjelma lukee kaksi eri karttaa .csv tiedostojen pohjalta ja luo näistä algoritmeille käyttöön verkon. Käyttäjä valitsee lähtöpisteen ja saapumispisteen ohjelman visuaalisen käyttöliittymän kautta sekä käytettävän algoritmin. Valittujen koordinaattien pohjalta piirtyy käyttöliittymään lyhin reitti sekä lyhimmän reitin kokonaismatka. 
 
 ### Tavoitteena olevat aika- ja tilavaativuudet (m.m. O-analyysit)?
 

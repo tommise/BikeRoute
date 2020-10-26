@@ -13,6 +13,16 @@ Projektin rakenne on seuraava:
 - Paketissa _tyokalut_ on luokka Matikka joka pitää sisällään omia toteutuksia javan Math.x metodeista _(itseisarvo, kertoma, potenssi, neliöjuuri, radiaani, sini, kosini, arkustangentti ja arkustangentti2)_
 - Paketissa _ui_ on Käyttöliittymä sekä käyttöliittymän apuluokat Etappi, EtappienKasittelija ja ReitinPiirtaja
 
+### Kartat
+
+Projektissa on käytössä kaksi karttaa osa Davisin kaupungista Yhdysvalloista sekä toinen talin siirtolapuutarhasta.
+
+**Davis (198 solmua)**
+![Davis](kuvat/davisverkko.png "Davis")
+
+**Talin siirtolapuutarha (24 solmua)**
+![Tali](kuvat/taliverkko.png "Tali")
+
 ## Aika- ja tilavaativuudet
 
 ### Algoritmit
@@ -46,13 +56,18 @@ Toteutettujen metodien aikavaativuudet:
 
 **HashSet** 
 - _add()_, O(1) (listan kokoa kasvatettaessa O(n))
-- _contains_, O(n)
+- _contains_, O(1), pahin tapaus O(n)
 - _size()_, O(1)
 
 **HashMap**
 - _get()_, O(1)
-- _remove_, O(n)
-- _size()_, O(1)
+- _put()_, O(1) listan kokoa kasvatettaessa O(n))
+
+**Stack** Last In First Out -menetelmällä
+- _push()_, O(1)
+- _pop()_, O(1)
+- _peek()_, O(1)
+- _contains()_, O(n)
 
 **PriorityQueuen** 
 - _add()_, O(n)
@@ -62,18 +77,13 @@ Toteutettujen metodien aikavaativuudet:
 - _isEmpty()_, O(1)
 - _isFull()_, O(1)
 
-**Stack** Last In First Out -menetelmällä
-- _push()_, O(1)
-- _pop()_, O(1)
-- _peek()_, O(1)
-- _contains()_, O(n)
-
 ## Puutteet ja parannusehdotukset
 
-- Esimerkkiverkko kattaa vain pienen alueen - OSM tiedoston lukemisen yhteydessä solmut luetaan normaalisti, mutta kaaret eivät yhdisty osm.pbf tiedoston kautta oikein - siksi tehty esimerkkiverkko Talin siirtolapuutarhasta
-- Osa matikkaluokan omista Math.x metodeista palvelee vain projektin käyttötarkoitusta eikä rajatapauksia, ei sinänsä projektin toimivuuden kannalta olennainen
-- IDA Star toimii hitaanlaisesti
-- A Star algoritmiin voisi tehdä mahdollisesti nopeuttavia muutoksia kuten kaksisuuntainen _(bidirectional)_ A Star joka etsii alusta ja lopusti reittiä
+- Olisi mielenkiintoista tietää miten kaksisuuntaiset toteutukset _bidirectional_ algoritmeistä toimisivat kartalla ja nopeuttaisiko nämä lyhimmän reitin etsintää
+- IDA Star toimii hitaanlaisesti, Wikipedian pseudokoodiin verrattuna en löytänyt koodistani virheitä, hitaus liittyy varmasti jotenkin ylimääräisten solmujen läpikäyntiin rekursiivisessa haussa
+- Osa matikkaluokan omista Math.x metodeista palvelee vain projektin käyttötarkoitusta eikä rajatapauksia
+- Projektin oikeastaan suurimpana haasteena oli karttadatan saaminen, projektiin voisi lisätä vielä isompia karttoja kahden käytössä olevan lisäksi
+
 
 #### Lähteet
 
