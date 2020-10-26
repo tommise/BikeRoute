@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 
 import algoritmit.AStar;
 import algoritmit.Dijkstra;
-import io.VerkonRakentaja;
+import io.VerkonLukija;
 import org.junit.Before;
 import org.junit.Test;
 import tietorakenteet.ArrayList;
@@ -17,11 +17,12 @@ public class SolmuTest {
     Dijkstra dijkstra;
     AStar astar;
     double epsilon = 0.001;
+    VerkonLukija reader;    
     
     @Before
     public void setUp() {
-        VerkonRakentaja rakentaja = new VerkonRakentaja();
-        this.verkko = rakentaja.luoTestiVerkko();
+        this.reader = new VerkonLukija();
+        this.verkko = reader.luoVerkkoTalista();
         this.dijkstra = new Dijkstra();
         this.astar = new AStar();
     }

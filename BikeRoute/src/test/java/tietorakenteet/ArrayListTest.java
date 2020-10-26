@@ -52,8 +52,12 @@ public class ArrayListTest {
     }
     
     @Test
-    public void listaOnAlussaTyhja() {
-        assertTrue(lista.isEmpty());
+    public void listaKasvaaKokoaKunListaTaysi() {
+        for (int i = 0; i < 1200; i++) {
+            lista.add(i);
+        }
+        
+        assertEquals(1200, lista.size());
     }
     
     @Test(expected = IndexOutOfBoundsException.class) 

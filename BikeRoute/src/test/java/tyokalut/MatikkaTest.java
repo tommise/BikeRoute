@@ -9,7 +9,7 @@ import org.junit.Test;
 public class MatikkaTest {
     
     Matikka mat;
-    double epsilon = 0.0001;
+    double epsilon = 0.001;
     
     @Before
     public void setUp() {

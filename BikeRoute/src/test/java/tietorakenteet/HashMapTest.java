@@ -20,11 +20,31 @@ public class HashMapTest {
     public void lisaaElementinHajautustauluun() {
         this.hashMap.put(5, 5.5);
         
-        assertEquals(true, this.hashMap.containsKey(5));
+        assertEquals(5.5, this.hashMap.get(5), epsilon);
+        assertNotNull(this.hashMap.get(5));
+    }
+    
+    @Test
+    public void lisaaUseammanElementinTauluun() {
+        this.hashMap.put(1, 200.00);
+        this.hashMap.put(2, 600.00);
+        this.hashMap.put(3, 100.00);
+        
+        assertEquals(3, this.hashMap.size());
+    }
+    
+    @Test
+    public void kokoKasvaaKunHajautustauluTaysi() {
+        for (int i = 0; i < 2100; i++) {
+            this.hashMap.put(i, 200.00);
+        }
+        
+        assertEquals(2100, this.hashMap.size());
     }
     
     @Test
     public void noutaaArvonHajautustaulusta() {
+        this.hashMap.put(1, 200.00);
         this.hashMap.put(2, 600.00);
         
         double arvo = this.hashMap.get(2);
@@ -33,16 +53,14 @@ public class HashMapTest {
     }
     
     @Test
-    public void containsPalauttaaFalseKunEiLoydy() {
-        this.hashMap.put(10, 100.00);
+    public void tyhjaAvainEiMeneHajautustauluun() {
+        this.hashMap.put(null, 100.00);
         
-        assertEquals(false, this.hashMap.containsKey(8));
+        assertEquals(0, this.hashMap.size());
     }
     
     @Test
-    public void containsPalauttaaTrueKunLoytyy() {
-        this.hashMap.put(11, 100.00);
-        
-        assertEquals(true, this.hashMap.containsKey(11));
+    public void getPalauttaaNullKunEiLoydy() {
+        assertNull(this.hashMap.get(1));
     }
 }
