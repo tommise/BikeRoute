@@ -2,7 +2,7 @@
 
 BikeRoute sovelluksen tarkoitus on etsiä lyhyin reitti paikasta A paikkaan B ja vertailemaan kuinka kauan käytetyillä algoritmeilla (Dijkstra, A Star tai IDA Star) menee tähän aikaa. Sovellus hyödyntää JXMapViewer2 kirjastoa ja se on toteutettu Javalla.
 
-![BikeRoute Demo](kuvat/reitti.gif)
+![BikeRoute Demo](dokumentaatio/kuvat/reitti.gif)
 
 ## Dokumentaatio
 
