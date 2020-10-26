@@ -53,26 +53,6 @@ public class Matikka {
     }
     
     /**
-     * Korvaa funktion Math.sqrt()
-     * @param luku
-     * @return palauttaa luvun neliöjuuren double muodossa
-     */
-    
-    public double neliojuuri(double luku) {
-        
-        double apu = Double.MAX_VALUE;
-
-        double neliojuuri = luku / 2;
-        
-        while ((apu - neliojuuri) != 0) {
-            apu = neliojuuri;
-            neliojuuri = (apu + (luku / apu)) / 2;
-        }
-
-        return neliojuuri;
-    }
-    
-    /**
      * Korvaa funktion Math.toRadians()
      * @param luku
      * @return palauttaa radiaanin double muodossa
@@ -121,6 +101,41 @@ public class Matikka {
         }
         
         return tulos;
+    }   
+    /**
+     * Korvaa funktion Math.sqrt()
+     * @param luku
+     * @return palauttaa luvun neliöjuuren double muodossa
+     */
+    
+    public double neliojuuri(double luku) {
+        
+        double apu = Double.MAX_VALUE;
+
+        double neliojuuri = luku / 2;
+        
+        while ((apu - neliojuuri) != 0) {
+            apu = neliojuuri;
+            neliojuuri = (apu + (luku / apu)) / 2;
+        }
+
+        return neliojuuri;
+    }
+    
+    /**
+     * Korvaa vastaavasti funktiota Math.sqrt()
+     * Ei aivan niin tarkka kuin aikaisempi, mutta nopeampi
+     * @param luku
+     * @return palauttaa luvun neliöjuuren double muodossa
+     */
+
+    public double nopeampiNeliojuuri(double luku) {
+        long a = 1L << 52;        
+        long b = 1L << 61;
+        long apu = Double.doubleToLongBits(luku) - a;
+        long tulos = ((apu) >> 1) + b;
+        
+        return Double.longBitsToDouble(tulos);
     }   
     
     /**
