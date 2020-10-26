@@ -13,40 +13,55 @@ Algoritmiluokille on yhteensä 33 yksikkötestiä, komponenteille 7, tietorakent
 Saadaksemme varmuuden, että algoritmit etsivät todella lyhyimmän reitin testauksissa ja suorituskyvyssä käytetyistä reiteistä, näitä verrattiin Google Mapsin reitinhakuun. 
 Google Maps pyöristää tuloksen kilometreissä lähimpään kokonaislukuun yhden desimaalin tarkkuudella eli esim. 3420m -> 3,4km ja 3380 -> 3,4km.
 
-**Reitti 1:**
+#### Reitti 1:
+
 ![Reitti 1 Oma](kuvat/reitti1.png "Reitti 1 Oma")
+
 ![Reitti 1 Google Maps](kuvat/reitti1verrattava.png "Reitti 1 Google Maps")
 
-Oman lyhyin reitti: 2444.6838193006743m
-Google Mapsin lyhyin reitti: 2,4km
+**Oman toteutuksen lyhyin reitti:** 2444.6838193006743m
 
-**Reitti 2:**
+**Google Mapsin lyhyin reitti:** 2,4km
+
+#### Reitti 2:
+
 ![Reitti 2 Oma](kuvat/reitti2.png "Reitti 2 Oma")
+
 ![Reitti 2 Google Maps](kuvat/reitti2verrattava.png "Reitti 2 Google Maps")
 
-Oman lyhyin reitti: 2997.0403280132705m
-Google Mapsin lyhyin reitti: 3.0km
+**Oman toteutuksen lyhyin reitti:** 2997.0403280132705m
 
-**Reitti 3:**
+**Google Mapsin lyhyin reitti:** 3.0km
+
+#### Reitti 3:
+
 ![Reitti 3 Oma](kuvat/reitti3.png "Reitti 3 Oma")
+
 ![Reitti 3 Google Maps](kuvat/reitti3verrattava.png "Reitti 3 Google Maps")
 
 Oman lyhyin reitti: 3415.7757993535465m
+
 Google Mapsin lyhyin reitti: 3.4km
 
-**Reitti 4:**
+#### Reitti 4:
+
 ![Reitti 4 Oma](kuvat/reitti4.png "Reitti 4 Oma")
+
 ![Reitti 4 Google Maps](kuvat/reitti4verrattava.png "Reitti 4 Google Maps")
 
-Oman lyhyin reitti: 881.4246491349884m
-Google Mapsin lyhyin reitti: 900m
+**Oman toteutuksen lyhyin reitti:** 881.4246491349884m
 
-**Reitti 5:**
+**Google Mapsin lyhyin reitti:** 900m
+
+### Reitti 5:
+
 ![Reitti 5 Oma](kuvat/reitti5.png "Reitti 5 Oma")
+
 ![Reitti 5 Google Maps](kuvat/reitti5verrattava.png "Reitti 5 Google Maps")
 
-Oman lyhyin reitti: 802.839856122337m
-Google Mapsin lyhyin reitti: 800m
+**Oman toteutuksen lyhyin reitti:** 802.839856122337m
+
+**Google Mapsin lyhyin reitti:** 800m
 
 Reitit syntyvät Google Mapsin reitinhakuun verrattuna identtisesti. Eroa löytyy lähinnä kokonaisreitin tuloksessa missä Google Maps pyöristää tuloksensa lähimpään kokonaislukuun yhden desimaalin tarkkuudella. Metrillisiä eroja saattaa tulla myös omien Math.x toteutuksien kautta, jotka eivät välttämättä ole yhtä tarkkoja kuin Javan omat toteutukset. Tällöin pidempien kaarien laskettu pituus saattaa heittää varsinkin pidemmillä matkoilla. Kaarien etäisyydet (painot) lasketaan projektissa Haversine Formulan avulla, jota on testattu luokassa _HeuristiikkaTest.java_.
 
