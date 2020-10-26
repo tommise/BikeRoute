@@ -60,6 +60,7 @@ Toteutettujen metodien aikavaativuudet:
 - _add()_, O(1) (listan kokoa kasvatettaessa O(n))
 - _contains_, O(1), pahin tapaus O(n)
 - _size()_, O(1)
+- _isEmpty()_, O(1)
 
 **HashMap**
 - _get()_, O(1)
@@ -77,13 +78,12 @@ Toteutettujen metodien aikavaativuudet:
 - _poll()_, O(n)
 - _size()_, O(1)
 - _isEmpty()_, O(1)
-- _isFull()_, O(1)
 
 ## Puutteet ja parannusehdotukset
 
 - Olisi mielenkiintoista tietää miten kaksisuuntaiset toteutukset _(bidirectional)_ algoritmeistä toimisivat kartalla ja nopeuttaisiko nämä lyhimmän reitin etsintää
 - IDA Star toimii hitaanlaisesti, Wikipedian pseudokoodiin verrattuna en löytänyt koodistani virheitä, hitaus liittyy varmasti jotenkin ylimääräisten solmujen läpikäyntiin rekursiivisessa haussa
-- Osa matikkaluokan omista Math.x metodeista palvelee vain projektin käyttötarkoitusta
+- Osa matikkaluokan omista Math.x metodeista palvelee vain projektin omaa käyttötarkoitusta
 - Projektin suurimpana haasteena oli karttadatan saaminen, projektiin voisi lisätä vielä isompia karttoja kahden käytössä olevan lisäksi
 
 #### Lähteet
