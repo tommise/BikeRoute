@@ -1,7 +1,10 @@
-apply plugin: 'java'
-apply plugin: 'jacoco'
-apply plugin: 'application'
-apply plugin: 'checkstyle'
+plugins {
+    id 'java'
+    id 'jacoco'
+    id 'application'
+    id 'checkstyle'
+    id 'com.github.johnrengelman.shadow' version '5.1.0'
+}
 
 checkstyle {
     toolVersion '8.17'
@@ -23,21 +26,12 @@ repositories {
 dependencies {
     testImplementation     'junit:junit:4.13'
     
-    // https://mvnrepository.com/artifact/org.openstreetmap.osmosis/osmosis-pbf
-    compile group: 'org.openstreetmap.osmosis', name: 'osmosis-pbf', version: '0.43-RELEASE'
-    
     // https://mvnrepository.com/artifact/org.jxmapviewer/jxmapviewer2
     compile group: 'org.jxmapviewer', name: 'jxmapviewer2', version: '2.5'
 }
 
 jacoco {
     toolVersion = "0.8.2"
-}
-
-jar {
-    manifest {
-        attributes 'Main-Class': 'ui.Kayttoliittyma'
-    }
 }
 
 jacocoTestReport {
@@ -57,6 +51,29 @@ jacocoTestReport {
             
         })
     }    
+}
+
+javadoc {
+    source = sourceSets.main.allJava
+    classpath = configurations.compile
+}
+
+jar {
+    from('src/main/java') {
+      include 'src/main/resources'
+    }
+    manifest {
+        attributes 'Main-Class': 'ui.Kayttoliittyma'
+    }
+    destinationDir = file("$rootDir/build/jar")
+}
+
+shadowJar {
+    from('src/main/java') {
+      include 'src/main/resources'
+    }
+    archiveName = 'bikerouteapp.jar'
+    destinationDir = file("$rootDir/build/jar")
 }
 
 run {
